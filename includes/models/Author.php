@@ -42,4 +42,6 @@ class AuthorObject extends MySqlObject
     );
     
     protected $_order = "name";
+    
+    protected $_cite = "name";
 }

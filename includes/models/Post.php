@@ -17,28 +17,42 @@ class PostObject extends MySqlObject
         ),
         "posted" => array(
             "value" => NULL,
+            "type" => "timestamp:jS F Y \\a\\t g:ia",
+            "validation" => array(
+                "rule" => "timestamp",
+                "required" => TRUE,
+                "message" => "Please enter a valid time"
+            ),
             "data_type" => array("timestamp" => "Please enter a valid time."),
-            "has_default" => TRUE
+            "has_default" => TRUE,
+            "on_grid" => array("position" => 1, "heading" => "Posted")
         ),
         "author" => array(
             "value" => "",
-            "model" => array("Author" => "Invalid author identifier.")
+            "type" => "object:Author",
+            "model" => array("Author" => "Invalid author identifier."),
+            "on_grid" => array("position" => 4, "heading" => "Author")
         ),
         "title" => array(
             "value" => "",
-            "regexp" => array("/^.{1,255}$/i" => "Please enter a valid title.")
+            "type" => "string",
+            "regexp" => array("/^.{1,255}$/i" => "Please enter a valid title."),
+            "on_grid" => array("position" => 3, "heading" => "Title")
         ),
         "content" => array(
             "value" => ""
         ),
         "can_comment" => array(
             "value" => NULL,
+            "type" => "boolean",
             "data_type" => array("boolean" => "Please select yes or no."),
-            "has_default" => TRUE
+            "has_default" => TRUE,
+            "on_grid" => array("position" => 5, "heading" => "Can Comment?")
         ),
         "type" => array(
             "value" => "",
-            "regexp" => array("/^post|page$/" => "Is this a page or a post?")
+            "regexp" => array("/^post|page$/" => "Is this a page or a post?"),
+            "on_grid" => array("position" => 2, "heading" => "Page or Post?")
         ),
     );
     
@@ -60,4 +74,6 @@ class PostObject extends MySqlObject
     );
     
     protected $_order = "posted DESC";
+    
+    protected $_cite = "title";
 }

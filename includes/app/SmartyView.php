@@ -51,7 +51,8 @@ class SmartyView extends View
         
         $this->assign_array(array(
             "base"   =>  _BASE,
-            "url"    =>  _PAGE
+            "url"    =>  _PAGE,
+            "admin"  =>  DIR_ADMIN ."/"
         ));
         
         @session_start();

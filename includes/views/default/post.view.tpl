@@ -8,7 +8,7 @@
     
     <p>
         Posted by <a href="{$base}author/{$data->getAuthor()->getId()}/">{$data->getAuthor()->getName()|escape}</a>
-        on {$data->getPosted()|date:'jS F Y'} at {$data->getPosted()|date:'g:ia'}.
+        on {$data->getPosted()|date:'jS F Y \a\t g:ia'}.
     </p>
     
     {assign var=numTags value=$data->getTags()->count()}

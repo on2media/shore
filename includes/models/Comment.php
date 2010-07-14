@@ -17,15 +17,21 @@ class CommentObject extends MySqlObject
         ),
         "post" => array(
             "value" => "",
-            "model" => array("Post" => "Invalid post identifier.")
+            "type" => "object:Post",
+            "model" => array("Post" => "Invalid post identifier."),
+            "on_grid" => array("position" => 2, "heading" => "Post")
         ),
         "received" => array(
             "value" => NULL,
+            "type" => "timestamp",
             "data_type" => array("timestamp" => "Please enter a valid time."),
-            "has_default" => TRUE
+            "has_default" => TRUE,
+            "on_grid" => array("position" => 1, "heading" => "Received")
         ),
         "content" => array(
-            "value" => ""
+            "value" => "",
+            "type" => "text",
+            "on_grid" => array("position" => 3, "heading" => "Comment")
         )
     );
     

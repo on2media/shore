@@ -60,6 +60,30 @@ abstract class Object
     }
     
     /**
+     *
+     */
+    public function getGridHead()
+    {
+        $rtn = array();
+        
+        foreach ($this->_fields as $fieldName => $fieldSpec) {
+            
+            if (isset($fieldSpec["on_grid"]) && ($spec = $fieldSpec["on_grid"])) {
+                
+                $rtn[(int)$spec["position"]] = array(
+                    "field"    =>  "cite" . var2func($fieldName),
+                    "heading"  =>  $spec["heading"]
+                );
+                
+            }
+            
+        }
+        
+        ksort($rtn);
+        return $rtn;
+    }
+    
+    /**
      * Method overloading handler
      *
      * @param  string  $name  Method called.
@@ -70,23 +94,49 @@ abstract class Object
     {
         $req = $name;
         
-        switch (substr($name, 0, 3)) {
+        switch (TRUE) {
             
-            case "get":
+            case (substr($name, 0, 3) == "get"):
                 
-                // get the variable name from the function name
                 $name = func2var(substr($name, 3));
                 
-                // this is a valid field
                 if (array_key_exists($name, $this->_fields)) {
                     
-                    $field =& $this->_fields[$name];
-                    $value =& $field["value"];
-                    
-                    return $value;
+                    return $this->_fields[$name]["value"];
                 }
             
-            case "set":
+            case (substr($name, 0, 4) == "cite"):
+                
+                $name = func2var(substr($name, 4));
+                
+                $func = "get" . $name; $value = $this->$func();
+                
+                switch ($this->typeOf($name)) {
+                    
+                    case "string":
+                        return htmlentities($value);
+                    
+                    case "text":
+                        return nl2br($value);
+                    
+                    case "timestamp":
+                        $pieces = explode(":", $this->_fields[$name]["type"], 2);
+                        if (isset($pieces[1])) return date($pieces[1], $value);
+                        return date("jS F Y H:i", $value);
+                    
+                    case "boolean":
+                        // do nothing - template handles boolean values
+                    
+                    case "object":
+                        if ($value instanceof Object) {
+                            return $value->cite();
+                        }
+                    
+                }
+                
+                return $value;
+            
+            case (substr($name, 0, 3) == "set"):
                 
                 $name = func2var(substr($name, 3));
                 if (array_key_exists($name, $this->_fields)) {
@@ -100,6 +150,24 @@ abstract class Object
         }
         
         trigger_error("Call to undefined function " . htmlentities($req) . "()", E_USER_ERROR);
+    }
+    
+    /**
+     *
+     */
+    protected function typeOf($var)
+    {
+        if (!array_key_exists($var, $this->_fields)) return NULL;
+        $pieces = explode(":", $this->_fields[$var]["type"], 2);
+        return $pieces[0];
+    }
+    
+    /**
+     *
+     */
+    public function cite()
+    {
+        return htmlentities($this->_fields[$this->_cite]["value"]);
     }
     
     /**

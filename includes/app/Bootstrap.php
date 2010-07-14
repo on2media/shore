@@ -9,9 +9,6 @@
 // create a shorthand version the DIRECTORY_SEPARATOR constant
 define("DS", DIRECTORY_SEPARATOR);
 
-// require the site configuration file
-require_once(realpath(dirname(__FILE__) . DS . ".." . DS . ".." . DS . "config.php"));
-
 // set the default timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);
 
@@ -45,6 +42,12 @@ define("_PAGE", substr(rawurldecode($urlParts["path"]), strlen($urlDir)));
 
 define("_QS", (isset($urlParts["query"]) ? "?" . $urlParts["query"] : ""));
 
+if (_PAGE != "" && substr(_PAGE, -1) != "/") {
+    @header($_SERVER["SERVER_PROTOCOL"] . " 301 Permanent Redirect");
+    @header("Location: " . _BASE . _PAGE . "/");
+    exit();
+}
+
 // include Smarty
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "smarty") . DS . "Smarty.class.php");
 
@@ -55,6 +58,10 @@ function classAutoloader($className)
         
         case (preg_match("/^([A-Za-z]+)Controller$/", $className, $matches)):
             $inc = _PATH . "includes" . DS . "controllers" . DS . $matches[1] . ".php";
+            break;
+        
+        case (preg_match("/^([A-Za-z]+)Component$/", $className, $matches)):
+            $inc = _PATH . "includes" . DS . "components" . DS . $matches[1] . ".php";
             break;
         
         case ($className != "MySqlObject" && preg_match("/^([A-Za-z]+)Object$/", $className, $matches)):

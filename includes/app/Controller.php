@@ -18,6 +18,11 @@ abstract class Controller
     protected $_view = NULL;
     
     /**
+     *
+     */
+    protected $_components = array();
+    
+    /**
      * Sets the view to use.
      *
      * @param  View  $view
@@ -59,7 +64,7 @@ abstract class Controller
      *                           invalid status is passed (i.e. not 301, 302, 303 or 307) a status
      *                           of 302 is used.
      */
-    public function redirect($url=NULL, $status=301)
+    public static function redirect($url=NULL, $status=301)
     {
         if ($url == NULL) $url = _BASE . _PAGE;
         
@@ -74,5 +79,21 @@ abstract class Controller
         @header("Location: " . $url);
         
         exit();
+    }
+    
+    /**
+     *
+     */
+    public function useComponent($name, Component $component)
+    {
+        $this->_components[$name] = $component;
+    }
+    
+    /**
+     *
+     */
+    public function getComponent($name)
+    {
+        return (isset($this->_components[$name]) ? $this->_components[$name] : FALSE);
     }
 }

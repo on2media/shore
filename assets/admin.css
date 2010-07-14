@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font: 0.825em sans-serif;
+    color: #444;
+    background: #f1f1f1;
+}
+#header {
+    background: #a3a3a3;
+}
+#header ul, #wrapper {
+    margin: 0 auto;
+}
+#header ul {
+    width: 959px;
+    height: 30px;
+    list-style: none;
+    border-left: 1px solid #fff;
+}
+#header li {
+    float: left;
+}
+#header li a {
+    display: block;
+    line-height: 30px;
+    padding: 0 20px;
+    border-right: 1px solid #fff;
+    text-decoration: none;
+    color: #fff;
+}
+#header li a:hover {
+    background: #939393;
+}
+#wrapper {
+    width: 940px;
+    padding: 20px 10px;
+    background: #fff;
+}
+div.status {
+    background-repeat: no-repeat;
+    background-position: 10px 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 10px 0 10px 0;
+    padding: 9px 9px 9px 40px;
+}
+div.status.confirm {
+    color: #8da000;
+    border: 1px solid #dcee66;
+    background-color: #f6ffbe;
+    background-image: url(img/ico/accept.png);
+}
+div.status.info {
+    color: #a08d00;
+    border: 1px solid #eedc66;
+    background-color: #fff6be;
+    background-image: url(img/ico/note.png);
+}
+div.status.alert {
+    color: #a40;
+    border: 1px solid #efa0b7;
+    background-color: #ffeeee;
+    background-image: url(img/ico/exclamation.png);
+}
+div.status a {
+    color: #666;
+    text-decoration: none;
+}
+div.status a:hover {
+    text-decoration: underline;
+}
+h1, h2, h3 {
+    margin-bottom: 0.6em;
+}
+p, table, ul {
+    margin-bottom: 1em;
+}
+dl.stats {
+    line-height: 1.4em;
+}
+dl.stats dt {
+    clear: both;
+    float: left;
+    width: 100px;
+}
+dl.stats dd {
+    min-height: 1.4em;
+}
+table.grid {
+    width: 100%;
+    border-spacing: 0;
+}
+table.grid th, table.grid td {
+    text-align: left;
+    padding: 4px;
+}
+table.grid th {
+    background-color: #ccc;
+}
+table.grid td {
+    border-bottom: 1px solid #ccc;
+}
