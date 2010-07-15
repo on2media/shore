@@ -64,6 +64,14 @@ abstract class Collection implements Iterator
     }
     
     /**
+     *
+     */
+    public function getObject()
+    {
+        return $this->_obj;
+    }
+    
+    /**
      * Limits the records returned when the collection is fetched.
      *
      * @param  string  $field  The field name to apply the limit to.

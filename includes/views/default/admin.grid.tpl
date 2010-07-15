@@ -6,6 +6,14 @@
     
 {else}
     
+    <form action="edit/add" method="get">
+        
+        <p>
+            <input type="submit" value="Add New" />
+        </p>
+        
+    </form>
+    
     <form action="delete/" method="post">
         
         <table class="grid">
@@ -58,7 +66,7 @@
         </table>
         
         <p>
-            <input type="submit" name="do" value= "Delete Selected" />
+            <input type="submit" name="do" value= "Delete Selected" class="delete" />
         </p>
         
     </form>

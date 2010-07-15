@@ -64,6 +64,10 @@ function classAutoloader($className)
             $inc = _PATH . "includes" . DS . "components" . DS . $matches[1] . ".php";
             break;
         
+        case (preg_match("/^([A-Za-z]+)Control$/", $className, $matches)):
+            $inc = _PATH . "includes" . DS . "controls" . DS . $matches[1] . ".php";
+            break;
+        
         case ($className != "MySqlObject" && preg_match("/^([A-Za-z]+)Object$/", $className, $matches)):
             $inc = _PATH . "includes" . DS . "models" . DS . $matches[1] . ".php";
             break;
@@ -84,7 +88,7 @@ spl_autoload_register('classAutoloader');
 
 /**
  * This function converts a variable name in the format foo_bar into the corresponding function
- * name fooBar.
+ * name FooBar.
  *
  * @param  string  $str  The variable name to convert
  * @return string
@@ -96,7 +100,7 @@ function var2func($str)
 }
 
 /**
- * This function converts a function name in the format fooBar into the corresponding variable
+ * This function converts a function name in the format FooBar into the corresponding variable
  * name foo_bar.
  *
  * @param  string  $str  The function name to convert
@@ -106,4 +110,12 @@ function func2var($str)
 {
     $str[0] = strtolower($str[0]);
     return strtolower(preg_replace("/([A-Z])/", "_$1", $str));
+}
+
+/**
+ *
+ */
+function var2label($var)
+{
+    return preg_replace("/([A-Z])/", " $1", var2func($var));
 }

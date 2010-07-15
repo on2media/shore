@@ -11,14 +11,17 @@ class AdminController extends Controller
     /**
      *
      */
+    protected $_components = array("Auth");
+    
+    /**
+     *
+     */
     public function dashboard(array $vars=array())
     {
-        $this->useComponent("Auth", new AuthComponent($this));
-        
         $this->setView(new SmartyView("admin.home.tpl"));
         $this->getView()->setLayout("layout.admin.tpl");
         
-        if ($this->getComponent("Auth")->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(__FUNCTION__)) {
             
             $this->getView()->assign("page_title", "Blog Administration");
             

@@ -2,9 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
+        
         <title>{if $page_title}{$page_title|escape} &laquo; {/if}Glooware Blog</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
         <link rel="stylesheet" type="text/css" href="{$base}assets/core.css" />
+        
+        <script type="text/javascript" src="{$base}assets/moo-core.js"></script>
+        <script type="text/javascript" src="{$base}assets/core.js"></script>
+        
     </head>
 
     <body>

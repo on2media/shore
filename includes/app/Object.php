@@ -32,6 +32,16 @@ abstract class Object
     protected $_order = "";
     
     /**
+     *
+     */
+    protected $_uid = "";
+    
+    /**
+     *
+     */
+    private $__grid_head = array();
+    
+    /**
      * Defines a Collection to store a data set of records.
      */
     public function __construct()
@@ -64,6 +74,8 @@ abstract class Object
      */
     public function getGridHead()
     {
+        if ($this->__grid_head != array()) return $this->__grid_head;
+        
         $rtn = array();
         
         foreach ($this->_fields as $fieldName => $fieldSpec) {
@@ -72,7 +84,7 @@ abstract class Object
                 
                 $rtn[(int)$spec["position"]] = array(
                     "field"    =>  "cite" . var2func($fieldName),
-                    "heading"  =>  $spec["heading"]
+                    "heading"  =>  (isset($fieldSpec["heading"]) ? $fieldSpec["heading"] : var2label($fieldName))
                 );
                 
             }
@@ -80,7 +92,31 @@ abstract class Object
         }
         
         ksort($rtn);
-        return $rtn;
+        
+        if ($rtn == array()) {
+            
+            // Grid hasn't been specified so show all fields.
+            
+            foreach ($this->_fields as $fieldName => $fieldSpec) {
+                
+                $rtn[] = array(
+                    "field"    =>  "cite" . var2func($fieldName),
+                    "heading"  =>  var2label($fieldName)
+                );
+                
+            }
+            
+        }
+        
+        return $this->__grid_head = $rtn;
+    }
+    
+    /**
+     *
+     */
+    public function uid()
+    {
+        return $this->{$this->_uid};
     }
     
     /**
@@ -101,9 +137,9 @@ abstract class Object
                 $name = func2var(substr($name, 3));
                 
                 if (array_key_exists($name, $this->_fields)) {
-                    
                     return $this->_fields[$name]["value"];
                 }
+                break;
             
             case (substr($name, 0, 4) == "cite"):
                 
@@ -146,6 +182,7 @@ abstract class Object
                     }
                     return FALSE;
                 }
+                break;
             
         }
         
@@ -158,6 +195,8 @@ abstract class Object
     protected function typeOf($var)
     {
         if (!array_key_exists($var, $this->_fields)) return NULL;
+        if (!isset($this->_fields[$var]["type"])) return "string";
+        
         $pieces = explode(":", $this->_fields[$var]["type"], 2);
         return $pieces[0];
     }

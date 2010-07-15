@@ -23,6 +23,19 @@ abstract class Controller
     protected $_components = array();
     
     /**
+     *
+     */
+    public function __construct()
+    {
+        foreach ($this->_components as $component) {
+            
+            $componentClass = $component . "Component";
+            $this->$component = new $componentClass($this);
+            
+        }
+    }
+    
+    /**
      * Sets the view to use.
      *
      * @param  View  $view
@@ -50,6 +63,7 @@ abstract class Controller
      */
     public function output()
     {
+        if (!$this->_view instanceof View) return FALSE;
         return $this->_view->output();
     }
     
@@ -79,21 +93,5 @@ abstract class Controller
         @header("Location: " . $url);
         
         exit();
-    }
-    
-    /**
-     *
-     */
-    public function useComponent($name, Component $component)
-    {
-        $this->_components[$name] = $component;
-    }
-    
-    /**
-     *
-     */
-    public function getComponent($name)
-    {
-        return (isset($this->_components[$name]) ? $this->_components[$name] : FALSE);
     }
 }

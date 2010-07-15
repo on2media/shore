@@ -2,9 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
+        
         <title>{$page_title|escape} &laquo; Glooware Blog Admin</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
         <link rel="stylesheet" type="text/css" href="{$base}assets/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}assets/datepicker.css" />
+        
+        <script type="text/javascript">var base = '{$base}';</script>
+        
+        <script type="text/javascript" src="{$base}assets/vendor/tiny_mce/tiny_mce.js"></script>
+        <script type="text/javascript" src="{$base}assets/editor.js"></script>
+        
+        <script type="text/javascript" src="{$base}assets/moo-core.js"></script>
+        <script type="text/javascript" src="{$base}assets/datepicker.js"></script>
+        <script type="text/javascript" src="{$base}assets/admin.js"></script>
+        
     </head>
 
     <body>

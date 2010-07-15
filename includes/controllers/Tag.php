@@ -11,6 +11,11 @@ class TagController extends Controller
     /**
      *
      */
+    protected $_components = array("Auth", "Edit", "Grid");
+    
+    /**
+     *
+     */
     public function browse(array $vars=array())
     {
         $obj = new PostObject();
@@ -48,19 +53,25 @@ class TagController extends Controller
      */
     public function grid(array $vars=array())
     {
-        $obj = new TagObject(); // The below is ALWAYS the same!!
-        $obj->getCollection()->fetchAll();
+        $obj = new TagObject();
         
-        $this->useComponent("Auth", new AuthComponent($this));
+        if ($this->Auth->canAccess(__FUNCTION__)) {
+            $this->Grid->draw($obj, "Tags");
+        }
         
-        $this->setView(new SmartyView("admin.grid.tpl"));
-        $this->getView()->setLayout("layout.admin.tpl");
+        return $this->output();
+    }
+    
+    /**
+     *
+     */
+    public function edit(array $vars=array())
+    {
+        $obj = new TagObject();
         
-        if ($this->getComponent("Auth")->canAccess(__FUNCTION__)) {
-            
-            $this->getView()->assign("data", $obj);
-            $this->getView()->assign("page_title", "Tags"); // CHANGED!!
-            
+        if ($this->Auth->canAccess(__FUNCTION__)) {
+            if (count($vars) != 2) exit();
+            $this->Edit->draw($obj, $vars[1], "Edit Tag");
         }
         
         return $this->output();

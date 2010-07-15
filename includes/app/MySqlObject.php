@@ -47,6 +47,42 @@ abstract class MySqlObject extends Object
     }
     
     /**
+     *
+     */
+    public function getEditForm()
+    {
+        $rtn = array();
+        
+        $varTypes = array("_fields", "_relationships");
+        
+        foreach ($varTypes as $varType) {
+            
+            foreach ($this->$varType as $fieldName => $fieldSpec) {
+                
+                if (isset($fieldSpec["on_edit"]) && ($spec = $fieldSpec["on_edit"])) {
+                    
+                    $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
+                    $control = new $controlClass(
+                        $this,
+                        $fieldName,
+                        $fieldSpec["heading"],
+                        (isset($fieldSpec["on_edit"]["tip"]) ? $fieldSpec["on_edit"]["tip"] : NULL)
+                    );
+                    
+                    $rtn[(int)$spec["position"]] = $control;
+                    
+                }
+                
+            }
+            
+        }
+        
+        ksort($rtn);
+        
+        return $rtn;
+    }
+    
+    /**
      * Method overloading handler
      *
      * @param  string  $name  Method called.
@@ -65,21 +101,26 @@ abstract class MySqlObject extends Object
                 
                 //TODO: only do this if the type is wrong.
                 
-                if (isset($fieldSpec["data_type"]["timestamp"]) && !is_int($value)) {
-                    return $this->$fieldName = strtotime($value);
-                }
-                
-                if (isset($fieldSpec["data_type"]["boolean"]) && !is_bool($value)) {
-                    return $this->$fieldName = ($value == 1);
-                }
-                
-                if (isset($fieldSpec["model"])) {
-                    $models = array_keys($fieldSpec["model"]);
-                    $modelObject = $models[0] . "Object";
-                    if (!$value instanceof $modelObject) {
-                        $model = new $modelObject();
-                        return $this->$fieldName = $model->fetchById($value);
-                    }
+                switch ($this->typeOf($fieldName)) {
+                    
+                    case "timestamp":
+                        if (!is_int($value)) return $this->$fieldName = strtotime($value);
+                        break;
+                    
+                    case "boolean":
+                        if (!is_bool($value)) return $this->$fieldName = ($value == 1);
+                        break;
+                    
+                    case "object":
+                        $pieces = explode(":", $this->_fields[$fieldName]["type"], 2);
+                        if (isset($pieces[1])) {
+                            $modelObject = $pieces[1] . "Object";
+                            if (!$value instanceof $modelObject) {
+                                $model = new $modelObject();
+                                return $this->$fieldName = $model->fetchById($value);
+                            }
+                        }
+                        break;
                 }
                 
             }

@@ -102,3 +102,39 @@ table.grid th {
 table.grid td {
     border-bottom: 1px solid #ccc;
 }
+form p {
+    clear: both;
+}
+form label {
+    display: block;
+    font-weight: bold;
+    line-height: 1.4em;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 6px;
+}
+form label span {
+    margin-left: 0.5em;
+    font-weight: normal;
+    font-style: italic;
+    color: #778;
+    font-size: 11px;
+}
+input, textarea {
+    font: 12px sans-serif;
+    padding: 4px;
+    border: 1px solid #778;
+}
+input:focus, textarea:focus, select:focus {
+    background-color: #ffe !important;
+}
+input[size='80'], textarea[cols='80'] {
+    width: 930px;
+}
+option {
+    padding-right: 1em;
+}
+input.datetime {
+    width: 172px;
+    padding-right: 24px;
+    background: url(img/ico/date_edit.png) no-repeat 180px 3px;
+}

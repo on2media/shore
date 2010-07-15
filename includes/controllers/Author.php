@@ -11,6 +11,11 @@ class AuthorController extends Controller
     /**
      *
      */
+    protected $_components = array("Auth", "Edit", "Grid");
+    
+    /**
+     *
+     */
     public function browse(array $vars=array())
     {
         $obj = new PostObject();
@@ -35,6 +40,35 @@ class AuthorController extends Controller
         
         $sideBar = new SideBarController();
         $this->getView()->assign("sidebar", $sideBar->view());
+        
+        return $this->output();
+    }
+    
+    /**
+     *
+     */
+    public function grid(array $vars=array())
+    {
+        $obj = new AuthorObject();
+        
+        if ($this->Auth->canAccess(__FUNCTION__)) {
+            $this->Grid->draw($obj, "Authors");
+        }
+        
+        return $this->output();
+    }
+    
+    /**
+     *
+     */
+    public function edit(array $vars=array())
+    {
+        $obj = new AuthorObject();
+        
+        if ($this->Auth->canAccess(__FUNCTION__)) {
+            if (count($vars) != 2) exit();
+            $this->Edit->draw($obj, $vars[1], "Edit Author");
+        }
         
         return $this->output();
     }

@@ -36,9 +36,13 @@ Router::connect("/^tag\/([0-9]*)\/$/i", "Tag", "browse");
 // Admin Pages
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/$/i", "Admin", "dashboard");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/$/i", "Post", "grid");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/edit\/([0-9]*)\/$/i", "Post", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/comments\/$/i", "Comment", "grid");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/comments\/edit\/([0-9]*)\/$/i", "Comment", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/tags\/$/i", "Tag", "grid");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/tags\/edit\/([0-9]*)\/$/i", "Tag", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/authors\/$/i", "Author", "grid");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/authors\/edit\/([0-9]*)\/$/i", "Author", "edit");
 
 // Default Page (404)
 Router::connect("/^.*$/", "StaticPage", "notFound");
