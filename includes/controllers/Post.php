@@ -24,8 +24,8 @@ class PostController extends Controller
         
         if ($data = $obj->fetchById($vars[2])) {
             
-            if ($data->getType() != $vars[1]) {
-                $this->redirect(_BASE . $data->getType() . "/" . $vars[2] . "/");
+            if ($data->getType()->getKey() != $vars[1]) {
+                $this->redirect(_BASE . $data->getType()->getKey() . "/" . $vars[2] . "/");
             }
             
             $this->setView(new SmartyView("post.view.tpl"));

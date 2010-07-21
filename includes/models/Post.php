@@ -76,11 +76,12 @@ class PostObject extends MySqlObject
         "type" => array(
             "heading" => "Page or Post?",
             "value" => "",
+            "type" => "object:PostType",
             //"regexp" => array("/^post|page$/" => "Is this a page or a post?"),
             "on_grid" => array("position" => 2),
             "on_edit" => array(
                 "position" => 6,
-                "control" => "Input"
+                "control" => "Select"
             )
         ),
     );

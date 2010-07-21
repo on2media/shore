@@ -11,12 +11,51 @@
 class MySqlCollection extends Collection
 {
     /**
+     * Stores the limits put in place using the setLimit() method.
+     *
+     * @var  array
+     */
+    protected $_limits = array("conditions" => array(), "values" => array());
+    
+    /**
      * Calls the parent constructor, but forces the model to be a MySqlObject by utilising type
      * hinting.
      */
     public function __construct(MySqlObject $obj)
     {
         parent::__construct($obj);
+    }
+    
+    /**
+     * Limits the records returned when the collection is fetched.
+     *
+     * @param  string  $field  The field name to apply the limit to.
+     * @param  string  $condition  The condition to limit by. The condition isn't validated so
+     *                             anything can be specified. Typical value conditions would be
+     *                             =, !=, <, >, IN or NOT IN. If IN or NOT IN are specified the
+     *                             $value should be an array.
+     * @param  string|int|float|array  $value  The value to limit by.
+     * @return  boolean
+     */
+    public function setLimit($field, $condition, $value)
+    {
+        if ((strtoupper($condition) == "IN" || strtoupper($condition) == "NOT IN") && is_array($value)) {
+            
+            if (count($value) == 0) return FALSE;
+            
+            $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
+            " (" . substr(str_repeat("?, ", count($value)), 0, -strlen(", ")) . ")";
+            
+            foreach ($value as $inValue) $this->_limits["values"][] = $inValue;
+            
+        } else {
+            
+            $this->_limits["conditions"][] = $field . " " . $condition . " ?";
+            $this->_limits["values"][] = $value;
+            
+        }
+        
+        return TRUE;
     }
     
     /**

@@ -35,8 +35,12 @@ body {
 }
 #wrapper {
     width: 940px;
+    margin-bottom: 50px;
     padding: 20px 10px;
     background: #fff;
+    -moz-border-radius: 0 0 1em 1em;
+    -webkit-border-bottom-left-radius: 1em;
+    -webkit-border-bottom-right-radius: 1em;
 }
 div.status {
     background-repeat: no-repeat;
@@ -123,6 +127,8 @@ input, textarea {
     font: 12px sans-serif;
     padding: 4px;
     border: 1px solid #778;
+    -moz-border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
 }
 input:focus, textarea:focus, select:focus {
     background-color: #ffe !important;

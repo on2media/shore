@@ -65,7 +65,7 @@ abstract class Object
      */
     public function fetchById($id)
     {
-        $this->_collection->setLimit("id", "=", $id);
+        $this->_collection->setLimit($this->_uid, "=", $id);
         return $this->_collection->fetchFirst();
     }
     

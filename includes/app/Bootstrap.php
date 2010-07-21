@@ -68,7 +68,10 @@ function classAutoloader($className)
             $inc = _PATH . "includes" . DS . "controls" . DS . $matches[1] . ".php";
             break;
         
-        case ($className != "MySqlObject" && preg_match("/^([A-Za-z]+)Object$/", $className, $matches)):
+        case (
+            !in_array($className, array("MySqlObject", "MapObject")) &&
+            preg_match("/^([A-Za-z]+)Object$/", $className, $matches)
+        ):
             $inc = _PATH . "includes" . DS . "models" . DS . $matches[1] . ".php";
             break;
         

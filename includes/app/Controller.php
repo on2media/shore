@@ -89,8 +89,8 @@ abstract class Controller
             default  : $status = "302 Found"; break;
         }
         
-        @header($_SERVER["SERVER_PROTOCOL"] . " $status");
-        @header("Location: " . $url);
+        header($_SERVER["SERVER_PROTOCOL"] . " $status");
+        header("Location: " . $url);
         
         exit();
     }
