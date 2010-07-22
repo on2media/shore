@@ -56,7 +56,7 @@
                             </td>
                         {/foreach}
                         <td>
-                            <a href="edit/{$row->getId()}/">Edit</a>
+                            <a href="edit/{$row->uid()|escape}/">Edit</a>
                         </td>
                     </tr>
                 {/foreach}

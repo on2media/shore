@@ -4,10 +4,10 @@
 
 {if $data instanceof PostObject}
     
-    <{$hx}><a href="{$base}post/{$data->getId()}/">{$data->getTitle()|escape}</a></{$hx}>
+    <{$hx}><a href="{$base}post/{$data->uid()|escape}/">{$data->getTitle()|escape}</a></{$hx}>
     
     <p>
-        Posted by <a href="{$base}author/{$data->getAuthor()->getId()}/">{$data->getAuthor()->getName()|escape}</a>
+        Posted by <a href="{$base}author/{$data->getAuthor()->uid()|escape}/">{$data->getAuthor()->getName()|escape}</a>
         on {$data->getPosted()|date:'jS F Y \a\t g:ia'}.
     </p>
     
@@ -17,7 +17,7 @@
         <p>
             Tags:{counter assign=i start=0}{foreach from=$data->getTags() item=tag} {strip}
                 {counter assign=i}
-                <a href="{$base}tag/{$tag->getId()}/">{$tag->getTag()|escape}</a>
+                <a href="{$base}tag/{$tag->uid()|escape}/">{$tag->getTag()|escape}</a>
                 {if $i != $numTags},{else}.{/if}
             {/strip}{/foreach}
         </p>
@@ -61,7 +61,7 @@
         </p>
         
         <p>
-            <a href="{$base}post/{$data->getId()}/">Read More&hellip;</a>
+            <a href="{$base}post/{$data->uid()|escape}/">Read More&hellip;</a>
         </p>
         
         <hr />

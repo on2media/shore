@@ -29,6 +29,11 @@ abstract class MySqlObject extends Object
     protected $_relationships = array();
     
     /**
+     *
+     */
+    protected $_varTypes = array("_fields", "_relationships");
+    
+    /**
      * Defines a MySqlCollection to store a data set of records.
      */
     public function __construct()
@@ -49,37 +54,86 @@ abstract class MySqlObject extends Object
     /**
      *
      */
-    public function getEditForm()
+    public function save()
     {
-        $rtn = array();
+        //TODO: make sure all fields are valid
         
-        $varTypes = array("_fields", "_relationships");
+        $dbh = MySqlDatabase::getInstance();
         
-        foreach ($varTypes as $varType) {
+        $fields = $values = array();
+        
+        $variables = array();
+        
+        foreach($this->_fields as $fieldName => $fieldSpec) {
             
-            foreach ($this->$varType as $fieldName => $fieldSpec) {
+            if ($fieldName != $this->uidField()) $variables[$fieldName] = $this->$fieldName;
+            
+        }
+        
+        foreach ($variables as $key => $value) {
+            
+            if (is_object($value) && $value instanceof Collection) {
                 
-                if (isset($fieldSpec["on_edit"]) && ($spec = $fieldSpec["on_edit"])) {
+                //TODO: handle collections
+                
+            } else {
+                
+                $fields[] = $key;
+                
+                switch ($this->typeOf($key)) {
                     
-                    $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
-                    $control = new $controlClass(
-                        $this,
-                        $fieldName,
-                        $fieldSpec["heading"],
-                        (isset($fieldSpec["on_edit"]["tip"]) ? $fieldSpec["on_edit"]["tip"] : NULL)
-                    );
+                    case "boolean":
+                        
+                        $value = ($value == TRUE ? 1 : 0);
+                        break;
                     
-                    $rtn[(int)$spec["position"]] = $control;
+                    case "object":
+                        
+                        $value = $value->uid();
+                        break;
+                    
+                    case "timestamp":
+                        
+                        $value = ($value != NULL ? date("Y-m-d H:i:s", $value) : NULL);
+                        break;
                     
                 }
+                
+                $values[] = $value;
                 
             }
             
         }
         
-        ksort($rtn);
+        if ($this->uid() != NULL) {
+            
+            $sql = sprintf("UPDATE %s SET ", $this->_table);
+            foreach ($fields as $field) $sql .= "`" . $field . "`=?, ";
+            $sql = substr($sql, 0, -strlen(", ")) . sprintf(" WHERE %s=?", $this->uidField());
+            
+            $values[] = $this->uid();
+            
+        } else {
+            
+            // prepare the sql for an insert
+            $sql = sprintf("INSERT INTO %s (", $this->_table);
+            foreach ($fields as $field) $sql .= "`" . $field . "`, ";
+            $sql = substr($sql, 0, -strlen(", ")) . ") VALUES (";
+            for ($i=0;$i<count($values);$i++) $sql .= "?, ";
+            $sql = substr($sql, 0, -strlen(", ")) . ")";
+            
+        }
         
-        return $rtn;
+        $sth = $dbh->prepare($sql);
+        
+        if ($sth->execute($values)) {
+            
+            if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
+            return TRUE;
+            
+        }
+        
+        return FALSE;
     }
     
     /**
@@ -98,8 +152,6 @@ abstract class MySqlObject extends Object
             if (isset($this->_fields[$fieldName]) && ($fieldSpec = $this->_fields[$fieldName])) {
                 
                 $value = parent::__call($func, array());
-                
-                //TODO: only do this if the type is wrong.
                 
                 switch ($this->typeOf($fieldName)) {
                     
@@ -130,6 +182,10 @@ abstract class MySqlObject extends Object
                 $obj = $linkSpec["collection"];
                 $tags = new $obj();
                 
+                $value =& $this->_relationships[$fieldName]["value"];
+                
+                if ($value instanceof MySqlCollection && $value->getObject() instanceof $obj) return $value;
+                
                 $dbh = MySqlDatabase::getInstance();
                 
                 $sql = sprintf("SELECT %s FROM %s WHERE %s = ?",
@@ -156,7 +212,7 @@ abstract class MySqlObject extends Object
                     
                 }
                 
-                return $tags->getCollection();
+                return $value = $tags->getCollection();
                 
             }
             

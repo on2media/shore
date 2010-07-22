@@ -39,6 +39,7 @@ class MapCollection extends Collection
     public function fetchAll()
     {
         //TODO: Handle... $this->_start   $this->_range   $this->_order
+        $this->_dataSet = array();
         
         $objClass = get_class($this->_obj);
         
@@ -52,19 +53,19 @@ class MapCollection extends Collection
         
         foreach ($this->_limits as $limit) {
             
-            foreach ($this as $key => $obj) {
+            foreach ($this->_dataSet as $key => $field) {
                 
                 $remove = FALSE;
                 
                 switch (strtoupper($limit["condition"])) {
                     
                     case "=":
-                        $remove = ($obj->$limit["field"] != $limit["value"]);
+                        $remove = ($field->getKey() != $limit["value"]);
                         break;
                     
                     case "!=":
                     case "<>":
-                        $remove = ($obj->$limit["field"] == $limit["value"]);
+                        $remove = ($field->getKey() == $limit["value"]);
                         break;
                     
                     case "IN":

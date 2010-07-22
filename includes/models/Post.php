@@ -19,11 +19,9 @@ class PostObject extends MySqlObject
             "value" => NULL,
             "type" => "timestamp:jS F Y \\a\\t g:ia",
             "validation" => array(
-                "rule" => "timestamp",
-                "required" => TRUE,
-                "message" => "Please enter a valid time"
+                "timestamp" => array("message" => "Please enter a valid time")
             ),
-            //"data_type" => array("timestamp" => "Please enter a valid time."),
+            "required" => TRUE,
             //"has_default" => TRUE,
             "on_grid" => array("position" => 1),
             "on_edit" => array(
@@ -35,7 +33,9 @@ class PostObject extends MySqlObject
         "author" => array(
             "value" => "",
             "type" => "object:Author",
-            //"model" => array("Author" => "Invalid author identifier."),
+            "validation" => array(
+                "object" => array("object" => "Author", "message" => "Please select an author from the list.")
+            ),
             "on_grid" => array("position" => 4),
             "on_edit" => array(
                 "position" => 2,
@@ -45,7 +45,10 @@ class PostObject extends MySqlObject
         ),
         "title" => array(
             "value" => "",
-            //"regexp" => array("/^.{1,255}$/i" => "Please enter a valid title."),
+            "validation" => array(
+                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid title.")
+            ),
+            "required" => TRUE,
             "on_grid" => array("position" => 3),
             "on_edit" => array(
                 "position" => 3,
@@ -64,7 +67,6 @@ class PostObject extends MySqlObject
             "heading" => "Can Comment?",
             "value" => NULL,
             "type" => "boolean",
-            //"data_type" => array("boolean" => "Please select yes or no."),
             //"has_default" => TRUE,
             "on_grid" => array("position" => 5),
             "on_edit" => array(
@@ -77,7 +79,10 @@ class PostObject extends MySqlObject
             "heading" => "Page or Post?",
             "value" => "",
             "type" => "object:PostType",
-            //"regexp" => array("/^post|page$/" => "Is this a page or a post?"),
+            "validation" => array(
+                "object" => array("object" => "PostType", "message" => "Please select a type from the list.")
+            ),
+            "required" => TRUE,
             "on_grid" => array("position" => 2),
             "on_edit" => array(
                 "position" => 6,
@@ -88,6 +93,7 @@ class PostObject extends MySqlObject
     
     protected $_relationships = array(
         "tags" => array(
+            "value" => NULL,
             "column" => "tag",
             "table" => "post_tags",
             "foreign" => "post",
@@ -100,6 +106,7 @@ class PostObject extends MySqlObject
             )
         ),
         "comments" => array(
+            "value" => NULL,
             "column" => "id",
             "table" => "comments",
             "foreign" => "post",

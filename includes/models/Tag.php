@@ -17,7 +17,10 @@ class TagObject extends MySqlObject
         ),
         "tag" => array(
             "value" => "",
-            //"regexp" => array("/^.{1,255}$/i" => "Please enter a valid tag."),
+            "validation" => array(
+                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid tag.")
+            ),
+            "required" => TRUE,
             "on_grid" => array("position" => 1, "heading" => "Tag"),
             "on_edit" => array(
                 "position" => 1,

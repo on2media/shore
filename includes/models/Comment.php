@@ -18,7 +18,10 @@ class CommentObject extends MySqlObject
         "post" => array(
             "value" => "",
             "type" => "object:Post",
-            //"model" => array("Post" => "Invalid post identifier."),
+            "validation" => array(
+                "object" => array("object" => "Post", "message" => "A comment must refer to a post.")
+            ),
+            "required" => TRUE,
             "on_grid" => array("position" => 2, "heading" => "Post"),
             "on_edit" => array(
                 "position" => 1,
@@ -29,7 +32,9 @@ class CommentObject extends MySqlObject
         "received" => array(
             "value" => NULL,
             "type" => "timestamp",
-            //"data_type" => array("timestamp" => "Please enter a valid time."),
+            "validation" => array(
+                "timestamp" => array("message" => "Please enter a valid time")
+            ),
             //"has_default" => TRUE,
             "on_grid" => array("position" => 1, "heading" => "Received"),
             "on_edit" => array(

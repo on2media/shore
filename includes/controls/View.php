@@ -16,4 +16,12 @@ class ViewControl extends Control
         $func = "cite" . var2func($this->_var);
         return $this->getWrapper(htmlentities($this->_obj->$func()));
     }
+    
+    /**
+     *
+     */
+    public function process(array $formData)
+    {
+        return TRUE;
+    }
 }

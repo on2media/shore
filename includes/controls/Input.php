@@ -22,4 +22,13 @@ class InputControl extends Control
         
         return $this->getWrapper($field);
     }
+    
+    /**
+     *
+     */
+    public function process(array $formData)
+    {
+        if (isset($formData[$this->_var])) $formData[$this->_var] = trim($formData[$this->_var]);
+        return parent::process($formData);
+    }    
 }

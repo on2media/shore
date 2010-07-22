@@ -31,4 +31,13 @@ abstract class MapObject extends Object
     {
         return $this->_values;
     }
+    
+    /**
+     *
+     */
+    public function save() {
+        
+        trigger_error("Map Objects can't be created or updated.", E_USER_ERROR);
+        
+    }
 }

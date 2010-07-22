@@ -22,4 +22,13 @@ class CheckboxControl extends Control
         
         return $this->getWrapper($field);
     }
+    
+    /**
+     *
+     */
+    public function process(array $formData)
+    {
+        $formData[$this->_var] = (isset($formData[$this->_var]));
+        return parent::process($formData);
+    }
 }

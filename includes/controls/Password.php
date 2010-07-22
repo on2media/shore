@@ -22,4 +22,14 @@ class PasswordControl extends Control
         
         return $this->getWrapper($field);
     }
+    
+    /**
+     *
+     */
+    public function process(array $formData)
+    {
+        //TODO: password validation
+        
+        return parent::process($formData);
+    }
 }
