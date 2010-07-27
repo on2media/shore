@@ -12,8 +12,7 @@ class PostObject extends MySqlObject
     
     protected $_fields = array(
         "id" => array(
-            "value" =>  NULL,
-            //"data_type" => array("primary" => "Invalid post identifier.")
+            "value" =>  NULL
         ),
         "posted" => array(
             "value" => NULL,
@@ -22,7 +21,6 @@ class PostObject extends MySqlObject
                 "timestamp" => array("message" => "Please enter a valid time")
             ),
             "required" => TRUE,
-            //"has_default" => TRUE,
             "on_grid" => array("position" => 1),
             "on_edit" => array(
                 "position" => 1,
@@ -67,7 +65,6 @@ class PostObject extends MySqlObject
             "heading" => "Can Comment?",
             "value" => NULL,
             "type" => "boolean",
-            //"has_default" => TRUE,
             "on_grid" => array("position" => 5),
             "on_edit" => array(
                 "position" => 5,
@@ -93,6 +90,7 @@ class PostObject extends MySqlObject
     
     protected $_relationships = array(
         "tags" => array(
+            "type" => "m-m",
             "value" => NULL,
             "column" => "tag",
             "table" => "post_tags",
@@ -106,6 +104,7 @@ class PostObject extends MySqlObject
             )
         ),
         "comments" => array(
+            "type" => "1-m",
             "value" => NULL,
             "column" => "id",
             "table" => "comments",

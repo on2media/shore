@@ -13,7 +13,9 @@ class EditComponent extends Component
      */
     public function draw(Object $obj, $uid, $title)
     {
-        if ($data = $obj->fetchById($uid)) {
+        $data = ($uid == "new" ? $obj : $obj->fetchById($uid));
+        
+        if ($data) {
             
             $this->_controller->setView(new SmartyView("admin.edit.tpl"));
             $tpl = $this->_controller->getView();
@@ -28,7 +30,15 @@ class EditComponent extends Component
                     
                 } else if ($data->save()) {
                     
-                    $tpl->assign("status_confirm", "Changes have been successfully saved.");
+                    $tpl->assign_session("status_confirm", "Changes have been successfully saved.");
+                    
+                    $newUrl = _PAGE;
+                    
+                    if (substr(_PAGE, -4, 4) == "new/") {
+                        $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
+                    }
+                    
+                    $this->_controller->redirect(_BASE . $newUrl);
                     
                 } else {
                     
@@ -39,7 +49,7 @@ class EditComponent extends Component
             }
             
             $tpl->assign("data", $data);
-            $tpl->assign("page_title", $title);
+            $tpl->assign("page_title", ($uid == "new" ? "Add" : "Edit") . " $title");
             
         }
     }

@@ -19,12 +19,3 @@
     </form>
     
 {/if}
-
-<div class="status info">The button below is just for testing.</div>
-
-<form action="" method="post">
-    <p>
-        <input type="hidden" name="test" value="123" />
-        <input type="submit" value="Send Empty Post" />
-    </p>
-</form>

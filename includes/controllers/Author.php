@@ -67,7 +67,7 @@ class AuthorController extends Controller
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             if (count($vars) != 2) exit();
-            $this->Edit->draw($obj, $vars[1], "Edit Author");
+            $this->Edit->draw($obj, $vars[1], "Author");
         }
         
         return $this->output();

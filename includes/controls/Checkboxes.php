@@ -26,7 +26,7 @@ class CheckboxesControl extends Control
         $optClass = get_class($checked->getObject());
         $options = new $optClass();
         
-        if (count($options->getCollection()->fetchAll()) == 0) {
+        if ($options->getCollection()->fetchAll()->count() == 0) {
             
             $field = "&nbsp;";
             

@@ -22,6 +22,7 @@ class CommentController extends Controller
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             $this->Grid->draw($obj, "Comments");
+            $this->getView()->assign("edit_only", TRUE);
         }
         
         return $this->output();
@@ -36,7 +37,18 @@ class CommentController extends Controller
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             if (count($vars) != 2) exit();
-            $this->Edit->draw($obj, $vars[1], "Edit Comment");
+            
+            if ($vars[1] == "new") {
+                
+                $this->setView(new SmartyView("layout.admin.tpl"));
+                $this->getView()->assign("page_title", "Add Comment");
+                $this->getView()->assign("status_alert", "You are not able to add comments.");
+                
+            } else {
+                
+                $this->Edit->draw($obj, $vars[1], "Comment");
+                
+            }
         }
         
         return $this->output();

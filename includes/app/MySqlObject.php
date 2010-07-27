@@ -62,25 +62,14 @@ abstract class MySqlObject extends Object
         
         $fields = $values = array();
         
-        $variables = array();
-        
         foreach($this->_fields as $fieldName => $fieldSpec) {
             
-            if ($fieldName != $this->uidField()) $variables[$fieldName] = $this->$fieldName;
-            
-        }
-        
-        foreach ($variables as $key => $value) {
-            
-            if (is_object($value) && $value instanceof Collection) {
+            if ($fieldName != $this->uidField()) {
                 
-                //TODO: handle collections
+                $fields[] = $fieldName;
+                $value = $this->$fieldName;
                 
-            } else {
-                
-                $fields[] = $key;
-                
-                switch ($this->typeOf($key)) {
+                switch ($this->typeOf($fieldName)) {
                     
                     case "boolean":
                         
@@ -115,7 +104,6 @@ abstract class MySqlObject extends Object
             
         } else {
             
-            // prepare the sql for an insert
             $sql = sprintf("INSERT INTO %s (", $this->_table);
             foreach ($fields as $field) $sql .= "`" . $field . "`, ";
             $sql = substr($sql, 0, -strlen(", ")) . ") VALUES (";
@@ -126,14 +114,68 @@ abstract class MySqlObject extends Object
         
         $sth = $dbh->prepare($sql);
         
-        if ($sth->execute($values)) {
+        if (!$sth->execute($values)) return FALSE;
+        
+        if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
+        
+        foreach($this->_relationships as $fieldName => $fieldSpec) {
             
-            if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
-            return TRUE;
+            if ($fieldSpec["type"] == "m-m") {
+                
+                $fieldValue = $this->$fieldName;
+                
+                if (is_object($fieldValue) && $fieldValue instanceof MySqlCollection) {
+                    
+                    try {
+                        
+                        if ($dbh->beginTransaction()) {
+                            
+                            $sth = $dbh->prepare(sprintf("DELETE FROM %s WHERE %s=?",
+                                $fieldSpec["table"],
+                                $fieldSpec["foreign"]
+                            ));
+                            
+                            if (!$sth->execute(array($this->uid()))) {
+                                
+                                $dbh->rollBack();
+                                return FALSE;
+                                
+                            } else {
+                                
+                                foreach ($fieldValue as $obj) {
+                                    
+                                    $sth = $dbh->prepare(sprintf("INSERT INTO %s (%s, %s) VALUES (?, ?)",
+                                        $fieldSpec["table"],
+                                        $fieldSpec["foreign"],
+                                        $fieldSpec["column"]
+                                    ));
+                                    
+                                    if (!$sth->execute(array($this->uid(), $obj->uid()))) {
+                                        
+                                        $dbh->rollBack();
+                                        return FALSE;
+                                        
+                                    }
+                                    
+                                }
+                                
+                                $dbh->commit();
+                                
+                            }
+                            
+                        }
+                        
+                    } catch (PDOException $e) {
+                        exit('Database error: ' . $e->getMessage() . " [$sql]");
+                    }
+                    
+                }
+                
+            }
             
         }
         
-        return FALSE;
+        return TRUE;
     }
     
     /**

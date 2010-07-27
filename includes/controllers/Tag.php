@@ -71,7 +71,7 @@ class TagController extends Controller
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             if (count($vars) != 2) exit();
-            $this->Edit->draw($obj, $vars[1], "Edit Tag");
+            $this->Edit->draw($obj, $vars[1], "Tag");
         }
         
         return $this->output();

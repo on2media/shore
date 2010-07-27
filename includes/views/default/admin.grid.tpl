@@ -6,13 +6,15 @@
     
 {else}
     
-    <form action="edit/add" method="get">
-        
-        <p>
-            <input type="submit" value="Add New" />
-        </p>
-        
-    </form>
+    {if !$edit_only}
+        <form action="edit/new" method="get">
+            
+            <p>
+                <input type="submit" value="Add New" />
+            </p>
+            
+        </form>
+    {/if}
     
     <form action="delete/" method="post">
         

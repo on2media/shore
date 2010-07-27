@@ -100,8 +100,14 @@ abstract class Control
         return ($this->_error != "" ? $this->_error : FALSE);
     }
     
+    /**
+     *
+     */
     abstract public function output();
     
+    /**
+     *
+     */
     public function process(array $formData)
     {
         if (!isset($formData[$this->_var])) {
@@ -116,11 +122,14 @@ abstract class Control
         }
     }
     
+    /**
+     *
+     */
     public function validate()
     {
         $value = $this->_obj->{$this->_var};
         
-        if ($this->_error != "" && $value === FALSE) return FALSE;
+        if ($this->_error != "") return FALSE;
         
         if ($this->_required == FALSE) {
             
@@ -155,6 +164,28 @@ abstract class Control
                     $subject = (is_object($value) ? $value->uid() : $value);
                     $fail = (!preg_match($opts["test"], $subject));
                     $message = "This field is invalid.";
+                    break;
+                
+                case "unique":
+                    
+                    $className = get_class($this->_obj);
+                    $obj = new $className();
+                    
+                    $collection = $obj->getCollection();
+                    $collection->setLimit($this->_var, "=", $value);
+                    
+                    foreach ($collection->fetchAll() as $other) {
+                        
+                        if ($other->uid() != $this->_obj->uid()) {
+                            
+                            $fail = TRUE;
+                            $message = "This field must be unique.";
+                            break(2);
+                            
+                        }
+                        
+                    }
+                    
                     break;
                 
             }

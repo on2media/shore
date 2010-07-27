@@ -13,10 +13,8 @@ class PasswordControl extends Control
      */
     public function output()
     {
-        $func = "get" . var2func($this->_var);
-        
-        $field = sprintf("New Password: <input type=\"password\" name=\"%1\$s\" value=\"\" size=\"30\" /> &nbsp;\n" .
-        "Confirm Password: <input type=\"password\" name=\"%1\$s\" value=\"\" size=\"30\" />",
+        $field = sprintf("New Password: <input type=\"password\" name=\"%1\$s[]\" value=\"\" size=\"30\" /> &nbsp;\n" .
+        "Confirm Password: <input type=\"password\" name=\"%1\$s[]\" value=\"\" size=\"30\" />",
             $this->_var
         );
         
@@ -28,7 +26,31 @@ class PasswordControl extends Control
      */
     public function process(array $formData)
     {
-        //TODO: password validation
+        if (isset($formData[$this->_var])) {
+            
+            $value =& $formData[$this->_var];
+            
+            if (!is_array($value)) {
+                
+                $value = FALSE;
+                $this->_error = "Unexpected password value.";
+                
+            } else {
+                
+                $unique = array_unique($value);
+                $value = reset($value);
+                
+                if (count($unique) != 1) $this->_error = "The passwords entered did not match.";
+                
+                if ($value == "") {
+                    $value = $this->_obj->{$this->_var};
+                } else {
+                    $value = md5($value);
+                }
+                
+            }
+            
+        }
         
         return parent::process($formData);
     }

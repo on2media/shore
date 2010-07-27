@@ -12,8 +12,7 @@ class CommentObject extends MySqlObject
     
     protected $_fields = array(
         "id" => array(
-            "value" =>  NULL,
-            //"data_type" => array("primary" => "Invalid comment identifier.")
+            "value" =>  NULL
         ),
         "post" => array(
             "value" => "",
@@ -35,6 +34,7 @@ class CommentObject extends MySqlObject
             "validation" => array(
                 "timestamp" => array("message" => "Please enter a valid time")
             ),
+            "required" => TRUE,
             //"has_default" => TRUE,
             "on_grid" => array("position" => 1, "heading" => "Received"),
             "on_edit" => array(
@@ -46,6 +46,10 @@ class CommentObject extends MySqlObject
         "content" => array(
             "value" => "",
             "type" => "text",
+            "validation" => array(
+                "regexp" => array("test" => "/^.+$/im", "message" => "Please enter a comment.")
+            ),
+            "required" => TRUE,
             "on_grid" => array("position" => 3, "heading" => "Comment"),
             "on_edit" => array(
                 "position" => 3,

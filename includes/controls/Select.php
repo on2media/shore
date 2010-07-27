@@ -16,10 +16,8 @@ class SelectControl extends Control
         $func = "get" . var2func($this->_var);
         $optionClass = $this->_objType;
         
-        //echo "<pre>" . print_r( $this->_obj->$func() , TRUE) . "</pre>";
-        
         $options = new $optionClass();
-        if (count($options->getCollection()->fetchAll()) == 0) {
+        if ($options->getCollection()->fetchAll()->count() == 0) {
             
             $field = "&nbsp;";
             
@@ -49,7 +47,7 @@ class SelectControl extends Control
         $func = "get" . var2func($this->_var);
         $optionClass = get_class($this->_obj->$func());
         
-        if (isset($formData[$this->_var])) {
+        if ($optionClass && isset($formData[$this->_var])) {
             
             $obj = new $optionClass();
             $formData[$this->_var] = $obj->fetchById($formData[$this->_var]);

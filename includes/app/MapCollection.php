@@ -84,7 +84,7 @@ class MapCollection extends Collection
             
         }
         
-        $this->_total = count($this->_dataSet);
+        $this->_total = $this->count();
         
         return $this;
     }

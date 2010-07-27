@@ -68,7 +68,7 @@ class PostController extends Controller
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             if (count($vars) != 2) exit();
-            $this->Edit->draw($obj, $vars[1], "Edit Post");
+            $this->Edit->draw($obj, $vars[1], "Post");
         }
         
         return $this->output();

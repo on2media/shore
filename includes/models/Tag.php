@@ -12,13 +12,13 @@ class TagObject extends MySqlObject
     
     protected $_fields = array(
         "id" => array(
-            "value" =>  NULL,
-            //"data_type" => array("primary" => "Invalid tag identifier.")
+            "value" =>  NULL
         ),
         "tag" => array(
             "value" => "",
             "validation" => array(
-                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid tag.")
+                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid tag."),
+                "unique" => array("message" => "Another tag exists with this name.")
             ),
             "required" => TRUE,
             "on_grid" => array("position" => 1, "heading" => "Tag"),
@@ -31,6 +31,7 @@ class TagObject extends MySqlObject
     
     protected $_relationships = array(
         "posts" => array(
+            "type" => "m-m",
             "column" => "post",
             "table" => "post_tags",
             "foreign" => "tag",
