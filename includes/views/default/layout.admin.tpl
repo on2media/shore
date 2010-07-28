@@ -28,6 +28,7 @@
                 <li><a href="{$base}{$admin}">Home</a></li>
                 <li><a href="{$base}{$admin}posts/">Posts</a></li>
                 <li><a href="{$base}{$admin}comments/">Comments</a></li>
+                <li><a href="{$base}{$admin}topics/">Topics</a></li>
                 <li><a href="{$base}{$admin}tags/">Tags</a></li>
                 <li><a href="{$base}{$admin}authors/">Authors</a></li>
             </ul>

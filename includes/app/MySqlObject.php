@@ -56,7 +56,7 @@ abstract class MySqlObject extends Object
      */
     public function save()
     {
-        //TODO: make sure all fields are valid
+        if (!$this->validate()) return FALSE;
         
         $dbh = MySqlDatabase::getInstance();
         
@@ -78,7 +78,7 @@ abstract class MySqlObject extends Object
                     
                     case "object":
                         
-                        $value = $value->uid();
+                        $value = ($value != NULL ? $value->uid() : NULL);
                         break;
                     
                     case "timestamp":
@@ -179,6 +179,25 @@ abstract class MySqlObject extends Object
     }
     
     /**
+     *
+     */
+    public function delete()
+    {
+        $dbh = MySqlDatabase::getInstance();
+        
+        $sql = sprintf("DELETE FROM %s WHERE %s=?", $this->_table, $this->uidField());
+        $sth = $dbh->prepare($sql);
+        
+        try {
+            if (!$sth->execute(array($this->uid()))) return FALSE;
+        } catch (PDOException $e) {
+            return FALSE;
+        }
+        
+        return TRUE;
+    }
+    
+    /**
      * Method overloading handler
      *
      * @param  string  $name  Method called.
@@ -206,13 +225,22 @@ abstract class MySqlObject extends Object
                         break;
                     
                     case "object":
+                        
                         $pieces = explode(":", $this->_fields[$fieldName]["type"], 2);
+                        
                         if (isset($pieces[1])) {
+                            
                             $modelObject = $pieces[1] . "Object";
-                            if (!$value instanceof $modelObject) {
+                            
+                            if ($value == NULL || $value instanceof $modelObject) {
+                                $rtn = $value;
+                            } else {
                                 $model = new $modelObject();
-                                return $this->$fieldName = $model->fetchById($value);
+                                $rtn = $model->fetchById($value);
                             }
+                            
+                            return $this->$fieldName = ($rtn ? $rtn : NULL);
+                            
                         }
                         break;
                 }
@@ -222,7 +250,7 @@ abstract class MySqlObject extends Object
             if (isset($this->_relationships[$fieldName]) && ($linkSpec = $this->_relationships[$fieldName])) {
                 
                 $obj = $linkSpec["collection"];
-                $tags = new $obj();
+                $items = new $obj();
                 
                 $value =& $this->_relationships[$fieldName]["value"];
                 
@@ -248,13 +276,15 @@ abstract class MySqlObject extends Object
                     
                     $tagIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);
                     
-                    if (count($tagIds) > 0 && $tags->getCollection()->setLimit("id", "IN", $tagIds)) {
-                        $tags->getCollection()->fetchAll();
+                    if (count($tagIds) == 0 || !$items->getCollection()->setLimit("id", "IN", $tagIds)) {
+                        $items->getCollection()->setLimit("id", "=", NULL);
                     }
+                    
+                    $items->getCollection()->fetchAll();
                     
                 }
                 
-                return $value = $tags->getCollection();
+                return $value = $items->getCollection();
                 
             }
             

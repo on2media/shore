@@ -96,6 +96,9 @@ table.grid {
     width: 100%;
     border-spacing: 0;
 }
+table.grid tr:hover {
+    background-color: #ffe !important;
+}
 table.grid th, table.grid td {
     text-align: left;
     padding: 4px;

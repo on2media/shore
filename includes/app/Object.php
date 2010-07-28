@@ -27,6 +27,11 @@ abstract class Object
     /**
      *
      */
+    protected $_customColumns = array();
+    
+    /**
+     *
+     */
     protected $_varTypes = array("_fields");
     
     /**
@@ -49,12 +54,7 @@ abstract class Object
     /**
      *
      */
-    protected $_showValidation = FALSE;
-    
-    /**
-     *
-     */
-    protected $_editForm = NULL;
+    protected $_controls = NULL;
     
     /**
      * Defines a Collection to store a data set of records.
@@ -106,6 +106,15 @@ abstract class Object
             
         }
         
+        foreach ($this->_customColumns as $name => $spec) {
+            
+            $rtn[(int)$spec["position"]] = array(
+                "field"    =>  (isset($spec["method"]) ? $spec["method"] : "cite" . var2func($name)),
+                "heading"  =>  (isset($spec["heading"]) ? $spec["heading"] : var2label($name))
+            );
+            
+        }
+        
         ksort($rtn);
         
         if ($rtn == array()) {
@@ -145,60 +154,62 @@ abstract class Object
     /**
      *
      */
-    public function getEditForm()
+    public function getControls($field=NULL)
     {
-        if (is_array($this->_editForm)) return $this->_editForm;
-        
-        $rtn = array();
-        
-        foreach ($this->_varTypes as $varType) {
+        if (!is_array($this->_controls)) {
             
-            foreach ($this->$varType as $fieldName => $fieldSpec) {
+            $rtn = array();
+            
+            foreach ($this->_varTypes as $varType) {
                 
-                if (isset($fieldSpec["on_edit"]) && ($spec = $fieldSpec["on_edit"])) {
+                foreach ($this->$varType as $fieldName => $fieldSpec) {
                     
-                    $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
-                    $control = new $controlClass(
-                        $this,
-                        $fieldName,
-                        $fieldSpec
-                    );
-                    
-                    $rtn[(int)$spec["position"]] = $control;
+                    if (isset($fieldSpec["on_edit"]) && ($spec = $fieldSpec["on_edit"])) {
+                        
+                        $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
+                        $control = new $controlClass(
+                            $this,
+                            $fieldName,
+                            $fieldSpec
+                        );
+                        
+                        $rtn[(int)$spec["position"]] = $control;
+                        
+                    }
                     
                 }
                 
             }
             
+            ksort($rtn);
+            $this->_controls = $rtn;
+            
         }
         
-        ksort($rtn);
-        
-        return $this->_editForm = $rtn;
+        if ($field == NULL) return $this->_controls;
+        else {
+            
+            foreach ($this->_controls as $control) {
+                if ($control->getVar() == $field) return $control;
+            }
+            
+            return FALSE;
+            
+        }
     }
     
     /**
      *
      */
-    public function validateEditForm(array $formData)
+    public function validate()
     {
         $errors = 0;
-        $this->_showValidation = TRUE;
         
-        foreach ($this->getEditForm() as $control) {
-            $control->process($formData);
+        foreach ($this->getControls() as $control) {
             $errors += ($control->validate() ? 0 : 1);
         }
         
         return ($errors == 0);
-    }
-    
-    /**
-     *
-     */
-    public function showValidation()
-    {
-        return $this->_showValidation;
     }
     
     /**
@@ -259,21 +270,24 @@ abstract class Object
             
             case (substr($name, 0, 3) == "set"):
                 
-                $name = func2var(substr($name, 3));
-                
-                foreach ($this->_varTypes as $varType) {
-                    if (array_key_exists($name, $this->$varType)) {
-                        if (isset($arguments[0])) {
+                if (isset($arguments[0]) || is_null($arguments[0])) {
+                    
+                    $name = func2var(substr($name, 3));
+                    
+                    foreach ($this->_varTypes as $varType) {
+                        if (array_key_exists($name, $this->$varType)) {
                             
                             $vars =& $this->$varType;
                             $vars[$name]["value"] = $arguments[0];
                             
                             return TRUE;
+                            
                         }
-                        return FALSE;
                     }
+                    
                 }
-                break;
+                
+                return FALSE;
             
         }
         
@@ -304,6 +318,11 @@ abstract class Object
      *
      */
     abstract public function save();
+    
+    /**
+     *
+     */
+    abstract public function delete();
     
     /**
      * Variable reading overload handler - uses the __call() method to fetch a variable within

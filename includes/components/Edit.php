@@ -24,7 +24,9 @@ class EditComponent extends Component
             
             if ($_POST) {
                 
-                if (!$data->validateEditForm($_POST)) {
+                foreach ($data->getControls() as $control) $control->process($_POST);
+                
+                if (!$data->validate()) {
                     
                     $tpl->assign("status_alert", "Please correct the error(s) below.");
                     

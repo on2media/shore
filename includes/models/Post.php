@@ -34,6 +34,7 @@ class PostObject extends MySqlObject
             "validation" => array(
                 "object" => array("object" => "Author", "message" => "Please select an author from the list.")
             ),
+            "required" => TRUE,
             "on_grid" => array("position" => 4),
             "on_edit" => array(
                 "position" => 2,
@@ -52,6 +53,18 @@ class PostObject extends MySqlObject
                 "position" => 3,
                 "control" => "Input",
                 "tip" => "Enter the title of the post."
+            )
+        ),
+        "topic" => array(
+            "value" => NULL,
+            "type" => "object:Topic",
+            "validation" => array(
+                "object" => array("object" => "Topic", "message" => "Please select a topic from the list.")
+            ),
+            "on_edit" => array(
+                "position" => 7,
+                "control" => "Select",
+                "tip" => "You optionally may define the topic of this post."
             )
         ),
         "content" => array(
@@ -98,7 +111,7 @@ class PostObject extends MySqlObject
             "primary" => "id",
             "collection" => "TagObject",
             "on_edit" => array(
-                "position" => 7,
+                "position" => 8,
                 "control" => "Checkboxes",
                 "tip" => "Select one or more tags."
             )
@@ -114,7 +127,31 @@ class PostObject extends MySqlObject
         )
     );
     
+    protected $_customColumns = array(
+        "comment_count" => array(
+            "heading" => "Comments",
+            "position" => 6
+        )
+    );
+    
     protected $_order = "posted DESC";
     protected $_cite = "title";
     protected $_uid = "id";
+    
+    /**
+     *
+     */
+    public function citeCommentCount()
+    {
+        if (!$this->getCanComment()) return "- -";
+        
+        $approved = 0;
+        $total = $this->getComments()->count();
+        
+        foreach ($this->getComments() as $comment) {
+            $approved += ($comment->getApproved() ? 0 : 1);
+        }
+        
+        return ($total - $approved) . ($approved > 0 ? " (<abbr title=\"You have comments awaiting approval.\">" . $approved . "</abbr>)" : "");
+    }
 }

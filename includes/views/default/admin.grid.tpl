@@ -1,3 +1,13 @@
+{if !$edit_only}
+    <form action="edit/new" method="get">
+        
+        <p>
+            <input type="submit" value="Add New" />
+        </p>
+        
+    </form>
+{/if}
+
 {if $data->getCollection()->count() == 0}
     
     <p>
@@ -6,17 +16,7 @@
     
 {else}
     
-    {if !$edit_only}
-        <form action="edit/new" method="get">
-            
-            <p>
-                <input type="submit" value="Add New" />
-            </p>
-            
-        </form>
-    {/if}
-    
-    <form action="delete/" method="post">
+    <form action="./" method="post">
         
         <table class="grid">
             
@@ -41,7 +41,7 @@
                 {foreach from=$data->getCollection() key=id item=row}
                     <tr>
                         <td>
-                            <input type="checkbox" name="items" value="" />
+                            <input type="checkbox" name="items[]" value="{$row->uid()}" />
                         </td>
                         {foreach from=$data->getGridHead() item=th}
                             <td>

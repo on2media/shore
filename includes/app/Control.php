@@ -46,6 +46,11 @@ abstract class Control
     /**
      *
      */
+    protected $_showValidation = FALSE;    
+    
+    /**
+     *
+     */
     protected $_error = "";
     
     /**
@@ -83,13 +88,21 @@ abstract class Control
             ($this->_required ? "<em>*</em>" : ""),
             ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
             $field,
-            ($this->_obj->showValidation() && $this->getError()
+            ($this->_showValidation == TRUE && $this->getError()
                 ? "<small>" . htmlentities($this->getError()) . "</small>\n"
                 : ""
             )
         );
         
         return $rtn;
+    }
+    
+    /**
+     *
+     */
+    public function getVar()
+    {
+        return $this->_var;
     }
     
     /**
@@ -110,7 +123,9 @@ abstract class Control
      */
     public function process(array $formData)
     {
-        if (!isset($formData[$this->_var])) {
+        $this->_showValidation = TRUE;
+        
+        if (!isset($formData[$this->_var]) && !is_null($formData[$this->_var])) {
             
             $this->_error = "Field was missing from the received form data.";
             $this->_obj->{$this->_var} = $formData[$this->_var] = FALSE;

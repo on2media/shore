@@ -62,6 +62,7 @@ class AuthorObject extends MySqlObject
     protected $_relationships = array(
         "posts" => array(
             "type" => "1-m",
+            "value" => NULL,
             "column" => "id",
             "table" => "posts",
             "foreign" => "author",

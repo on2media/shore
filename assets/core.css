@@ -112,6 +112,31 @@ body {
 #content p {
     margin-bottom: 1em;
 }
+#content .post {
+    margin-bottom: 4em;
+}
+#content .post_meta {
+    margin-bottom: 1em;
+}
+#content .post_meta p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 20px;
+}
+#content .post_comment {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f0f0f0;
+}
+#content .post_comment_meta {
+    font-style: italic;
+    height: 30px;
+}
+#content .post_comment_meta img {
+    float: right;
+    border: 1px solid #fff;
+    margin: 0 0 10px 10px;
+}
 #side {
     float: left;
     width: 300px;
@@ -130,4 +155,28 @@ body {
 }
 #side .widgets .widget:first-child {
     margin-right: 20px;
+}
+
+form p {
+    clear: both;
+    padding-left: 80px;
+}
+form label {
+    float: left;
+    margin-left: -80px;
+    width: 70px;
+}
+form small {
+    display: block;
+    font-size: 10px;
+    line-height: 14px;
+    color: #f33;
+}
+input[type='text'], textarea {
+    font: 16px/26px Georgia, "Times New Roman", Times, serif;
+    border: 1px solid #444;
+    padding: 4px;
+}
+textarea[cols='70'] {
+    width: 500px;
 }

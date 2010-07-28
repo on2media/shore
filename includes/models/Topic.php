@@ -6,22 +6,22 @@
 /**
  *
  */
-class TagObject extends MySqlObject
+class TopicObject extends MySqlObject
 {
-    protected $_table = "tags";
+    protected $_table = "topics";
     
     protected $_fields = array(
         "id" => array(
             "value" =>  NULL
         ),
-        "tag" => array(
+        "topic" => array(
             "value" => "",
             "validation" => array(
-                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid tag."),
-                "unique" => array("message" => "Another tag exists with this name.")
+                "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter a valid topic."),
+                "unique" => array("message" => "Another topc exists with this name.")
             ),
             "required" => TRUE,
-            "on_grid" => array("position" => 1, "heading" => "Tag"),
+            "on_grid" => array("position" => 1),
             "on_edit" => array(
                 "position" => 1,
                 "control" => "Input"
@@ -31,17 +31,17 @@ class TagObject extends MySqlObject
     
     protected $_relationships = array(
         "posts" => array(
-            "type" => "m-m",
+            "type" => "1-m",
             "value" => NULL,
-            "column" => "post",
-            "table" => "post_tags",
-            "foreign" => "tag",
+            "column" => "id",
+            "table" => "posts",
+            "foreign" => "topic",
             "primary" => "id",
             "collection" => "PostObject"
         )
     );
     
-    protected $_order = "tag";
-    protected $_cite = "tag";
+    protected $_order = "topic";
+    protected $_cite = "topic";
     protected $_uid = "id";
 }

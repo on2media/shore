@@ -31,6 +31,7 @@ Router::connect("/^$/", "Blog", "browse");
 // Frontend Pages
 Router::connect("/^(post|page)\/([0-9]*)\/$/i", "Post", "view");
 Router::connect("/^author\/([0-9]*)\/$/i", "Author", "browse");
+Router::connect("/^topic\/([0-9]*)\/$/i", "Topic", "browse");
 Router::connect("/^tag\/([0-9]*)\/$/i", "Tag", "browse");
 
 // Admin Pages
@@ -39,6 +40,8 @@ Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/$/i", "Post", "grid");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/edit\/([0-9]*|new)\/$/i", "Post", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/comments\/$/i", "Comment", "grid");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/comments\/edit\/([0-9]*|new)\/$/i", "Comment", "edit");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/topics\/$/i", "Topic", "grid");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/topics\/edit\/([0-9]*|new)\/$/i", "Topic", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/tags\/$/i", "Tag", "grid");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/tags\/edit\/([0-9]*|new)\/$/i", "Tag", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/authors\/$/i", "Author", "grid");

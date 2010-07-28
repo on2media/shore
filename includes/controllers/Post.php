@@ -34,6 +34,11 @@ class PostController extends Controller
             $this->getView()->assign("data", $data);
             $this->getView()->assign("page_title", $data->getTitle());
             
+            if ($data->getCanComment()) {
+                $commentForm = new CommentFormController();
+                $this->getView()->assign("comment_form", $commentForm->view(array($data)));
+            }
+            
             $sideBar = new SideBarController();
             $this->getView()->assign("sidebar", $sideBar->view());
             

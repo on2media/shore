@@ -1,4 +1,4 @@
-{if count($data->getEditForm()) == 0}
+{if count($data->getControls()) == 0}
     
     <p>
         No record found.
@@ -8,7 +8,7 @@
 
     <form action="" method="post">
     
-    {foreach from=$data->getEditForm() item=control}
+    {foreach from=$data->getControls() item=control}
         {$control->output()}
     {/foreach}
     

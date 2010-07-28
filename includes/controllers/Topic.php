@@ -6,7 +6,7 @@
 /**
  *
  */
-class TagController extends Controller
+class TopicController extends Controller
 {
     /**
      *
@@ -18,15 +18,15 @@ class TagController extends Controller
      */
     public function browse(array $vars=array())
     {
-        $tags = new TagObject();
-        if (!$tag = $tags->fetchById($vars[1])) {
+        $topics = new TopicObject();
+        if (!$topic = $topics->fetchById($vars[1])) {
             
             $controller = new StaticPageController();
             return $controller->notFound();
             
         }
         
-        $data = $tag->getPosts();
+        $data = $topic->getPosts();
         $data->setLimit("type", "=", "post");
         
         if (!$data->fetchAll()) {
@@ -38,7 +38,7 @@ class TagController extends Controller
         $this->getView()->setLayout("layout.default.tpl"); // Common
         
         $this->getView()->assign("data", $data); // Common
-        $this->getView()->assign("page_title", "Posts tagged " . htmlentities($tag->getTag()));
+        $this->getView()->assign("page_title", "Posts about " . htmlentities($topic->getTopic()));
         
         $sideBar = new SideBarController(); // Common
         $this->getView()->assign("sidebar", $sideBar->view()); // Common
@@ -51,10 +51,10 @@ class TagController extends Controller
      */
     public function grid(array $vars=array())
     {
-        $obj = new TagObject();
+        $obj = new TopicObject();
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
-            $this->Grid->draw($obj, "Tags");
+            $this->Grid->draw($obj, "Topics");
         }
         
         return $this->output();
@@ -65,11 +65,11 @@ class TagController extends Controller
      */
     public function edit(array $vars=array())
     {
-        $obj = new TagObject();
+        $obj = new TopicObject();
         
         if ($this->Auth->canAccess(__FUNCTION__)) {
             if (count($vars) != 2) exit();
-            $this->Edit->draw($obj, $vars[1], "Tag");
+            $this->Edit->draw($obj, $vars[1], "Topic");
         }
         
         return $this->output();

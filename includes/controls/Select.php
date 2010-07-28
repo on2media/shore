@@ -17,13 +17,10 @@ class SelectControl extends Control
         $optionClass = $this->_objType;
         
         $options = new $optionClass();
-        if ($options->getCollection()->fetchAll()->count() == 0) {
-            
-            $field = "&nbsp;";
-            
-        } else {
-            
-            $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_var);
+        
+        $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_var);
+        
+        if ($options->getCollection()->fetchAll()->count() > 0) {
             
             foreach ($options->getCollection() as $option) {
                 $field .= sprintf("    <option value=\"%s\"%s>%s</option>\n",
@@ -33,9 +30,10 @@ class SelectControl extends Control
                 );
             }
             
-            $field .= "</select>";
-            
         }
+        
+        $field .= "</select>";
+        
         return $this->getWrapper($field);
     }
     
@@ -45,12 +43,17 @@ class SelectControl extends Control
     public function process(array $formData)
     {
         $func = "get" . var2func($this->_var);
-        $optionClass = get_class($this->_obj->$func());
+        $optionClass = $this->_objType;
         
         if ($optionClass && isset($formData[$this->_var])) {
             
-            $obj = new $optionClass();
-            $formData[$this->_var] = $obj->fetchById($formData[$this->_var]);
+            if ($formData[$this->_var] == "0") $formData[$this->_var] = NULL;
+            else {
+                
+                $obj = new $optionClass();
+                $formData[$this->_var] = $obj->fetchById($formData[$this->_var]);
+                
+            }
             
         }
         
