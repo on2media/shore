@@ -20,7 +20,7 @@ class CommentController extends Controller
     {
         $obj = new CommentObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(3) || $this->Auth->canAccess(5)) {
             $this->Grid->draw($obj, "Comments");
             $this->getView()->assign("edit_only", TRUE);
         }
@@ -35,7 +35,7 @@ class CommentController extends Controller
     {
         $obj = new CommentObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(5)) {
             if (count($vars) != 2) exit();
             
             if ($vars[1] == "new") {

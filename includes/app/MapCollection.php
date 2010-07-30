@@ -34,6 +34,8 @@ class MapCollection extends Collection
             "condition" => $condition,
             "value" => $value
         );
+        
+        return TRUE;
     }
     
     public function fetchAll()
@@ -53,27 +55,28 @@ class MapCollection extends Collection
         
         foreach ($this->_limits as $limit) {
             
-            foreach ($this->_dataSet as $key => $field) {
+            foreach ($this->_dataSet as $key => $item) {
                 
                 $remove = FALSE;
                 
                 switch (strtoupper($limit["condition"])) {
                     
                     case "=":
-                        $remove = ($field->getKey() != $limit["value"]);
+                        $remove = ($item->{$limit["field"]} != $limit["value"]);
                         break;
                     
                     case "!=":
                     case "<>":
-                        $remove = ($field->getKey() == $limit["value"]);
+                        $remove = ($item->{$limit["field"]} == $limit["value"]);
                         break;
                     
                     case "IN":
-                        //TODO
-                        break;
-                    
                     case "NOT IN":
-                        //TODO
+                        $matches = 0;
+                        foreach ($limit["value"] as $aval) {
+                            $matches += ($item->{$limit["field"]} == $aval ? 1 : 0);
+                        }
+                        $remove = (strtoupper($limit["condition"]) == "IN" ? $matches == 0 : $matches > 0);
                         break;
                     
                 }
@@ -85,7 +88,6 @@ class MapCollection extends Collection
         }
         
         $this->_total = $this->count();
-        
         return $this;
     }
 }

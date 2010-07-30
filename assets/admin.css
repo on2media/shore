@@ -36,11 +36,17 @@ body {
 #wrapper {
     width: 940px;
     margin-bottom: 50px;
-    padding: 20px 10px;
+    padding: 0 10px 20px 10px;
     background: #fff;
     -moz-border-radius: 0 0 1em 1em;
     -webkit-border-bottom-left-radius: 1em;
     -webkit-border-bottom-right-radius: 1em;
+}
+#user {
+    text-align: right;
+    padding-top: 4px;
+    line-height: 16px;
+    font-size: 11px;
 }
 .status {
     background-repeat: no-repeat;

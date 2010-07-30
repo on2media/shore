@@ -57,7 +57,7 @@ class PostController extends Controller
     {
         $obj = new PostObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(4) || $this->Auth->canAccess(1) || $this->Auth->canAccess(2) || $this->Auth->canAccess(10)) {
             $this->Grid->draw($obj, "Posts");
         }
         
@@ -71,7 +71,7 @@ class PostController extends Controller
     {
         $obj = new PostObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(1) || $this->Auth->canAccess(2) || $this->Auth->canAccess(10)) {
             if (count($vars) != 2) exit();
             $this->Edit->draw($obj, $vars[1], "Post");
         }

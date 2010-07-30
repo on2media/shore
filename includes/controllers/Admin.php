@@ -21,12 +21,22 @@ class AdminController extends Controller
         $this->setView(new SmartyView("admin.home.tpl"));
         $this->getView()->setLayout("layout.admin.tpl");
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->checkLogin()) {
             
             $this->getView()->assign("page_title", "Blog Administration");
             
         }
         
         return $this->output();
+    }
+    
+    /**
+     *
+     */
+    public function logout(array $vars=array())
+    {
+        $this->Auth->logout();
+        SmartyView::assign_session("status_confirm", "You have logged out.");
+        $this->redirect(_BASE . DIR_ADMIN . "/");
     }
 }

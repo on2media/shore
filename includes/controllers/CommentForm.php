@@ -41,9 +41,10 @@ class CommentFormController extends Controller
                     
                 } else {
                     
-                    $this->getView()->assign("status", "ok");
+                    $this->getView()->assign_session("status", "ok");
+                    $this->redirect(_BASE . _PAGE . (_QS == "" ? "?" : "&") . "goal=comment");
                     
-                    //TODO: redirect with hash, email notification
+                    //TODO: email notification
                     
                 }
                 

@@ -37,6 +37,10 @@
         
         <div id="wrapper">
             
+            {if $current_user}<div id="user">
+                Current User: <strong>{$current_user->getName()|escape}</strong>
+            </div>{/if}
+            
             <h1>{$page_title|escape}</h1>
             
             {if $status_confirm}<div class="status confirm">{$status_confirm}</div>{/if}

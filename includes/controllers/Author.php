@@ -51,7 +51,7 @@ class AuthorController extends Controller
     {
         $obj = new AuthorObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(8) || $this->Auth->canAccess(9) || $this->Auth->canAccess(11)) {
             $this->Grid->draw($obj, "Authors");
         }
         
@@ -65,7 +65,7 @@ class AuthorController extends Controller
     {
         $obj = new AuthorObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(8) || $this->Auth->canAccess(9) || $this->Auth->canAccess(11)) {
             if (count($vars) != 2) exit();
             $this->Edit->draw($obj, $vars[1], "Author");
         }

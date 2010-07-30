@@ -25,10 +25,6 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     $_REQUEST = stripMagicQuotes($_REQUEST);
 }
 
-// start a session
-session_name(SESSION_NAME);
-session_start();
-
 // automatically define some system variables - paths and urls
 define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 
@@ -88,6 +84,10 @@ function classAutoloader($className)
 }
 
 spl_autoload_register('classAutoloader');
+
+// start a session
+session_name(SESSION_NAME);
+session_start();
 
 /**
  * This function converts a variable name in the format foo_bar into the corresponding function

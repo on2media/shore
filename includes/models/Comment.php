@@ -46,7 +46,7 @@ class CommentObject extends MySqlObject
             "value" => NULL,
             "type" => "boolean",
             //"has_default" => TRUE,
-            "on_grid" => array("position" => 4),
+            "on_grid" => array("position" => 5),
             "on_edit" => array(
                 "position" => 7,
                 "control" => "Checkbox",
@@ -93,13 +93,14 @@ class CommentObject extends MySqlObject
             )
         ),
         "content" => array(
+            "heading" => "Comment",
             "value" => "",
             "type" => "text",
             "validation" => array(
                 "regexp" => array("test" => "/^.+$/im", "message" => "Please enter a comment.")
             ),
             "required" => TRUE,
-            "on_grid" => array("position" => 4, "heading" => "Comment"),
+            "on_grid" => array("position" => 4),
             "on_edit" => array(
                 "position" => 6,
                 "control" => "Textarea",

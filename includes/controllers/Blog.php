@@ -17,6 +17,7 @@ class BlogController extends Controller
         
         // set order
         $obj->getCollection()->setLimit("type", "=", "post");
+        $obj->getCollection()->setLimit("approved", "=", 1);
         $obj->getCollection()->setPagination(0, 10);
         
         if ($data = $obj->getCollection()->fetchAll()) {

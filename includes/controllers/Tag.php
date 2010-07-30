@@ -53,7 +53,7 @@ class TagController extends Controller
     {
         $obj = new TagObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(6)) {
             $this->Grid->draw($obj, "Tags");
         }
         
@@ -67,7 +67,7 @@ class TagController extends Controller
     {
         $obj = new TagObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(6)) {
             if (count($vars) != 2) exit();
             $this->Edit->draw($obj, $vars[1], "Tag");
         }

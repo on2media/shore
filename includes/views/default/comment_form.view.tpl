@@ -5,9 +5,9 @@
         {if $status == 'invalid'}
             Please correct the error(s) below:
         {elseif $status == 'error'}
-            An error occured whilst submitting your comment.
+            An error occured whilst submitting your comment. Please try again.
         {elseif $status == 'ok'}
-            Thank you for your comment.
+            Thank you for your comment. Once approved your comment will appear against this post.
         {/if}
     {else}
         Complete the form below to leave a comment:
@@ -15,7 +15,7 @@
 </p>
 
 {if $status != 'ok'}
-    <form action="#leave-comment" method="post">
+    <form action="./#leave-comment" method="post">
         
         <p>
             <label>Name</label>

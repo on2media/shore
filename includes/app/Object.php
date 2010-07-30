@@ -87,6 +87,18 @@ abstract class Object
     /**
      *
      */
+    public function getFieldHeading($field)
+    {
+        if (isset($this->_fields[$field]) && ($spec = $this->_fields[$field])) {
+            return (isset($spec["heading"]) ? $spec["heading"] : var2label($field));
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     *
+     */
     public function getGridHead()
     {
         if ($this->__gridHead != array()) return $this->__gridHead;
@@ -99,7 +111,7 @@ abstract class Object
                 
                 $rtn[(int)$spec["position"]] = array(
                     "field"    =>  "cite" . var2func($fieldName),
-                    "heading"  =>  (isset($fieldSpec["heading"]) ? $fieldSpec["heading"] : var2label($fieldName))
+                    "heading"  =>  $this->getFieldHeading($fieldName)
                 );
                 
             }

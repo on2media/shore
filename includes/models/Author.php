@@ -20,7 +20,7 @@ class AuthorObject extends MySqlObject
                 "regexp" => array("test" => "/^.{1,255}$/i", "message" => "Please enter your name.")
             ),
             "required" => TRUE,
-            "on_grid" => array("position" => 1, "heading" => "Name"),
+            "on_grid" => array("position" => 1),
             "on_edit" => array(
                 "position" => 1,
                 "control" => "Input",
@@ -28,6 +28,7 @@ class AuthorObject extends MySqlObject
             )
         ),
         "email" => array(
+            "heading" => "Email Address",
             "value" => "",
             "validation" => array(
                 "regexp" => array(
@@ -39,7 +40,7 @@ class AuthorObject extends MySqlObject
                 )
             ),
             "required" => TRUE,
-            "on_grid" => array("position" => 2, "heading" => "Email Address"),
+            "on_grid" => array("position" => 2),
             "on_edit" => array(
                 "position" => 2,
                 "control" => "Input",
@@ -56,7 +57,17 @@ class AuthorObject extends MySqlObject
                 "control" => "Password",
                 "tip" => "Enter a password so the author can login."
             )
-        )
+        ),
+        "super" => array(
+            "heading" => "Super User",
+            "value" => NULL,
+            "type" => "boolean",
+            "on_edit" => array(
+                "position" => 4,
+                "control" => "Checkbox",
+                "tip" => "Is the author a super user?"
+            )
+        ),
     );
     
     protected $_relationships = array(
@@ -68,6 +79,20 @@ class AuthorObject extends MySqlObject
             "foreign" => "author",
             "primary" => "id",
             "collection" => "PostObject"
+        ),
+        "access" => array(
+            "type" => "m-m",
+            "value" => NULL,
+            "column" => "access",
+            "table" => "author_access",
+            "foreign" => "author",
+            "primary" => "id",
+            "collection" => "AccessObject",
+            "on_edit" => array(
+                "position" => 5,
+                "control" => "Checkboxes",
+                "tip" => "Define the author's level of admin access."
+            )
         )
     );
     

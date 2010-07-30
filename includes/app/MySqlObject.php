@@ -124,7 +124,7 @@ abstract class MySqlObject extends Object
                 
                 $fieldValue = $this->$fieldName;
                 
-                if (is_object($fieldValue) && $fieldValue instanceof MySqlCollection) {
+                if (is_object($fieldValue) && $fieldValue instanceof Collection) {
                     
                     try {
                         
@@ -254,7 +254,7 @@ abstract class MySqlObject extends Object
                 
                 $value =& $this->_relationships[$fieldName]["value"];
                 
-                if ($value instanceof MySqlCollection && $value->getObject() instanceof $obj) return $value;
+                if ($value instanceof Collection && $value->getObject() instanceof $obj) return $value;
                 
                 $dbh = MySqlDatabase::getInstance();
                 

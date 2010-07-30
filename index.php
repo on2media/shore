@@ -19,7 +19,8 @@ define("MYSQL_PORT"      ,  "3306");
 
 define("DIR_ADMIN"  ,  "cp");
 
-define("AUTH_TABLE"     ,  "authors");
+define("AUTH_SESSION"   ,  "auth");
+define("AUTH_MODEL"     ,  "AuthorObject");
 define("AUTH_USERNAME"  ,  "email");
 define("AUTH_PASSWORD"  ,  "password");
 
@@ -36,6 +37,7 @@ Router::connect("/^tag\/([0-9]*)\/$/i", "Tag", "browse");
 
 // Admin Pages
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/$/i", "Admin", "dashboard");
+Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/logout\/$/i", "Admin", "logout");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/$/i", "Post", "grid");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/posts\/edit\/([0-9]*|new)\/$/i", "Post", "edit");
 Router::connect("/^" . preg_quote(DIR_ADMIN) . "\/comments\/$/i", "Comment", "grid");

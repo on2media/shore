@@ -53,7 +53,7 @@ class TopicController extends Controller
     {
         $obj = new TopicObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(7)) {
             $this->Grid->draw($obj, "Topics");
         }
         
@@ -67,7 +67,7 @@ class TopicController extends Controller
     {
         $obj = new TopicObject();
         
-        if ($this->Auth->canAccess(__FUNCTION__)) {
+        if ($this->Auth->canAccess(7)) {
             if (count($vars) != 2) exit();
             $this->Edit->draw($obj, $vars[1], "Topic");
         }

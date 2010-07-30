@@ -55,10 +55,13 @@ class SmartyView extends View
             "admin"  =>  DIR_ADMIN ."/"
         ));
         
+        if (isset($_SESSION[AUTH_SESSION]) && $_SESSION[AUTH_SESSION] instanceof AuthorObject) {
+            $this->assign("current_user", $_SESSION[AUTH_SESSION]);
+        }
+        
         @session_start();
         if (isset($_SESSION["Smarty"]) && is_array($_SESSION["Smarty"])) {
             $this->assign_array($_SESSION["Smarty"]);
-            unset($_SESSION["Smarty"]);
         }
     }
     
@@ -132,6 +135,9 @@ class SmartyView extends View
      */
     public function output()
     {
+        @session_start();
+        unset($_SESSION["Smarty"]);
+        
         if ($this->_layout != NULL) {
             
             $content = $this->_smarty->fetch($this->_template);

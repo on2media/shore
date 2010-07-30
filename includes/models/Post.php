@@ -62,7 +62,7 @@ class PostObject extends MySqlObject
                 "object" => array("object" => "Topic", "message" => "Please select a topic from the list.")
             ),
             "on_edit" => array(
-                "position" => 7,
+                "position" => 8,
                 "control" => "Select",
                 "tip" => "You optionally may define the topic of this post."
             )
@@ -78,7 +78,7 @@ class PostObject extends MySqlObject
             "heading" => "Can Comment?",
             "value" => NULL,
             "type" => "boolean",
-            "on_grid" => array("position" => 5),
+            "on_grid" => array("position" => 6),
             "on_edit" => array(
                 "position" => 5,
                 "control" => "Checkbox",
@@ -99,6 +99,17 @@ class PostObject extends MySqlObject
                 "control" => "Select"
             )
         ),
+        "approved" => array(
+            "heading" => "Approved?",
+            "value" => NULL,
+            "type" => "boolean",
+            "on_grid" => array("position" => 5),
+            "on_edit" => array(
+                "position" => 7,
+                "control" => "Checkbox",
+                "tip" => "Only approved posts are shown."
+            )
+        )
     );
     
     protected $_relationships = array(
@@ -111,7 +122,7 @@ class PostObject extends MySqlObject
             "primary" => "id",
             "collection" => "TagObject",
             "on_edit" => array(
-                "position" => 8,
+                "position" => 9,
                 "control" => "Checkboxes",
                 "tip" => "Select one or more tags."
             )
@@ -130,7 +141,7 @@ class PostObject extends MySqlObject
     protected $_customColumns = array(
         "comment_count" => array(
             "heading" => "Comments",
-            "position" => 6
+            "position" => 7
         )
     );
     
