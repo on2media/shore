@@ -23,6 +23,7 @@ define("AUTH_SESSION"   ,  "auth");
 define("AUTH_MODEL"     ,  "AuthorObject");
 define("AUTH_USERNAME"  ,  "email");
 define("AUTH_PASSWORD"  ,  "password");
+define("AUTH_SUPERUSER" ,  "super");
 
 require_once("includes/app/Bootstrap.php");
 

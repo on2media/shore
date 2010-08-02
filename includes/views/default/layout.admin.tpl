@@ -26,20 +26,25 @@
             
             <ul>
                 <li><a href="{$base}{$admin}">Home</a></li>
-                <li><a href="{$base}{$admin}posts/">Posts</a></li>
-                <li><a href="{$base}{$admin}comments/">Comments</a></li>
-                <li><a href="{$base}{$admin}topics/">Topics</a></li>
-                <li><a href="{$base}{$admin}tags/">Tags</a></li>
-                <li><a href="{$base}{$admin}authors/">Authors</a></li>
+                {if $current_user && $current_user->canAccess(array(1, 2, 10))}<li><a href="{$base}{$admin}posts/">Posts</a></li>{/if}
+                {if $current_user && $current_user->canAccess(5)}<li><a href="{$base}{$admin}comments/">Comments</a></li>{/if}
+                {if $current_user && $current_user->canAccess(7)}<li><a href="{$base}{$admin}topics/">Topics</a></li>{/if}
+                {if $current_user && $current_user->canAccess(6)}<li><a href="{$base}{$admin}tags/">Tags</a></li>{/if}
+                {if $current_user && $current_user->canAccess(array(8, 9, 11))}<li><a href="{$base}{$admin}authors/">Authors</a></li>{/if}
             </ul>
             
         </div>
         
         <div id="wrapper">
             
-            {if $current_user}<div id="user">
-                Current User: <strong>{$current_user->getName()|escape}</strong>
-            </div>{/if}
+            <div id="user">
+                {if $current_user}
+                    Current User: <strong>{$current_user->getName()|escape}</strong>
+                    {if $current_user->getSuper()}(Super User){/if}
+                {else}
+                    Not Logged In
+                {/if}
+            </div>
             
             <h1>{$page_title|escape}</h1>
             

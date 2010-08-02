@@ -70,6 +70,8 @@ class AuthorController extends Controller
             $this->Edit->draw($obj, $vars[1], "Author");
         }
         
+        //TODO: logout and in again to update session if editing current user
+        
         return $this->output();
     }
 }

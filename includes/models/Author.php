@@ -99,4 +99,23 @@ class AuthorObject extends MySqlObject
     protected $_order = "name";
     protected $_cite = "name";
     protected $_uid = "id";
+    
+    public function canAccess($access, $compare="OR")
+    {
+        if ($this->getSuper()) return TRUE;
+        
+        if (!is_array($access)) $access = array($access);
+        
+        $matches = 0;
+        
+        foreach ($access as $accessLevel) {
+            
+            foreach ($this->getAccess() as $level) {
+                if ($level->getId() == $accessLevel) $matches++;
+            }
+            
+        }
+        
+        return (($compare == "OR" && $matches == count($access)) || ($compare == "AND" && $matches > 0));
+    }
 }

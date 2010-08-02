@@ -14,10 +14,14 @@ class AuthComponent extends Component
     public function canAccess($access)
     {
         if (!$this->checkLogin()) return FALSE;
+        if ($_SESSION[AUTH_SESSION]->canAccess($access)) return TRUE;
         
-        $access = $_SESSION[AUTH_SESSION]->getAccess();
+        $tpl = new SmartyView("layout.admin.tpl");
+        $tpl->assign("page_title", "Access Denied");
+        $tpl->assign("status_alert", "You are not authorised to access this function.");
+        $this->_controller->setView($tpl);
         
-        return TRUE;
+        return FALSE;
     }
     
     /**
