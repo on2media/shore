@@ -1,5 +1,5 @@
 <p>
-    Welcome to your blog administration area.
+    Welcome!
 </p>
 
 <form action="./logout/" method="get">

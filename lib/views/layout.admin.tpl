@@ -3,20 +3,20 @@
 
     <head>
         
-        <title>{$page_title|escape} &laquo; Glooware Blog Admin</title>
+        <title>{$page_title|escape} &laquo; Admin</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         
-        <link rel="stylesheet" type="text/css" href="{$base}assets/admin.css" />
-        <link rel="stylesheet" type="text/css" href="{$base}assets/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}core/assets/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}core/assets/datepicker.css" />
         
         <script type="text/javascript">var base = '{$base}';</script>
         
-        <script type="text/javascript" src="{$base}assets/vendor/tiny_mce/tiny_mce.js"></script>
+        <script type="text/javascript" src="{$base}core/assets/vendor/tiny_mce/tiny_mce.js"></script>
         <script type="text/javascript" src="{$base}assets/editor.js"></script>
         
-        <script type="text/javascript" src="{$base}assets/moo-core.js"></script>
-        <script type="text/javascript" src="{$base}assets/datepicker.js"></script>
-        <script type="text/javascript" src="{$base}assets/admin.js"></script>
+        <script type="text/javascript" src="{$base}core/assets/moo-core.js"></script>
+        <script type="text/javascript" src="{$base}core/assets/datepicker.js"></script>
+        <script type="text/javascript" src="{$base}core/assets/admin.js"></script>
         
     </head>
 
@@ -26,11 +26,6 @@
             
             <ul>
                 <li><a href="{$base}{$admin}">Home</a></li>
-                {if $current_user && $current_user->canAccess(array(1, 2, 10))}<li><a href="{$base}{$admin}posts/">Posts</a></li>{/if}
-                {if $current_user && $current_user->canAccess(5)}<li><a href="{$base}{$admin}comments/">Comments</a></li>{/if}
-                {if $current_user && $current_user->canAccess(7)}<li><a href="{$base}{$admin}topics/">Topics</a></li>{/if}
-                {if $current_user && $current_user->canAccess(6)}<li><a href="{$base}{$admin}tags/">Tags</a></li>{/if}
-                {if $current_user && $current_user->canAccess(array(8, 9, 11))}<li><a href="{$base}{$admin}authors/">Authors</a></li>{/if}
             </ul>
             
         </div>

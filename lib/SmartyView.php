@@ -40,9 +40,10 @@ class SmartyView extends View
     {
         $this->_smarty = new Smarty();
         
-        $base = realpath(dirname(__FILE__) . DS . "..") . DS;
+        $this->_smarty->template_dir = DIR_VIEWS . DS;
         
-        $this->_smarty->template_dir  =  $base . "views" . DS . "default" . DS;
+        $base = realpath(dirname(__FILE__)) . DS;
+        
         $this->_smarty->compile_dir   =  $base . "cache" . DS . "smarty_compiled" . DS;
         $this->_smarty->config_dir    =  $base . "cache" . DS . "smarty_configs" . DS;
         $this->_smarty->cache_dir     =  $base . "cache" . DS . "smarty_cache" . DS;
@@ -52,11 +53,14 @@ class SmartyView extends View
         $this->assign_array(array(
             "base"   =>  _BASE,
             "url"    =>  _PAGE,
-            "admin"  =>  DIR_ADMIN ."/"
+            "admin"  =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
         ));
         
-        if (isset($_SESSION[AUTH_SESSION]) && $_SESSION[AUTH_SESSION] instanceof AuthorObject) {
-            $this->assign("current_user", $_SESSION[AUTH_SESSION]);
+        if (defined("AUTH_SESSION") && defined("AUTH_MODEL")) {
+            $authModel = AUTH_MODEL;
+            if (isset($_SESSION[AUTH_SESSION]) && $_SESSION[AUTH_SESSION] instanceof $authModel) {
+                $this->assign("current_user", $_SESSION[AUTH_SESSION]);
+            }
         }
         
         @session_start();
@@ -72,6 +76,10 @@ class SmartyView extends View
      */
     public function setTemplate($template)
     {
+        if (!file_exists($this->_smarty->template_dir . $template)) {
+            $template = realpath(dirname(__FILE__)) . DS . "views" . DS . $template;
+        }
+        
         $this->_template = $template;
     }
     
@@ -83,6 +91,9 @@ class SmartyView extends View
      */
     public function setLayout($layout=NULL)
     {
+        if ($layout != NULL && !file_exists($this->_smarty->template_dir . $layout)) {
+            $layout = realpath(dirname(__FILE__)) . DS . "views" . DS . $layout;
+        }
         $this->_layout = $layout;
     }
     

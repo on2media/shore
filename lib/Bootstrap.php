@@ -50,37 +50,46 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "smarty") . DS . 
 // class autoloader
 function classAutoloader($className)
 {
+    $inc = array();
+    
     switch (TRUE) {
         
         case (preg_match("/^([A-Za-z]+)Controller$/", $className, $matches)):
-            $inc = _PATH . "includes" . DS . "controllers" . DS . $matches[1] . ".php";
+            $inc[] = _PATH . DIR_CONTROLLERS . DS . $matches[1] . ".php";
+            $inc[] = _PATH . "core" . DS . "lib" . DS . "controllers" . DS . $matches[1] . ".php";
             break;
         
         case (preg_match("/^([A-Za-z]+)Component$/", $className, $matches)):
-            $inc = _PATH . "includes" . DS . "components" . DS . $matches[1] . ".php";
+            $inc[] = _PATH . DIR_COMPONENTS . DS . $matches[1] . ".php";
+            $inc[] = _PATH . "core" . DS . "lib" . DS . "components" . DS . $matches[1] . ".php";
             break;
         
         case (preg_match("/^([A-Za-z]+)Control$/", $className, $matches)):
-            $inc = _PATH . "includes" . DS . "controls" . DS . $matches[1] . ".php";
+            $inc[] = _PATH . DIR_CONTROLS . DS . $matches[1] . ".php";
+            $inc[] = _PATH . "core" . DS . "lib" . DS . "controls" . DS . $matches[1] . ".php";
             break;
         
         case (
             !in_array($className, array("MySqlObject", "MapObject")) &&
             preg_match("/^([A-Za-z]+)Object$/", $className, $matches)
         ):
-            $inc = _PATH . "includes" . DS . "models" . DS . $matches[1] . ".php";
+            $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
+            $inc[] = _PATH . "core" . DS . "lib" . DS . "models" . DS . $matches[1] . ".php";
             break;
         
         default:
-            $inc = _PATH . "includes" . DS . "app" . DS . $className . ".php";
+            $inc[] = _PATH . DIR_APP . DS . $className . ".php";
+            $inc[] = _PATH . "core" . DS . "lib" . DS . $className . ".php";
             break;
         
     }
     
-    if (!include_once($inc)) {
-        trigger_error("Class autoloading failed for '" . htmlentities($className) . "'", E_USER_ERROR);
-        exit();
+    foreach ($inc as $filename) {
+        if (file_exists($filename) && include_once($filename)) return;
     }
+    
+    trigger_error("Class autoloading failed for '" . htmlentities($className) . "'", E_USER_ERROR);
+    exit();
 }
 
 spl_autoload_register('classAutoloader');
