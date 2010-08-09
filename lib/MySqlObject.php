@@ -96,7 +96,7 @@ abstract class MySqlObject extends Object
         
         if ($this->uid() != NULL) {
             
-            $sql = sprintf("UPDATE %s SET ", $this->_table);
+            $sql = sprintf("UPDATE `%s` SET ", $this->_table);
             foreach ($fields as $field) $sql .= "`" . $field . "`=?, ";
             $sql = substr($sql, 0, -strlen(", ")) . sprintf(" WHERE %s=?", $this->uidField());
             
@@ -104,7 +104,7 @@ abstract class MySqlObject extends Object
             
         } else {
             
-            $sql = sprintf("INSERT INTO %s (", $this->_table);
+            $sql = sprintf("INSERT INTO `%s` (", $this->_table);
             foreach ($fields as $field) $sql .= "`" . $field . "`, ";
             $sql = substr($sql, 0, -strlen(", ")) . ") VALUES (";
             for ($i=0;$i<count($values);$i++) $sql .= "?, ";

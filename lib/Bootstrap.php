@@ -7,7 +7,7 @@
  */
 
 // create a shorthand version the DIRECTORY_SEPARATOR constant
-define("DS", DIRECTORY_SEPARATOR);
+if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
 
 // set the default timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);
@@ -38,7 +38,7 @@ define("_PAGE", substr(rawurldecode($urlParts["path"]), strlen($urlDir)));
 
 define("_QS", (isset($urlParts["query"]) ? "?" . $urlParts["query"] : ""));
 
-if (_PAGE != "" && substr(_PAGE, -1) != "/") {
+if (strpos(_PAGE, ".") === FALSE && _PAGE != "" && substr(_PAGE, -1) != "/") {
     @header($_SERVER["SERVER_PROTOCOL"] . " 301 Permanent Redirect");
     @header("Location: " . _BASE . _PAGE . "/");
     exit();

@@ -5,7 +5,11 @@
     </p>
     
 {else}
-
+    
+    <p>
+        <a href="../../">Back to Grid</a>
+    </p>
+    
     <form action="" method="post">
     
     {foreach from=$data->getControls() item=control}

@@ -38,6 +38,8 @@ class SmartyView extends View
      */
     public function __construct($template)
     {
+        @header("Content-Type: text/html;charset=iso-8859-1");
+        
         $this->_smarty = new Smarty();
         
         $this->_smarty->template_dir = DIR_VIEWS . DS;

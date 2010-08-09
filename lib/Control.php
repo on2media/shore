@@ -151,7 +151,7 @@ abstract class Control
             if ($value instanceof Object && $value->getCollection()->count() == 0) return TRUE;
             else if ($value === NULL) return TRUE;
             
-        } else if (empty($value)) {
+        } else if (empty($value) && $value != 0) {
             
             $this->_error = "This field is required.";
             return FALSE;

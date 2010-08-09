@@ -163,3 +163,6 @@ form small {
     font-size: 10px;
     line-height: 18px;
 }
+a img {
+    border: 1px solid #ccc;
+}
