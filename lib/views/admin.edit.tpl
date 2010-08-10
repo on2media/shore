@@ -1,3 +1,5 @@
+{$welcome}
+
 {if count($data->getControls()) == 0}
     
     <p>

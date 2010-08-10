@@ -1,3 +1,5 @@
+{$welcome}
+
 {if !$edit_only}
     <form action="edit/new" method="get">
         
