@@ -23,16 +23,15 @@ class CheckboxesControl extends Control
             $checked_options[] = $checked_option->uid();
         }
         
-        $optClass = get_class($checked->getObject());
-        $options = new $optClass();
+        $options = $this->getOptions()->fetchAll();
         
-        if ($options->getCollection()->fetchAll()->count() == 0) {
+        if ($options->count() == 0) {
             
             $field = "&nbsp;";
             
         } else {
             
-            foreach ($options->getCollection() as $option) {
+            foreach ($options as $option) {
                 $field .= sprintf("<input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s<br />\n",
                     $this->_var,
                     $option->uid(),
@@ -51,20 +50,27 @@ class CheckboxesControl extends Control
      */
     public function process(array $formData)
     {
-        $func = "get" . var2func($this->_var);
-        $checked = $this->_obj->$func();
-        
-        $optClass = get_class($checked->getObject());
-        $options = new $optClass();
+        $options = $this->getOptions();
         
         if (isset($formData[$this->_var]) && is_array($formData[$this->_var])) {
             
-            $options->getCollection()->setLimit($options->uidField(), "IN", $formData[$this->_var]);
-            $options->getCollection()->fetchAll();
+            $options->setLimit($options->getObject()->uidField(), "IN", $formData[$this->_var]);
+            $options->fetchAll();
             
         }
         
-        $formData[$this->_var] = $options->getCollection();
+        $formData[$this->_var] = $options;
         return parent::process($formData);
+    }
+    
+    /**
+     *
+     */
+    public function getOptions()
+    {
+        $func = "get" . var2func($this->_var);
+        $optClass = get_class($this->_obj->$func()->getObject());
+        $options = new $optClass();
+        return $options->getCollection();
     }
 }

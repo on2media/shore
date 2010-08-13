@@ -88,13 +88,34 @@ abstract class MySqlObject extends Object
                     
                 }
                 
+                if (!isset($fieldSpec["not_null"]) || $fieldSpec["not_null"] != TRUE) {
+                    if ($value === "") $value = NULL;
+                }
+                
                 $values[] = $value;
                 
             }
             
         }
         
-        if ($this->uid() != NULL) {
+        $forceInsert = FALSE;
+        
+        if ($this->{$this->uidField()} instanceof MySqlObject) {
+            
+            $objType = get_class($this);
+            
+            $search = new $objType();
+            if (!$search->fetchById($this->uid())) {
+                
+                $fields[] = $this->uidField();
+                $values[] = $this->uid();
+                $forceInsert = TRUE;
+                
+            }
+            
+        }
+        
+        if (!$forceInsert && $this->uid() != NULL) {
             
             $sql = sprintf("UPDATE `%s` SET ", $this->_table);
             foreach ($fields as $field) $sql .= "`" . $field . "`=?, ";
@@ -130,7 +151,7 @@ abstract class MySqlObject extends Object
                         
                         if ($dbh->beginTransaction()) {
                             
-                            $sth = $dbh->prepare(sprintf("DELETE FROM %s WHERE %s=?",
+                            $sth = $dbh->prepare(sprintf("DELETE FROM `%s` WHERE `%s`=?",
                                 $fieldSpec["table"],
                                 $fieldSpec["foreign"]
                             ));
@@ -144,7 +165,7 @@ abstract class MySqlObject extends Object
                                 
                                 foreach ($fieldValue as $obj) {
                                     
-                                    $sth = $dbh->prepare(sprintf("INSERT INTO %s (%s, %s) VALUES (?, ?)",
+                                    $sth = $dbh->prepare(sprintf("INSERT INTO `%s` (`%s`, `%s`) VALUES (?, ?)",
                                         $fieldSpec["table"],
                                         $fieldSpec["foreign"],
                                         $fieldSpec["column"]
@@ -258,7 +279,7 @@ abstract class MySqlObject extends Object
                 
                 $dbh = MySqlDatabase::getInstance();
                 
-                $sql = sprintf("SELECT %s FROM %s WHERE %s = ?",
+                $sql = sprintf("SELECT `%s` FROM `%s` WHERE `%s` = ?",
                     $linkSpec["column"],
                     $linkSpec["table"],
                     $linkSpec["foreign"]
@@ -268,16 +289,19 @@ abstract class MySqlObject extends Object
                     
                     $func = "get" . var2func($linkSpec["primary"]);
                     
+                    $value = $this->$func();
+                    if ($this->$func() instanceof MySqlObject) $value = $value->uid();
+                    
                     try {
-                        $sth->execute(array($this->$func()));
+                        $sth->execute(array($value));
                     } catch (PDOException $e) {
                         exit('Database error: ' . $e->getMessage() . " [$sql]");
                     }
                     
                     $tagIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);
                     
-                    if (count($tagIds) == 0 || !$items->getCollection()->setLimit("id", "IN", $tagIds)) {
-                        $items->getCollection()->setLimit("id", "=", NULL);
+                    if (count($tagIds) == 0 || !$items->getCollection()->setLimit($items->uidField(), "IN", $tagIds)) {
+                        $items->getCollection()->setLimit($items->uidField(), "=", NULL);
                     }
                     
                     $items->getCollection()->fetchAll();

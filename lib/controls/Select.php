@@ -14,18 +14,16 @@ class SelectControl extends Control
     public function output()
     {
         $func = "get" . var2func($this->_var);
-        $optionClass = $this->_objType;
-        
-        $options = new $optionClass();
+        $options = $this->getOptions();
         
         $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_var);
         
-        if ($options->getCollection()->fetchAll()->count() > 0) {
+        if ($options->fetchAll()->count() > 0) {
             
-            foreach ($options->getCollection() as $option) {
+            foreach ($options as $option) {
                 $field .= sprintf("    <option value=\"%s\"%s>%s</option>\n",
                     $option->uid(),
-                    ($this->_obj->$func() instanceof $optionClass && $this->_obj->$func()->uid() == $option->uid() ? " selected=\"selected\"":""),
+                    ($this->_obj->$func() instanceof $this->_objType && $this->_obj->$func()->uid() == $option->uid() ? " selected=\"selected\"":""),
                     $option->cite()
                 );
             }
@@ -43,20 +41,33 @@ class SelectControl extends Control
     public function process(array $formData)
     {
         $func = "get" . var2func($this->_var);
-        $optionClass = $this->_objType;
+        $options = $this->getOptions();
         
-        if ($optionClass && isset($formData[$this->_var])) {
+        if (isset($formData[$this->_var])) {
             
             if ($formData[$this->_var] == "0") $formData[$this->_var] = NULL;
             else {
                 
-                $obj = new $optionClass();
-                $formData[$this->_var] = $obj->fetchById($formData[$this->_var]);
+                $options->setLimit($options->getObject()->uidField(), "=", $formData[$this->_var]);
+                if (!$formData[$this->_var] = $options->fetchFirst()) {
+                    $formData[$this->_var] = NULL;
+                }
                 
             }
             
         }
         
         return parent::process($formData);
+    }
+    
+    /**
+     *
+     */
+    public function getOptions()
+    {
+        $func = "get" . var2func($this->_var);
+        $optionClass = $this->_objType;
+        $options = new $optionClass();
+        return $options->getCollection();
     }
 }

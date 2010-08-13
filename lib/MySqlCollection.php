@@ -64,8 +64,9 @@ class MySqlCollection extends Collection
      */
     public function fetchAll()
     {
-        $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, id AS PDOid, tbl.* FROM `%s` AS tbl %s",
+        $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, tbl.* FROM `%s` AS tbl %s",
             get_class($this->_obj),
+            $this->_obj->uidField(),
             $this->_obj->getTable(),
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );

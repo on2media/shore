@@ -152,7 +152,13 @@ abstract class Object
      */
     public function uid()
     {
-        return $this->{$this->uidField()};
+        $rtn = $this;
+        
+        do {
+            $rtn = $rtn->{$rtn->uidField()};
+        } while ($rtn instanceof Object);
+        
+        return $rtn;
     }
     
     /**
@@ -323,7 +329,10 @@ abstract class Object
      */
     public function cite()
     {
-        return htmlentities($this->_fields[$this->_cite]["value"]);
+        $rtn = $this->{$this->_cite};
+        if ($rtn instanceof Object) $rtn = $rtn->cite();
+        
+        return htmlentities($rtn);
     }
     
     /**

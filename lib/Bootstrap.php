@@ -32,9 +32,9 @@ $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
 define("_BASE", "http://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
 
-$urlParts = parse_url($_SERVER["REQUEST_URI"]);
-$urlPath = $urlParts["path"];
-define("_PAGE", substr(rawurldecode($urlParts["path"]), strlen($urlDir)));
+$urlParts = parse_url($_SERVER["REQUEST_URI"]); $urlPath = $urlParts["path"];
+if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
+define("_PAGE", $page);
 
 define("_QS", (isset($urlParts["query"]) ? "?" . $urlParts["query"] : ""));
 
