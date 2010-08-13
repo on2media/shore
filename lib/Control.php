@@ -41,6 +41,11 @@ abstract class Control
     /**
      *
      */
+    protected $_showEmpty = TRUE;
+    
+    /**
+     *
+     */
     protected $_objType;
     
     /**
@@ -71,6 +76,8 @@ abstract class Control
         
         if (isset($fieldSpec["required"]) && $fieldSpec["required"] == TRUE) $this->_required = TRUE;
         
+        if (isset($fieldSpec["on_edit"]["show_empty"]) && $fieldSpec["on_edit"]["show_empty"] == FALSE) $this->_showEmpty = FALSE;
+        
         if ($this->_obj->typeOf($var) == "object") {
             $pieces = explode(":", $fieldSpec["type"], 2);
             if (isset($pieces[1])) $this->_objType = $pieces[1] . "Object";
@@ -81,13 +88,15 @@ abstract class Control
     /**
      *
      */
-    public function getWrapper($field="&nbsp;")
+    public function getWrapper($field="")
     {
+        if ($field == "" && !$this->_showEmpty) return "";
+        
         $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s\n%s</p>\n",
             htmlentities($this->_heading),
             ($this->_required ? "<em>*</em>" : ""),
             ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
-            $field,
+            ($field == "" ? "&nbsp;" : $field),
             ($this->_showValidation == TRUE && $this->getError()
                 ? "<small>" . htmlentities($this->getError()) . "</small>\n"
                 : ""

@@ -15,7 +15,7 @@ class ViewControl extends Control
     {
         $func = "cite" . var2func($this->_var);
         $field = htmlentities($this->_obj->$func());
-        return $this->getWrapper(($field == "" ? "&nbsp;" : $field));
+        return $this->getWrapper($field);
     }
     
     /**

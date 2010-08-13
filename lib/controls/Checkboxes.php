@@ -27,7 +27,7 @@ class CheckboxesControl extends Control
         
         if ($options->count() == 0) {
             
-            $field = "&nbsp;";
+            $field = "";
             
         } else {
             
