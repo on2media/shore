@@ -32,7 +32,7 @@ $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
 define("_BASE", "http://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
 
-$urlParts = parse_url($_SERVER["REQUEST_URI"]); $urlPath = $urlParts["path"];
+if (!$urlParts = @parse_url($_SERVER["REQUEST_URI"])) exit(); $urlPath = $urlParts["path"];
 if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
 define("_PAGE", $page);
 
@@ -88,7 +88,7 @@ function classAutoloader($className)
         if (file_exists($filename) && include_once($filename)) return;
     }
     
-    trigger_error("Class autoloading failed for '" . htmlentities($className) . "'", E_USER_ERROR);
+    throw new Exception("Class autoloading failed for '" . htmlentities($className) . "'", E_USER_ERROR);
     exit();
 }
 

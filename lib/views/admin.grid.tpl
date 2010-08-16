@@ -18,6 +18,15 @@
     
 {else}
     
+    <p>
+        Select: <span class="cb_sel_grid">
+            <a href="#" rel="all">All</a>
+            <a href="#" rel="range">Range</a>
+            <a href="#" rel="invert">Invert</a>
+            <a href="#" rel="none">None</a>
+        </span>
+    </p>
+    
     <form action="./" method="post">
         
         <table class="grid">
@@ -43,7 +52,7 @@
                 {foreach from=$data->getCollection() key=id item=row}
                     <tr>
                         <td>
-                            <input type="checkbox" name="items[]" value="{$row->uid()}" />
+                            <input type="checkbox" name="items[]" value="{$row->uid()}" class="cb_sel_grid" />
                         </td>
                         {foreach from=$data->getGridHead() item=th}
                             <td>

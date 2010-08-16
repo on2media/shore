@@ -37,7 +37,7 @@ abstract class MapObject extends Object
      */
     public function save()
     {
-        trigger_error("Map Objects can't be created or updated.", E_USER_ERROR);
+        throw new Exception("Map Objects can't be created or updated.", E_USER_ERROR);
     }
     
     /**
@@ -45,6 +45,6 @@ abstract class MapObject extends Object
      */
     public function delete()
     {
-        trigger_error("Map Objects can't be deleted.", E_USER_ERROR);
+        throw new Exception("Map Objects can't be deleted.", E_USER_ERROR);
     }
 }

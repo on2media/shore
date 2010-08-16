@@ -327,7 +327,7 @@ abstract class Object
             
         }
         
-        trigger_error("Call to undefined function " . htmlentities($req) . "()", E_USER_ERROR);
+        throw new Exception("Call to undefined function " . htmlentities($req) . "() in " . htmlentities(get_class($this)), E_USER_ERROR);
     }
     
     /**

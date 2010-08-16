@@ -40,7 +40,7 @@ class MySqlDatabase
                 $instance = new PDO("mysql:dbname=" . MYSQL_DB_NAME . ";host=" . MYSQL_HOST . ";port=" . MYSQL_PORT, MYSQL_USERNAME, MYSQL_PASSWORD);
                 $instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                trigger_error("Database connection failed: " . $e->getMessage(), E_USER_ERROR);
+                throw new Exception("Database connection failed: " . $e->getMessage(), E_USER_ERROR);
             }
             
         }
