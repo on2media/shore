@@ -54,24 +54,24 @@ function classAutoloader($className)
     
     switch (TRUE) {
         
-        case (preg_match("/^([A-Za-z]+)Controller$/", $className, $matches)):
+        case (preg_match("/^([A-Za-z0-9]+)Controller$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLLERS . DS . $matches[1] . ".php";
             $inc[] = _PATH . "core" . DS . "lib" . DS . "controllers" . DS . $matches[1] . ".php";
             break;
         
-        case (preg_match("/^([A-Za-z]+)Component$/", $className, $matches)):
+        case (preg_match("/^([A-Za-z0-9]+)Component$/", $className, $matches)):
             $inc[] = _PATH . DIR_COMPONENTS . DS . $matches[1] . ".php";
             $inc[] = _PATH . "core" . DS . "lib" . DS . "components" . DS . $matches[1] . ".php";
             break;
         
-        case (preg_match("/^([A-Za-z]+)Control$/", $className, $matches)):
+        case (preg_match("/^([A-Za-z0-9]+)Control$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLS . DS . $matches[1] . ".php";
             $inc[] = _PATH . "core" . DS . "lib" . DS . "controls" . DS . $matches[1] . ".php";
             break;
         
         case (
             !in_array($className, array("MySqlObject", "MapObject")) &&
-            preg_match("/^([A-Za-z]+)Object$/", $className, $matches)
+            preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
         ):
             $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
             $inc[] = _PATH . "core" . DS . "lib" . DS . "models" . DS . $matches[1] . ".php";

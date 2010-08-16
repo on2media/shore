@@ -15,7 +15,7 @@ class PasswordControl extends Control
     {
         $field = sprintf("New Password: <input type=\"password\" name=\"%1\$s[]\" value=\"\" size=\"30\" /> &nbsp;\n" .
         "Confirm Password: <input type=\"password\" name=\"%1\$s[]\" value=\"\" size=\"30\" />",
-            $this->_var
+            $this->_prefix . $this->_var
         );
         
         return $this->getWrapper($field);
@@ -26,9 +26,9 @@ class PasswordControl extends Control
      */
     public function process(array $formData)
     {
-        if (isset($formData[$this->_var])) {
+        if (isset($formData[$this->_prefix . $this->_var])) {
             
-            $value =& $formData[$this->_var];
+            $value =& $formData[$this->_prefix . $this->_var];
             
             if (!is_array($value)) {
                 

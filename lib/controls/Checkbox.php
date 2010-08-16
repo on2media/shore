@@ -16,7 +16,7 @@ class CheckboxControl extends Control
         $func = "get" . var2func($this->_var);
         
         $field = sprintf("<input type=\"checkbox\" name=\"%s\" value=\"tick\"%s />",
-            $this->_var,
+            $this->_prefix . $this->_var,
             ($this->_obj->$func() == TRUE ? " checked=\"checked\"" : "")
         );
         
@@ -28,7 +28,7 @@ class CheckboxControl extends Control
      */
     public function process(array $formData)
     {
-        $formData[$this->_var] = (isset($formData[$this->_var]));
+        $formData[$this->_prefix . $this->_var] = (isset($formData[$this->_prefix . $this->_var]));
         return parent::process($formData);
     }
 }

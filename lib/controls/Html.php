@@ -16,7 +16,7 @@ class HtmlControl extends Control
         $func = "get" . var2func($this->_var);
         
         $field = sprintf("<textarea name=\"%s\" cols=\"80\" rows=\"20\" class=\"wysiwyg\">%s</textarea>",
-            $this->_var,
+            $this->_prefix . $this->_var,
             htmlentities($this->_obj->$func())
         );
         

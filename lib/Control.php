@@ -16,6 +16,11 @@ abstract class Control
     /**
      *
      */
+    protected $_prefix = "";
+    
+    /**
+     *
+     */
     protected $_var = "";
     
     /**
@@ -61,9 +66,11 @@ abstract class Control
     /**
      *
      */
-    public function __construct(Object $obj, $var, $fieldSpec=array())
+    public function __construct(Object $obj, $prefix, $var, $fieldSpec=array())
     {
         $this->_obj = $obj;
+        
+        $this->_prefix = $prefix;
         $this->_var = $var;
         
         $heading = (isset($fieldSpec["heading"]) ? $fieldSpec["heading"] : NULL);
@@ -134,14 +141,14 @@ abstract class Control
     {
         $this->_showValidation = TRUE;
         
-        if (!isset($formData[$this->_var]) && !is_null($formData[$this->_var])) {
+        if (!isset($formData[$this->_prefix . $this->_var]) && !is_null($formData[$this->_prefix . $this->_var])) {
             
             $this->_error = "Field was missing from the received form data.";
-            $this->_obj->{$this->_var} = $formData[$this->_var] = FALSE;
+            $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var] = FALSE;
             
         } else {
             
-            $this->_obj->{$this->_var} = $formData[$this->_var];
+            $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var];
             
         }
     }

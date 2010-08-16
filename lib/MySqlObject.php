@@ -54,7 +54,7 @@ abstract class MySqlObject extends Object
     /**
      *
      */
-    public function save()
+    public function save($inTransaction=FALSE)
     {
         if (!$this->validate()) return FALSE;
         
@@ -149,7 +149,7 @@ abstract class MySqlObject extends Object
                     
                     try {
                         
-                        if ($dbh->beginTransaction()) {
+                        if ($inTransaction || $dbh->beginTransaction()) {
                             
                             $sth = $dbh->prepare(sprintf("DELETE FROM `%s` WHERE `%s`=?",
                                 $fieldSpec["table"],
@@ -158,7 +158,7 @@ abstract class MySqlObject extends Object
                             
                             if (!$sth->execute(array($this->uid()))) {
                                 
-                                $dbh->rollBack();
+                                if (!$inTransaction) $dbh->rollBack();
                                 return FALSE;
                                 
                             } else {
@@ -173,14 +173,14 @@ abstract class MySqlObject extends Object
                                     
                                     if (!$sth->execute(array($this->uid(), $obj->uid()))) {
                                         
-                                        $dbh->rollBack();
+                                        if (!$inTransaction) $dbh->rollBack();
                                         return FALSE;
                                         
                                     }
                                     
                                 }
                                 
-                                $dbh->commit();
+                                if (!$inTransaction) $dbh->commit();
                                 
                             }
                             

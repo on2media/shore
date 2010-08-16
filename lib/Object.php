@@ -54,6 +54,11 @@ abstract class Object
     /**
      *
      */
+    protected $_controlPrefix = "";
+    
+    /**
+     *
+     */
     protected $_controls = NULL;
     
     /**
@@ -172,6 +177,18 @@ abstract class Object
     /**
      *
      */
+    public function setControlPrefix($prefix)
+    {
+        if ($this->_controlPrefix == "" && !is_array($this->controls)) {
+            $this->_controlPrefix = $prefix;
+            return TRUE;
+        }
+        return FALSE;
+    }
+    
+    /**
+     *
+     */
     public function getControls($field=NULL)
     {
         if (!is_array($this->_controls)) {
@@ -187,6 +204,7 @@ abstract class Object
                         $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
                         $control = new $controlClass(
                             $this,
+                            $this->_controlPrefix,
                             $fieldName,
                             $fieldSpec
                         );

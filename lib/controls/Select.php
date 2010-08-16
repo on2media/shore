@@ -16,7 +16,7 @@ class SelectControl extends Control
         $func = "get" . var2func($this->_var);
         $options = $this->getOptions();
         
-        $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_var);
+        $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_prefix . $this->_var);
         
         if ($options->fetchAll()->count() > 0) {
             
@@ -43,14 +43,14 @@ class SelectControl extends Control
         $func = "get" . var2func($this->_var);
         $options = $this->getOptions();
         
-        if (isset($formData[$this->_var])) {
+        if (isset($formData[$this->_prefix . $this->_var])) {
             
-            if ($formData[$this->_var] == "0") $formData[$this->_var] = NULL;
+            if ($formData[$this->_prefix . $this->_var] == "0") $formData[$this->_prefix . $this->_var] = NULL;
             else {
                 
-                $options->setLimit($options->getObject()->uidField(), "=", $formData[$this->_var]);
-                if (!$formData[$this->_var] = $options->fetchFirst()) {
-                    $formData[$this->_var] = NULL;
+                $options->setLimit($options->getObject()->uidField(), "=", $formData[$this->_prefix . $this->_var]);
+                if (!$formData[$this->_prefix . $this->_var] = $options->fetchFirst()) {
+                    $formData[$this->_prefix . $this->_var] = NULL;
                 }
                 
             }

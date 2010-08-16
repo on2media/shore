@@ -33,7 +33,7 @@ class CheckboxesControl extends Control
             
             foreach ($options as $option) {
                 $field .= sprintf("<input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s<br />\n",
-                    $this->_var,
+                    $this->_prefix . $this->_var,
                     $option->uid(),
                     (in_array($option->uid(), $checked_options) ? " checked=\"checked\"" : ""),
                     $option->cite()
@@ -52,14 +52,14 @@ class CheckboxesControl extends Control
     {
         $options = $this->getOptions();
         
-        if (isset($formData[$this->_var]) && is_array($formData[$this->_var])) {
+        if (isset($formData[$this->_prefix . $this->_var]) && is_array($formData[$this->_prefix . $this->_var])) {
             
-            $options->setLimit($options->getObject()->uidField(), "IN", $formData[$this->_var]);
+            $options->setLimit($options->getObject()->uidField(), "IN", $formData[$this->_prefix . $this->_var]);
             $options->fetchAll();
             
         }
         
-        $formData[$this->_var] = $options;
+        $formData[$this->_prefix . $this->_var] = $options;
         return parent::process($formData);
     }
     
