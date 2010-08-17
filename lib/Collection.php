@@ -109,6 +109,14 @@ abstract class Collection implements Iterator
     abstract public function fetchAll();
     
     /**
+     *
+     */
+    public function add(Object $obj)
+    {
+        $this->_dataSet[] = $obj;
+    }    
+    
+    /**
      * Returns the current record.
      *
      * @return  object

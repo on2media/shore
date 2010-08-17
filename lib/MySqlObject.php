@@ -117,16 +117,16 @@ abstract class MySqlObject extends Object
         
         if (!$forceInsert && $this->uid() != NULL) {
             
-            $sql = sprintf("UPDATE `%s` SET ", $this->_table);
-            foreach ($fields as $field) $sql .= "`" . $field . "`=?, ";
+            $sql = sprintf("UPDATE %s SET ", $this->quoteField($this->_table));
+            foreach ($fields as $field) $sql .= $this->quoteField($field) . "=?, ";
             $sql = substr($sql, 0, -strlen(", ")) . sprintf(" WHERE %s=?", $this->uidField());
             
             $values[] = $this->uid();
             
         } else {
             
-            $sql = sprintf("INSERT INTO `%s` (", $this->_table);
-            foreach ($fields as $field) $sql .= "`" . $field . "`, ";
+            $sql = sprintf("INSERT INTO %s (", $this->quoteField($this->_table));
+            foreach ($fields as $field) $sql .= $this->quoteField($field) . ", ";
             $sql = substr($sql, 0, -strlen(", ")) . ") VALUES (";
             for ($i=0;$i<count($values);$i++) $sql .= "?, ";
             $sql = substr($sql, 0, -strlen(", ")) . ")";
@@ -141,54 +141,81 @@ abstract class MySqlObject extends Object
         
         foreach($this->_relationships as $fieldName => $fieldSpec) {
             
-            if ($fieldSpec["type"] == "m-m") {
+            if ($fieldSpec["type"] == "m-m" || ($fieldSpec["type"] == "1-m" && isset($fieldSpec["on_edit"]))) {
                 
-                $fieldValue = $this->$fieldName;
-                
-                if (is_object($fieldValue) && $fieldValue instanceof Collection) {
+                try {
                     
-                    try {
+                    if ($inTransaction || $dbh->beginTransaction()) {
                         
-                        if ($inTransaction || $dbh->beginTransaction()) {
+                        $sth = $dbh->prepare(sprintf("DELETE FROM %s WHERE %s=?",
+                            $this->quoteField($fieldSpec["table"]),
+                            $this->quoteField($fieldSpec["foreign"])
+                        ));
+                        
+                        if (!$sth->execute(array($this->uid()))) {
                             
-                            $sth = $dbh->prepare(sprintf("DELETE FROM `%s` WHERE `%s`=?",
-                                $fieldSpec["table"],
-                                $fieldSpec["foreign"]
-                            ));
+                            if (!$inTransaction) $dbh->rollBack();
+                            return FALSE;
                             
-                            if (!$sth->execute(array($this->uid()))) {
+                        }
+                        
+                    }
+                    
+                } catch (PDOException $e) {
+                    exit('Database error: ' . $e->getMessage());
+                }
+                
+                if ($fieldSpec["type"] == "m-m") {
+                    
+                    $fieldValue = $this->$fieldName;
+                    
+                    if (is_object($fieldValue) && $fieldValue instanceof Collection) {
+                        
+                        try {
+                            
+                            foreach ($fieldValue as $obj) {
                                 
-                                if (!$inTransaction) $dbh->rollBack();
-                                return FALSE;
+                                $sth = $dbh->prepare(sprintf("INSERT INTO %s (%s, %s) VALUES (?, ?)",
+                                    $this->quoteField($fieldSpec["table"]),
+                                    $this->quoteField($fieldSpec["foreign"]),
+                                    $this->quoteField($fieldSpec["column"])
+                                ));
                                 
-                            } else {
-                                
-                                foreach ($fieldValue as $obj) {
+                                if (!$sth->execute(array($this->uid(), $obj->uid()))) {
                                     
-                                    $sth = $dbh->prepare(sprintf("INSERT INTO `%s` (`%s`, `%s`) VALUES (?, ?)",
-                                        $fieldSpec["table"],
-                                        $fieldSpec["foreign"],
-                                        $fieldSpec["column"]
-                                    ));
-                                    
-                                    if (!$sth->execute(array($this->uid(), $obj->uid()))) {
-                                        
-                                        if (!$inTransaction) $dbh->rollBack();
-                                        return FALSE;
-                                        
-                                    }
+                                    if (!$inTransaction) $dbh->rollBack();
+                                    return FALSE;
                                     
                                 }
                                 
-                                if (!$inTransaction) $dbh->commit();
+                            }
+                            
+                            if (!$inTransaction) $dbh->commit();
+                            
+                        } catch (PDOException $e) {
+                            exit('Database error: ' . $e->getMessage());
+                        }
+                        
+                    }
+                    
+                } else if ($fieldSpec["type"] == "1-m" && isset($fieldSpec["on_edit"])) {
+                    
+                    foreach ($this->$fieldName as $obj) {
+                        
+                        if ($obj instanceof MySqlObject) {
+                            
+                            if (!$obj->save(TRUE)) {
+                                
+                                if (!$inTransaction) $dbh->rollBack();
+                                return FALSE;
                                 
                             }
                             
                         }
                         
-                    } catch (PDOException $e) {
-                        exit('Database error: ' . $e->getMessage() . " [$sql]");
                     }
+                    
+                    if (!$inTransaction) $dbh->commit();
                     
                 }
                 
@@ -279,10 +306,10 @@ abstract class MySqlObject extends Object
                 
                 $dbh = MySqlDatabase::getInstance();
                 
-                $sql = sprintf("SELECT `%s` FROM `%s` WHERE `%s` = ?",
-                    $linkSpec["column"],
-                    $linkSpec["table"],
-                    $linkSpec["foreign"]
+                $sql = sprintf("SELECT %s FROM %s WHERE %s = ?",
+                    $this->quoteField($linkSpec["column"]),
+                    $this->quoteField($linkSpec["table"]),
+                    $this->quoteField($linkSpec["foreign"])
                 );
                 
                 if ($sth = $dbh->prepare($sql)) {
@@ -315,5 +342,13 @@ abstract class MySqlObject extends Object
         }
         
         return parent::__call($func, $arguments);
+    }
+    
+    /**
+     *
+     */
+    protected function quoteField($field)
+    {
+        return (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
     }
 }

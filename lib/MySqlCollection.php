@@ -39,6 +39,8 @@ class MySqlCollection extends Collection
      */
     public function setLimit($field, $condition, $value)
     {
+        $field = (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
+        
         if ((strtoupper($condition) == "IN" || strtoupper($condition) == "NOT IN") && is_array($value)) {
             
             if (count($value) == 0) return FALSE;
@@ -66,7 +68,7 @@ class MySqlCollection extends Collection
     {
         $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, tbl.* FROM `%s` AS tbl %s",
             get_class($this->_obj),
-            $this->_obj->uidField(),
+            (substr($this->_obj->uidField(), 0, 1) == "*" ? substr($this->_obj->uidField(), 1) : "`" . $this->_obj->uidField() . "`"),
             $this->_obj->getTable(),
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );
