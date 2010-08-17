@@ -19,7 +19,7 @@ class EditComponent extends Component
             $tpl->assign("page_title", "Invalid Identifier");
             $tpl->assign("status_alert", "Unable to match the identifier supplied to a dataset.");
             $this->_controller->setView($tpl);
-            return;
+            return $this->output();
             
         }
         

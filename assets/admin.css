@@ -164,7 +164,7 @@ form label span {
     color: #778;
     font-size: 11px;
 }
-input, textarea {
+input, textarea, button {
     font: 12px sans-serif;
     padding: 4px;
     border: 1px solid #778;

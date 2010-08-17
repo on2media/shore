@@ -135,7 +135,11 @@ abstract class MySqlObject extends Object
         
         $sth = $dbh->prepare($sql);
         
-        if (!$sth->execute($values)) return FALSE;
+        try {
+            if (!$sth->execute($values)) return FALSE;
+        } catch (PDOException $e) {
+            exit('Database error: ' . $e->getMessage());
+        }
         
         if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
         
