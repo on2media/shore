@@ -92,6 +92,14 @@ abstract class Object
     /**
      *
      */
+    public function getFieldSpec($var)
+    {
+        return (isset($this->_fields[$var]) ? $this->_fields[$var] : FALSE);
+    }
+    
+    /**
+     *
+     */
     public function getFieldHeading($field)
     {
         if (isset($this->_fields[$field]) && ($spec = $this->_fields[$field])) {
@@ -160,7 +168,11 @@ abstract class Object
         $rtn = $this;
         
         do {
+            
+            if (substr($rtn->uidField(), 0, 1) == "*") return NULL;
+            
             $rtn = $rtn->{$rtn->uidField()};
+            
         } while ($rtn instanceof Object);
         
         return $rtn;

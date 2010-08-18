@@ -116,6 +116,14 @@ abstract class Control
     /**
      *
      */
+    public function getObject()
+    {
+        return $this->_obj;
+    }
+    
+    /**
+     *
+     */
     public function getVar()
     {
         return $this->_var;

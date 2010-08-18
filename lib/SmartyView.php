@@ -86,6 +86,14 @@ class SmartyView extends View
     }
     
     /**
+     *
+     */
+    public function getTemplate()
+    {
+        return $this->_template;
+    }
+    
+    /**
      * Defines the layout to use. A layout is wrapped around the template. The layout template
      * should contain a {$content} variable where the template content should be inserted.
      *
