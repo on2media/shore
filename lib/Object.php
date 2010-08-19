@@ -44,6 +44,11 @@ abstract class Object
     /**
      *
      */
+    protected $_cite = "";
+    
+    /**
+     *
+     */
     protected $_uid = "";
     
     /**
