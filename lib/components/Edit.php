@@ -11,7 +11,7 @@ class EditComponent extends Component
     /**
      *
      */
-    public function draw(Object $obj, $uid, $title)
+    public function draw(Object $obj, $uid, $title, $hasCustomFields=FALSE)
     {
         if (!$data = ($uid == "new" ? $obj : $obj->fetchById($uid))) {
             
@@ -32,25 +32,40 @@ class EditComponent extends Component
             
             foreach ($data->getControls() as $control) $control->process($_POST);
             
-            if (!$data->validate()) {
+            $dataValid = $data->validate();
+            $customValid = (!$hasCustomFields || $this->_controller->validateCustomFields($data));
+            
+            if (!$dataValid || !$customValid) {
                 
                 $tpl->assign("status_alert", "Please correct the error(s) below.");
                 
-            } else if ($data->save()) {
-                
-                $tpl->assign_session("status_confirm", "Changes have been successfully saved.");
-                
-                $newUrl = _PAGE;
-                
-                if (substr(_PAGE, -4, 4) == "new/") {
-                    $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
-                }
-                
-                $this->_controller->redirect(_BASE . $newUrl);
-                
             } else {
                 
-                $tpl->assign("status_alert", "An error occured whilst saving the changes.");
+                $dbh = MySqlDatabase::getInstance();
+                $dbh->beginTransaction();
+                
+                if (
+                    $data->save(TRUE) &&
+                    (!$hasCustomFields || $this->_controller->saveCustomFields($data))
+                ) {
+                    
+                    $dbh->commit();
+                    $tpl->assign_session("status_confirm", "Changes have been successfully saved.");
+                    
+                    $newUrl = _PAGE;
+                    
+                    if (substr(_PAGE, -4, 4) == "new/") {
+                        $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
+                    }
+                    
+                    $this->_controller->redirect(_BASE . $newUrl);
+                    
+                } else {
+                    
+                    $dbh->rollBack();
+                    $tpl->assign("status_alert", "An error occured whilst saving the changes.");
+                    
+                }
                 
             }
             
