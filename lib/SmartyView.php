@@ -36,13 +36,13 @@ class SmartyView extends View
      *
      * @param  string  $template  Filename of the template to use.
      */
-    public function __construct($template)
+    public function __construct($template, $dir="")
     {
         @header("Content-Type: text/html;charset=iso-8859-1");
         
         $this->_smarty = new Smarty();
         
-        $this->_smarty->template_dir = DIR_VIEWS . DS;
+        $this->_smarty->template_dir = DIR_VIEWS . DS . $dir;
         
         $base = realpath(dirname(__FILE__)) . DS;
         

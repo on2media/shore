@@ -30,7 +30,8 @@ define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
-define("_BASE", "http://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
+$protocol = (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https");
+define("_BASE", $protocol . "://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
 
 if (!$urlParts = @parse_url($_SERVER["REQUEST_URI"])) exit(); $urlPath = $urlParts["path"];
 if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
