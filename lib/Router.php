@@ -92,7 +92,7 @@ class Router
             
         }
         
-        throw new Exception("Unable to route the request through a controller", E_USER_ERROR);
+        throw new Exception("Unable to route the request through a controller");
         exit();
     }
 }

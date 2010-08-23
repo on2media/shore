@@ -30,8 +30,8 @@ define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
-$protocol = (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https");
-define("_BASE", $protocol . "://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
+define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https"));
+define("_BASE", _PROTOCOL . "://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
 
 if (!$urlParts = @parse_url($_SERVER["REQUEST_URI"])) exit(); $urlPath = $urlParts["path"];
 if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
@@ -89,7 +89,7 @@ function classAutoloader($className)
         if (file_exists($filename) && include_once($filename)) return;
     }
     
-    throw new Exception("Class autoloading failed for '" . htmlentities($className) . "'", E_USER_ERROR);
+    throw new Exception("Class autoloading failed for '" . htmlentities($className) . "'");
     exit();
 }
 
