@@ -39,11 +39,11 @@ abstract class Controller
      * Sets the view to use.
      *
      * @param  View  $view
-     * @return  void
+     * @return  View
      */
     public function setView(View $view)
     {
-        $this->_view = $view;
+        return $this->_view = $view;
     }
     
     /**
