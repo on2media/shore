@@ -329,10 +329,14 @@ abstract class MySqlObject extends Object
                         exit('Database error: ' . $e->getMessage() . " [$sql]");
                     }
                     
-                    $tagIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);
+                    $objIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);
                     
-                    if (count($tagIds) == 0 || !$items->getCollection()->setLimit($items->uidField(), "IN", $tagIds)) {
+                    if (count($objIds) == 0 || !$items->getCollection()->setLimit($items->uidField(), "IN", $objIds)) {
                         $items->getCollection()->setLimit($items->uidField(), "=", NULL);
+                    }
+                    
+                    if ($this->_relationships[$fieldName]["type"] == "1-1") {
+                        return $items->getCollection()->fetchFirst();
                     }
                     
                     $items->getCollection()->fetchAll();
