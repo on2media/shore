@@ -58,6 +58,7 @@ class EditComponent extends Component
                         $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
                     }
                     
+                    $newUrl = substr($newUrl, 0, -strlen("edit/{$data->uid()}/"));
                     $this->_controller->redirect(_BASE . $newUrl);
                     
                 } else {

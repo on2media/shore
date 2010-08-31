@@ -143,13 +143,13 @@ abstract class Control
     abstract public function output();
     
     /**
-     *
+     * 
      */
     public function process(array $formData)
     {
         $this->_showValidation = TRUE;
         
-        if (!isset($formData[$this->_prefix . $this->_var]) && !is_null($formData[$this->_prefix . $this->_var])) {
+        if (!array_key_exists($this->_prefix . $this->_var, $formData)) {
             
             $this->_error = "Field was missing from the received form data.";
             $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var] = FALSE;
