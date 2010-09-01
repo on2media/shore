@@ -53,7 +53,7 @@ class MySqlCollection extends Collection
         } else {
             
             $this->_limits["conditions"][] = $field . " " . $condition . " ?";
-            $this->_limits["values"][] = $value;
+            $this->_limits["values"][] = ($value instanceof Object ? $value->uid() : $value);
             
         }
         
