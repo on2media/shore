@@ -25,11 +25,9 @@ class CheckboxesControl extends Control
         
         $options = $this->getOptions()->fetchAll();
         
-        if ($options->count() == 0) {
-            
-            $field = "";
-            
-        } else {
+        $field = "";
+        
+        if ($options->count() > 0) {
             
             foreach ($options as $option) {
                 $field .= sprintf("<input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s<br />\n",
