@@ -175,10 +175,15 @@ abstract class Control
             if ($value instanceof Object && $value->getCollection()->count() == 0) return TRUE;
             else if ($value === NULL) return TRUE;
             
-        } else if (empty($value) && $value !== "0" && $value !== 0) {
+        } else if ((empty($value) && $value !== "0" && $value !== 0) || ($value instanceof Collection && $value->count() == 0)) {
             
+            // This is required, but the field the control hasn't returned any output so we can
+            // assume it isn't required.
+            if ($this->output() == "" && $this->_showEmpty == FALSE) return TRUE;
+            
+            // This is required, but don't return false just yet, as the validation might be
+            // better handled below.
             $this->_error = "This field is required.";
-            return FALSE;
             
         }
         

@@ -34,21 +34,38 @@ class MySqlCollection extends Collection
      *                             anything can be specified. Typical value conditions would be
      *                             =, !=, <, >, IN or NOT IN. If IN or NOT IN are specified the
      *                             $value should be an array.
-     * @param  string|int|float|array  $value  The value to limit by.
+     * @param  string|int|float|array|Collection  $value  The value to limit by.
      * @return  boolean
      */
     public function setLimit($field, $condition, $value)
     {
         $field = (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
         
-        if ((strtoupper($condition) == "IN" || strtoupper($condition) == "NOT IN") && is_array($value)) {
+        if ((strtoupper($condition) == "IN" || strtoupper($condition) == "NOT IN")) {
             
-            if (count($value) == 0) return FALSE;
-            
-            $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
-            " (" . substr(str_repeat("?, ", count($value)), 0, -strlen(", ")) . ")";
-            
-            foreach ($value as $inValue) $this->_limits["values"][] = $inValue;
+            if (is_array($value)) {
+                
+                if (count($value) == 0) return FALSE;
+                
+                $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
+                " (" . substr(str_repeat("?, ", count($value)), 0, -strlen(", ")) . ")";
+                
+                foreach ($value as $inValue) $this->_limits["values"][] = $inValue;
+                
+            } else if ($value instanceof Collection) {
+                
+                if ($value->count() == 0) return FALSE;
+                
+                $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
+                " (" . substr(str_repeat("?, ", $value->count()), 0, -strlen(", ")) . ")";
+                
+                foreach ($value as $inValue) $this->_limits["values"][] = $inValue->uid();
+                
+            } else {
+                
+                return FALSE;
+                
+            }
             
         } else {
             

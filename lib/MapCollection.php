@@ -38,9 +38,11 @@ class MapCollection extends Collection
         return TRUE;
     }
     
+    /**
+     * @todo Handle... $this->_start   $this->_range   $this->_order
+     */
     public function fetchAll()
     {
-        //TODO: Handle... $this->_start   $this->_range   $this->_order
         $this->_dataSet = array();
         
         $objClass = get_class($this->_obj);
