@@ -58,17 +58,17 @@ class SmartyView extends View
             "admin"  =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
         ));
         
-        if (defined("AUTH_SESSION") && defined("AUTH_MODEL")) {
-            $authModel = AUTH_MODEL;
-            if (isset($_SESSION[AUTH_SESSION]) && $_SESSION[AUTH_SESSION] instanceof $authModel) {
-                $this->assign("current_user", $_SESSION[AUTH_SESSION]);
-            }
+        $session = Session::getInstance();
+        $this->assign("current_user", $session->getUser());
+        
+        $session = Session::getInstance();
+        if ($session->getSmarty() && is_array($session->getSmarty())) {
+            $this->assign_array($session->getSmarty());
         }
         
-        @session_start();
-        if (isset($_SESSION["Smarty"]) && is_array($_SESSION["Smarty"])) {
-            $this->assign_array($_SESSION["Smarty"]);
-        }
+        //$session->setSmarty("test");
+        //print_r($_SESSION);
+        //var_dump($session->getSmarty()); exit();
     }
     
     /**
@@ -145,8 +145,10 @@ class SmartyView extends View
      */
     public static function assign_session($key, $value)
     {
-        @session_start();
-        $_SESSION["Smarty"][$key] = $value;
+        $session = Session::getInstance();
+        $vars = $session->getSmarty();
+        $vars[$key] = $value;
+        $session->setSmarty($vars);
     }
     
     /**
@@ -156,8 +158,8 @@ class SmartyView extends View
      */
     public function output()
     {
-        @session_start();
-        unset($_SESSION["Smarty"]);
+        $session = Session::getInstance();
+        $session->unsetSmarty();
         
         if ($this->_layout != NULL) {
             

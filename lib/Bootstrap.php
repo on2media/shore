@@ -95,9 +95,7 @@ function classAutoloader($className)
 
 spl_autoload_register('classAutoloader');
 
-// start a session
-session_name(SESSION_NAME);
-session_start();
+Session::getInstance();
 
 /**
  * This function converts a variable name in the format foo_bar into the corresponding function
