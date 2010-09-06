@@ -70,6 +70,7 @@
                         {/foreach}
                         <td>
                             <a href="edit/{$row->uid()|escape}/">Edit</a>
+                            {if $add_similar}| <a href="add/{$row->uid()|escape}/">Add Similar</a>{/if}
                         </td>
                     </tr>
                 {/foreach}

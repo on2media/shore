@@ -17,7 +17,7 @@ class InputControl extends Control
         
         $field = sprintf("<input type=\"text\" name=\"%s\" value=\"%s\" size=\"%d\" />",
             $this->_prefix . $this->_var,
-            htmlentities($this->_obj->$func()),
+            htmlspecialchars($this->_obj->$func()),
             $this->getSize()
         );
         

@@ -89,7 +89,7 @@ function classAutoloader($className)
         if (file_exists($filename) && include_once($filename)) return;
     }
     
-    throw new Exception("Class autoloading failed for '" . htmlentities($className) . "'");
+    throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
     exit();
 }
 

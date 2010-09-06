@@ -100,12 +100,12 @@ abstract class Control
         if ($field == "" && !$this->_showEmpty) return "";
         
         $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s\n%s</p>\n",
-            htmlentities($this->_heading),
+            htmlspecialchars($this->_heading),
             ($this->_required ? "<em>*</em>" : ""),
             ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
             ($field == "" ? "&nbsp;" : $field),
             ($this->_showValidation == TRUE && $this->getError()
-                ? "<small>" . htmlentities($this->getError()) . "</small>\n"
+                ? "<small>" . htmlspecialchars($this->getError()) . "</small>\n"
                 : ""
             )
         );
@@ -181,9 +181,9 @@ abstract class Control
             // assume it isn't required.
             if ($this->output() == "" && $this->_showEmpty == FALSE) return TRUE;
             
-            // This is required, but don't return false just yet, as the validation might be
-            // better handled below.
+            // This is required!
             $this->_error = "This field is required.";
+            return FALSE;
             
         }
         

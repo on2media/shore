@@ -11,7 +11,7 @@ class EditComponent extends Component
     /**
      *
      */
-    public function draw(Object $obj, $uid, $title, $hasCustomFields=FALSE)
+    public function draw(Object $obj, $uid, $title, $hasCustomFields=FALSE, $addSimilar=FALSE)
     {
         if (!$data = ($uid == "new" ? $obj : $obj->fetchById($uid))) {
             
@@ -44,6 +44,8 @@ class EditComponent extends Component
                 $dbh = MySqlDatabase::getInstance();
                 $dbh->beginTransaction();
                 
+                if ($addSimilar) $data->{$data->uidField()} = NULL;
+                
                 if (
                     $data->save(TRUE) &&
                     (!$hasCustomFields || $this->_controller->saveCustomFields($data))
@@ -58,7 +60,7 @@ class EditComponent extends Component
                         $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
                     }
                     
-                    $newUrl = substr($newUrl, 0, -strlen("edit/{$data->uid()}/"));
+                    $newUrl = substr($newUrl, 0, -strlen(($addSimilar ? "add" : "edit") . "/{$data->uid()}/"));
                     $this->_controller->redirect(_BASE . $newUrl);
                     
                 } else {

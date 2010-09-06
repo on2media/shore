@@ -17,7 +17,7 @@ class TextareaControl extends Control
         
         $field = sprintf("<textarea name=\"%s\" cols=\"80\" rows=\"10\">%s</textarea>",
             $this->_prefix . $this->_var,
-            htmlentities($this->_obj->$func())
+            htmlspecialchars($this->_obj->$func())
         );
         
         return $this->getWrapper($field);

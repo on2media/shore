@@ -299,7 +299,7 @@ abstract class Object
                 switch ($this->typeOf($name)) {
                     
                     case "string":
-                        return htmlentities($value);
+                        return htmlspecialchars($value);
                     
                     case "text":
                         return nl2br($value);
@@ -344,7 +344,7 @@ abstract class Object
             
         }
         
-        throw new Exception("Call to undefined function " . htmlentities($req) . "() in " . htmlentities(get_class($this)));
+        throw new Exception("Call to undefined function " . htmlspecialchars($req) . "() in " . htmlspecialchars(get_class($this)));
     }
     
     /**
@@ -367,7 +367,7 @@ abstract class Object
         $rtn = $this->{$this->_cite};
         if ($rtn instanceof Object) $rtn = $rtn->cite();
         
-        return htmlentities($rtn);
+        return htmlspecialchars($rtn);
     }
     
     /**

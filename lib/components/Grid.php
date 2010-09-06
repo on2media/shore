@@ -11,12 +11,14 @@ class GridComponent extends Component
     /**
      *
      */
-    public function draw(Object $obj, $title)
+    public function draw(Object $obj, $title, $addSimilar=FALSE)
     {
         $obj->getCollection()->fetchAll();
         
         $this->_controller->setView(new SmartyView("admin.grid.tpl"));
         $this->_controller->getView()->setLayout("layout.admin.tpl");
+        
+        if ($addSimilar) $this->_controller->getView()->assign("add_similar", TRUE);
         
         if ($_POST) {
             
