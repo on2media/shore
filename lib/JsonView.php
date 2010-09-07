@@ -16,16 +16,16 @@ class JsonView extends View
     /**
      *
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
-        @header("Content-Type: application/json");
+        @header("Content-Type: application/json;charset=utf-8");
         $this->_json = $data;
     }
     
     /**
      *
      */
-    public function output(array $data=array())
+    public function output()
     {
         return json_encode($this->_json);
     }
