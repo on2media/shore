@@ -16,7 +16,7 @@ class JsonView extends View
     /**
      *
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
         @header("Content-Type: application/json;charset=utf-8");
         $this->_json = $data;
