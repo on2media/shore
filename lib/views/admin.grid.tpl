@@ -1,7 +1,7 @@
 {$welcome}
 
 {if !$edit_only}
-    <form action="edit/new" method="get">
+    <form action="edit/new/" method="get">
         
         <p>
             <input type="submit" value="Add New" />
@@ -70,7 +70,7 @@
                         {/foreach}
                         <td>
                             <a href="edit/{$row->uid()|escape}/">Edit</a>
-                            {if $add_similar}| <a href="add/{$row->uid()|escape}/">Add Similar</a>{/if}
+                            {if $add_similar}| <a href="add-similar/{$row->uid()|escape}/">Add Similar</a>{/if}
                         </td>
                     </tr>
                 {/foreach}
