@@ -54,7 +54,7 @@ class SmartyView extends View
         
         $this->assign_array(array(
             "base"   =>  _BASE,
-            "url"    =>  _PAGE,
+            "here"   =>  _PAGE,
             "admin"  =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
         ));
         
