@@ -32,6 +32,8 @@ class EditComponent extends Component
             
             foreach ($data->getControls() as $control) $control->process($_POST);
             
+            if ($addSimilar) $data->{$data->uidField()} = NULL;
+            
             $dataValid = $data->validate();
             $customValid = (!$hasCustomFields || $this->_controller->validateCustomFields($data));
             
@@ -43,8 +45,6 @@ class EditComponent extends Component
                 
                 $dbh = MySqlDatabase::getInstance();
                 $dbh->beginTransaction();
-                
-                if ($addSimilar) $data->{$data->uidField()} = NULL;
                 
                 if (
                     $data->save(TRUE) &&
