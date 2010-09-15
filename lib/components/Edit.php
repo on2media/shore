@@ -54,14 +54,11 @@ class EditComponent extends Component
                     $dbh->commit();
                     $tpl->assign_session("status_confirm", "Changes have been successfully saved.");
                     
-                    $newUrl = _PAGE;
+                    $parts = explode("/", _PAGE);
+                    for($i=0;$i<3;$i++) array_pop($parts);
+                    $newUrl = _BASE . implode("/", $parts) . "/";
                     
-                    if (substr(_PAGE, -4, 4) == "new/") {
-                        $newUrl = substr(_PAGE, 0, -4) . $data->uid() . "/";
-                    }
-                    
-                    $newUrl = substr($newUrl, 0, -strlen(($addSimilar ? "add-similar" : "edit") . "/{$data->uid()}/"));
-                    $this->_controller->redirect(_BASE . $newUrl);
+                    $this->_controller->redirect($newUrl);
                     
                 } else {
                     
