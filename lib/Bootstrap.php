@@ -48,6 +48,9 @@ if (strpos(_PAGE, ".") === FALSE && _PAGE != "" && substr(_PAGE, -1) != "/") {
 // include Smarty
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "smarty") . DS . "Smarty.class.php");
 
+// include Swift Mailer
+require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "swift") . DS . "swift_required.php");
+
 // class autoloader
 function classAutoloader($className)
 {
