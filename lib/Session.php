@@ -135,12 +135,18 @@ class Session
             unset($_SESSION[$name]);
             return TRUE;
             
-        } else if (substr($name, 0, 3) == "set" && (isset($arguments[0]) || is_null($arguments[0]))) {
+        } else {
             
-            $name = substr($name, 3);
-            $_SESSION[$name] = $arguments[0];
-            return TRUE;
-            
+            if (isset($arguments) && is_array($arguments) && isset($arguments[0])) {
+                
+                if (substr($name, 0, 3) == "set" && (isset($arguments[0]) || is_null($arguments[0]))) {
+                    
+                    $name = substr($name, 3);
+                    $_SESSION[$name] = $arguments[0];
+                    return TRUE;
+                }
+                
+            }
         }
         
         return FALSE;
