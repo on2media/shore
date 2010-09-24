@@ -339,6 +339,13 @@ abstract class MySqlObject extends Object
                         return $items->getCollection()->fetchFirst();
                     }
                     
+                    // if FALSE is passed as the first argument then do not fetch the entire
+                    // collection and do not set the value in the class.
+                    
+                    if (isset($arguments[0]) && $arguments[0] === FALSE) {
+                        return $items->getCollection();
+                    }
+                    
                     $items->getCollection()->fetchAll();
                     
                 }

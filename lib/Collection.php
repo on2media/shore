@@ -83,6 +83,98 @@ abstract class Collection implements Iterator
     }
     
     /**
+     *
+     */
+    public function setPaginationPage($page=1, $itemsPerPage=20)
+    {
+        if ((int)$page > 0) {
+            $this->_start = ((int)$page-1) * $itemsPerPage;
+            $this->_range = $itemsPerPage;
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     *
+     */
+    public function paginate($showSummary=TRUE, $url="?p=%d")
+    {
+        $rtn = "";
+        
+        if ($this->_start !== NULL && $this->_range !== NULL && $this->_total !== NULL) {
+            
+            $rtn .= $this->getPageLinks($this->_start, $this->_range, $this->_total, $url);
+            
+            if ($showSummary == TRUE) {
+                $rtn .= sprintf("<p class=\"np\">\n    Showing %d - %d of %d records.\n</p>\n",
+                    $this->_start + 1,
+                    (($this->_start + $this->_range) > $this->_total ? $this->_total : ($this->_start + $this->_range)),
+                    $this->_total
+                );
+            }
+            
+        }
+        
+        return $rtn;
+    }
+    
+    /**
+     *
+     */
+    public function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d")
+    {
+        $a=6; $page = ($startAt / $itemsPerPage) + 1;
+        $lastpage = ceil($totalRecords / $itemsPerPage);
+        if ($page == 0 || $lastpage <= 1) return "";
+       
+        $rtn = "<ul class=\"pagination\">";
+       
+        if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">&lt;</a></li>";
+        if ($lastpage < (8+$a)) {
+            $rtn .= $this->paginateSection(1, $lastpage, $url, $page);
+        } else {
+            if ($page < (3+$a)) {
+                $rtn .= $this->paginateSection(1, $i=(3+$a), $url, $page);
+            } else {
+                $rtn .= $this->paginateSection(1, 2, $url, $page);
+                if ($page != (3+$a)) $rtn .= "<li><span>&hellip;</span></li>";
+                if ($lastpage > $page+(1+$a)) {
+                    $rtn .= $this->paginateSection($page-$a, $i=$page+$a, $url, $page);
+                } else {
+                    $rtn .= $this->paginateSection($lastpage-(3+$a), $i=$lastpage, $url, $page);
+                }
+            }
+            if ($i<$lastpage) {
+                if ($lastpage-2 != $i) $rtn .= "<li><span>&hellip;</span></li>";
+                $rtn .= $this->paginateSection($lastpage-1, $lastpage, $url, $page);
+            }
+        }
+        if ($page < $lastpage) $rtn .= "<li><a href=\"" . sprintf($url, ($page+1)) . "\">&gt;</a></li>";
+       
+        return $rtn . "</ul>";
+    }
+    
+    /**
+     *
+     */
+    protected function paginateSection($start, $end, $url, $currentPage)
+    {
+        $rtn = "";
+       
+        for ($i=$start; $i<=$end;$i++) {
+            $rtn .= sprintf("<li%s><a href=\"%s\">%d</a></li>\n",
+                ($currentPage == $i ? " class=\"active\"":""),
+                sprintf($url, $i),
+                $i
+            );
+        }
+       
+        return $rtn;
+    }
+    
+    /**
      * Sets the sort order.
      *
      * @param  string  $order

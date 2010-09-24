@@ -79,6 +79,8 @@
             
         </table>
         
+        {$data->getCollection()->paginate()}
+        
         <p>
             <input type="submit" name="do" value= "Delete Selected" class="delete" />
         </p>

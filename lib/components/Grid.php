@@ -13,6 +13,7 @@ class GridComponent extends Component
      */
     public function draw(Object $obj, $title, $addSimilar=FALSE)
     {
+        $obj->getCollection()->setPaginationPage((isset($_GET["p"]) ? (int)$_GET["p"] : 1));
         $obj->getCollection()->fetchAll();
         
         $this->_controller->setView(new SmartyView("admin.grid.tpl"));
