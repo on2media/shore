@@ -109,8 +109,12 @@ Session::getInstance();
  */
 function var2func($str)
 {
-    $chrToUpper = create_function("\$chr", "return strtoupper(\$chr[1]);");
-    return preg_replace_callback("/_([a-z])/", $chrToUpper, ucfirst(strtolower($str)));
+    return preg_replace_callback("/_([a-z])/", "chrToUpper", ucfirst(strtolower($str)));
+}
+
+function chrToUpper($chr)
+{
+    return strtoupper($chr[1]);
 }
 
 /**

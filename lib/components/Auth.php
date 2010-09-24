@@ -15,7 +15,7 @@ class AuthComponent extends Component
     {
         $session = Session::getInstance();
         if (!$this->checkLogin()) return FALSE;
-        if ($session->canAccess($access)) return TRUE;
+        if ($session->getUser()->canAccess($access)) return TRUE;
         
         $tpl = new SmartyView("layout.admin.tpl");
         $tpl->assign("page_title", "Access Denied");

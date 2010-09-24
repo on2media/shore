@@ -44,17 +44,6 @@ class Session
     /**
      *
      */
-    public function canAccess($access)
-    {
-        if (!$this->checkLogin()) return FALSE;
-        if ($_SESSION["User"]->canAccess($access)) return TRUE;
-        
-        return FALSE;
-    }
-    
-    /**
-     *
-     */
     public function getUsernameHeading()
     {
         $userObject = AUTH_MODEL; $users = new $userObject();
