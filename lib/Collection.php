@@ -99,13 +99,13 @@ abstract class Collection implements Iterator
     /**
      *
      */
-    public function paginate($showSummary=TRUE, $url="?p=%d")
+    public function paginate($showSummary=TRUE, $adjacents=6, $url="?p=%d")
     {
         $rtn = "";
         
         if ($this->_start !== NULL && $this->_range !== NULL && $this->_total !== NULL) {
             
-            $rtn .= $this->getPageLinks($this->_start, $this->_range, $this->_total, $url);
+            $rtn .= $this->getPageLinks($this->_start, $this->_range, $this->_total, $url, $adjacents);
             
             if ($showSummary == TRUE) {
                 $rtn .= sprintf("<p class=\"np\">\n    Showing %d - %d of %d records.\n</p>\n",
@@ -123,27 +123,27 @@ abstract class Collection implements Iterator
     /**
      *
      */
-    public function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d")
+    protected function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d", $adjacents=6)
     {
-        $a=6; $page = ($startAt / $itemsPerPage) + 1;
+        $page = ($startAt / $itemsPerPage) + 1;
         $lastpage = ceil($totalRecords / $itemsPerPage);
         if ($page == 0 || $lastpage <= 1) return "";
        
         $rtn = "<ul class=\"pagination\">";
        
         if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">&lt;</a></li>";
-        if ($lastpage < (8+$a)) {
+        if ($lastpage < (8+$adjacents)) {
             $rtn .= $this->paginateSection(1, $lastpage, $url, $page);
         } else {
-            if ($page < (3+$a)) {
-                $rtn .= $this->paginateSection(1, $i=(3+$a), $url, $page);
+            if ($page < (3+$adjacents)) {
+                $rtn .= $this->paginateSection(1, $i=(3+$adjacents), $url, $page);
             } else {
                 $rtn .= $this->paginateSection(1, 2, $url, $page);
-                if ($page != (3+$a)) $rtn .= "<li><span>&hellip;</span></li>";
-                if ($lastpage > $page+(1+$a)) {
-                    $rtn .= $this->paginateSection($page-$a, $i=$page+$a, $url, $page);
+                if ($page != (3+$adjacents)) $rtn .= "<li><span>&hellip;</span></li>";
+                if ($lastpage > $page+(1+$adjacents)) {
+                    $rtn .= $this->paginateSection($page-$adjacents, $i=$page+$adjacents, $url, $page);
                 } else {
-                    $rtn .= $this->paginateSection($lastpage-(3+$a), $i=$lastpage, $url, $page);
+                    $rtn .= $this->paginateSection($lastpage-(3+$adjacents), $i=$lastpage, $url, $page);
                 }
             }
             if ($i<$lastpage) {
