@@ -80,7 +80,7 @@ abstract class Controller
      */
     public static function redirect($url=NULL, $status=301)
     {
-        if ($url == NULL) $url = _BASE . _PAGE;
+        if ($url == NULL) $url = _BASE . _PAGE . _QS;
         
         switch ($status) {
             case 301 : $status = "301 Moved Permanently"; break;
