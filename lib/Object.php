@@ -206,6 +206,14 @@ abstract class Object
     /**
      *
      */
+    public function deleteControls()
+    {
+        $this->_controls = NULL;
+    }
+    
+    /**
+     *
+     */
     public function getControls($field=NULL)
     {
         if (!is_array($this->_controls)) {
