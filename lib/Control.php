@@ -172,7 +172,7 @@ abstract class Control
         
         if ($this->_required == FALSE) {
             
-            if ($value instanceof Object && $value->getCollection()->count() == 0) return TRUE;
+            if ($value instanceof Collection && $value->count() == 0) return TRUE;
             else if ($value === NULL) return TRUE;
             
         } else if ((empty($value) && $value !== "0" && $value !== 0) || ($value instanceof Collection && $value->count() == 0)) {
@@ -201,6 +201,16 @@ abstract class Control
                 
                 case "timestamp":
                     $fail = ($value != NULL && !@date("U", $value));
+                    $message = "Please enter a valid date/time.";
+                    break;
+                
+                case "beforenow":
+                    $fail = ($value != NULL && (!@date("U", $value) || $value > time()));
+                    $message = "Please enter a valid date/time.";
+                    break;
+                
+                case "afternow":
+                    $fail = ($value != NULL && (!@date("U", $value) || $value < time()));
                     $message = "Please enter a valid date/time.";
                     break;
                 

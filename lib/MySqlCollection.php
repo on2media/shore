@@ -145,6 +145,8 @@ class MySqlCollection extends Collection
             
             if ($sth = $dbh->query("SELECT FOUND_ROWS()")) $this->_total = $sth->fetchColumn(0);
             
+            $this->_obj->decryptCollection();
+            
         }
         
         return $this;

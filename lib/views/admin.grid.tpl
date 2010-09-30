@@ -18,14 +18,16 @@
     
 {else}
     
-    <p>
-        Select: <span class="cb_sel_grid">
-            <a href="#" rel="all">All</a>
-            <a href="#" rel="range">Range</a>
-            <a href="#" rel="invert">Invert</a>
-            <a href="#" rel="none">None</a>
-        </span>
-    </p>
+    {if !$no_delete}
+        <p>
+            Select: <span class="cb_sel_grid">
+                <a href="#" rel="all">All</a>
+                <a href="#" rel="range">Range</a>
+                <a href="#" rel="invert">Invert</a>
+                <a href="#" rel="none">None</a>
+            </span>
+        </p>
+    {/if}
     
     <form action="./" method="post">
         
@@ -33,17 +35,13 @@
             
             <thead>
                 <tr>
-                    <th>
-                        &nbsp;
-                    </th>
+                    {if !$no_delete}<th>&nbsp;</th>{/if}
                     {foreach from=$data->getGridHead() item=th}
                         <th>
                             {$th.heading|escape}
                         </th>
                     {/foreach}
-                    <th>
-                        &nbsp;
-                    </th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
             
@@ -51,9 +49,11 @@
                 
                 {foreach from=$data->getCollection() key=id item=row}
                     <tr>
-                        <td>
-                            <input type="checkbox" name="items[]" value="{$row->uid()}" class="cb_sel_grid" />
-                        </td>
+                        {if !$no_delete}
+                            <td>
+                                <input type="checkbox" name="items[]" value="{$row->uid()}" class="cb_sel_grid" />
+                            </td>
+                        {/if}
                         {foreach from=$data->getGridHead() item=th}
                             <td>
                                 {assign var=func value=$th.field}
@@ -69,7 +69,7 @@
                             </td>
                         {/foreach}
                         <td>
-                            <a href="edit/{$row->uid()|escape}/">Edit</a>
+                            <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|escape}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
                             {if $add_similar}| <a href="add-similar/{$row->uid()|escape}/">Add Similar</a>{/if}
                         </td>
                     </tr>
@@ -81,9 +81,11 @@
         
         {$data->getCollection()->paginate()}
         
-        <p>
-            <input type="submit" name="do" value= "Delete Selected" class="delete" />
-        </p>
+        {if !$no_delete}
+            <p>
+                <input type="submit" name="do" value= "Delete Selected" class="delete" />
+            </p>
+        {/if}
         
     </form>
     

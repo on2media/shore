@@ -11,7 +11,7 @@ class GridComponent extends Component
     /**
      *
      */
-    public function draw(Object $obj, $title, $addSimilar=FALSE)
+    public function draw(Object $obj, $title, $addSimilar=FALSE, $noDelete=FALSE)
     {
         $obj->getCollection()->setPaginationPage((isset($_GET["p"]) ? (int)$_GET["p"] : 1));
         $obj->getCollection()->fetchAll();
@@ -20,13 +20,14 @@ class GridComponent extends Component
         $this->_controller->getView()->setLayout("layout.admin.tpl");
         
         if ($addSimilar) $this->_controller->getView()->assign("add_similar", TRUE);
+        if ($noDelete) $this->_controller->getView()->assign("no_delete", TRUE);
         
         if ($_POST) {
             
             $status = "";
             $numDeleted = 0;
             
-            if (isset($_POST["do"]) && $_POST["do"] == "Delete Selected") {
+            if ($noDelete == FALSE && isset($_POST["do"]) && $_POST["do"] == "Delete Selected") {
                 
                 if (!isset($_POST["items"]) || !is_array($_POST["items"]) || count($_POST["items"]) == 0) {
                     

@@ -92,7 +92,13 @@ abstract class MySqlObject extends Object
                     if ($value === "") $value = NULL;
                 }
                 
-                $values[] = $value;
+                if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
+                    $values[] = base64_encode(mcrypt_encrypt(
+                        MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, $value, MCRYPT_MODE_ECB
+                    ));
+                } else {
+                    $values[] = $value;
+                }
                 
             }
             
@@ -365,5 +371,25 @@ abstract class MySqlObject extends Object
     protected function quoteField($field)
     {
         return (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
+    }
+    
+    /**
+     *
+     */
+    public function decryptCollection()
+    {
+        foreach ($this->_fields as $fieldName => $fieldSpec) {
+            
+            if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
+                
+                foreach ($this->_collection as $obj) {
+                    $obj->$fieldName = trim(mcrypt_decrypt(
+                        MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, base64_decode($obj->$fieldName), MCRYPT_MODE_ECB
+                    ));
+                }
+                
+            }
+            
+        }
     }
 }
