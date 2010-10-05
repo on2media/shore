@@ -243,7 +243,10 @@ abstract class MySqlObject extends Object
     {
         $dbh = MySqlDatabase::getInstance();
         
-        $sql = sprintf("DELETE FROM %s WHERE %s=?", $this->_table, $this->uidField());
+        $sql = sprintf("DELETE FROM %s WHERE %s=?",
+            $this->quoteField($this->_table),
+            $this->quoteField($this->uidField())
+        );
         $sth = $dbh->prepare($sql);
         
         try {
