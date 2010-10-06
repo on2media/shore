@@ -99,13 +99,13 @@ abstract class Collection implements Iterator
     /**
      *
      */
-    public function paginate($showSummary=TRUE, $adjacents=6, $url="?p=%d")
+    public function paginate($showSummary=TRUE, $adjacents=6, $prev="&lt;", $next="&gt;", $url="?p=%d")
     {
         $rtn = "";
         
         if ($this->_start !== NULL && $this->_range !== NULL && $this->_total !== NULL) {
             
-            $rtn .= $this->getPageLinks($this->_start, $this->_range, $this->_total, $url, $adjacents);
+            $rtn .= $this->getPageLinks($this->_start, $this->_range, $this->_total, $url, $adjacents, $prev, $next);
             
             if ($showSummary == TRUE) {
                 $rtn .= sprintf("<p class=\"np\">\n    Showing %d - %d of %d records.\n</p>\n",
@@ -123,7 +123,7 @@ abstract class Collection implements Iterator
     /**
      *
      */
-    protected function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d", $adjacents=6)
+    protected function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d", $adjacents=6, $prev="&lt;", $next="%gt;")
     {
         $page = ($startAt / $itemsPerPage) + 1;
         $lastpage = ceil($totalRecords / $itemsPerPage);
@@ -131,7 +131,7 @@ abstract class Collection implements Iterator
        
         $rtn = "<ul class=\"pagination\">";
        
-        if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">&lt;</a></li>";
+        if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">{$prev}</a></li>";
         if ($lastpage < (8+$adjacents)) {
             $rtn .= $this->paginateSection(1, $lastpage, $url, $page);
         } else {
@@ -151,7 +151,7 @@ abstract class Collection implements Iterator
                 $rtn .= $this->paginateSection($lastpage-1, $lastpage, $url, $page);
             }
         }
-        if ($page < $lastpage) $rtn .= "<li><a href=\"" . sprintf($url, ($page+1)) . "\">&gt;</a></li>";
+        if ($page < $lastpage) $rtn .= "<li><a href=\"" . sprintf($url, ($page+1)) . "\">{$next}</a></li>";
        
         return $rtn . "</ul>";
     }
