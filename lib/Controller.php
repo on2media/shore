@@ -102,12 +102,12 @@ abstract class Controller
     {
         $seconds = ($now == NULL ? time() : $now) - $timestamp;
         
-        if ($seconds < 60)              return "less than a minute ago";
-        else if($seconds < 120)         return "about a minute ago";
-        else if($seconds < (60*60))     return (int)($seconds/60) . " minutes ago";
-        else if($seconds < (120*60))    return "about an hour ago";
-        else if($seconds < (24*60*60))  return "about " . (int)($seconds/(60*60)) . " hours ago";
-        else if($seconds < (48*60*60))  return "1 day ago";
-        else                            return (int)($seconds/(60*60*24)) . " days ago";
+        if ($seconds < 60)               return "less than a minute ago";
+        else if ($seconds < 120)         return "about a minute ago";
+        else if ($seconds < (60*60))     return (int)($seconds/60) . " minutes ago";
+        else if ($seconds < (120*60))    return "about an hour ago";
+        else if ($seconds < (24*60*60))  return "about " . (int)($seconds/(60*60)) . " hours ago";
+        else if ($seconds < (48*60*60))  return "1 day ago";
+        else                             return (int)($seconds/(60*60*24)) . " days ago";
     }
 }
