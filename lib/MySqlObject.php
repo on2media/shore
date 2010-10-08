@@ -54,6 +54,15 @@ abstract class MySqlObject extends Object
     /**
      *
      */
+    public function getFieldSpec($var)
+    {
+        if (isset($this->_fields[$var])) return $this->_fields[$var];
+        return (isset($this->_relationships[$var]) ? $this->_relationships[$var] : FALSE);
+    }
+    
+    /**
+     *
+     */
     public function save($inTransaction=FALSE)
     {
         if (!$this->validate()) return FALSE;

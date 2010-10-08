@@ -19,8 +19,10 @@ class CheckboxesControl extends Control
         
         $checked = $this->_obj->$func();
         
-        foreach ($checked as $checked_option) {
-            $checked_options[] = $checked_option->uid();
+        if ($checked instanceof Collection) {
+            foreach ($checked as $checked_option) {
+                $checked_options[] = $checked_option->uid();
+            }
         }
         
         $options = $this->getOptions()->fetchAll();
@@ -30,13 +32,15 @@ class CheckboxesControl extends Control
         if ($options->count() > 0) {
             
             foreach ($options as $option) {
-                $field .= sprintf("<input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s<br />\n",
+                $field .= sprintf("    <label><input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s</label>\n",
                     $this->_prefix . $this->_var,
                     $option->uid(),
                     (in_array($option->uid(), $checked_options) ? " checked=\"checked\"" : ""),
                     $option->cite()
                 );
             }
+            
+            $field = "<span class=\"cb_list\">\n" . $field . "</span>\n";
             
         }
         
