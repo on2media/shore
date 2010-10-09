@@ -177,6 +177,14 @@ input:focus, textarea:focus, select:focus {
 input[size='80'], textarea[cols='80'] {
     width: 930px;
 }
+input[type=submit], button {
+    color: #000;
+    background-color: #e2e2e2;
+}
+input[type=submit]:hover, button:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
 option {
     padding-right: 1em;
 }
@@ -190,6 +198,32 @@ form small {
     color: #f33;
     font-size: 10px;
     line-height: 18px;
+}
+ul.pagination {
+    list-style: none;
+    height: 24px;
+}
+ul.pagination li {
+    float: left;
+    margin-right: 4px;
+    line-height: 22px;
+}
+ul.pagination li a {
+    display: block;
+    width: 22px;
+    border: 1px solid #778;
+    -moz-border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    background-color: #e2e2e2;
+}
+ul.pagination li.active a {
+    font-weight: bold;
+}
+ul.pagination li a:hover, ul.pagination li.active a {
+    background-color: #ccc;
 }
 a {
     color: #666;
