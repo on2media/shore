@@ -110,4 +110,34 @@ abstract class Controller
         else if ($seconds < (48*60*60))  return "1 day ago";
         else                             return (int)($seconds/(60*60*24)) . " days ago";
     }
+    
+    /**
+     *
+     */
+    public static function uploadErrorMessage($error)
+    {
+        switch ($error) {
+            
+            case UPLOAD_ERR_OK:
+            case UPLOAD_ERR_NO_FILE:
+                return FALSE;
+            
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                return  "Uploaded file is too large.";
+            
+            case UPLOAD_ERR_PARTIAL:
+                return "Uploaded file was only partially uploaded.";
+            
+            case UPLOAD_ERR_NO_TMP_DIR:
+            case UPLOAD_ERR_CANT_WRITE:
+                return "Unable to save uploaded file.";
+            
+            case UPLOAD_ERR_EXTENSION:
+                return "An internal upload error occured.";
+            
+        }
+        
+        return "An unknown upload error occured.";
+    }
 }

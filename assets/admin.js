@@ -2,7 +2,7 @@ window.addEvent('domready', function(){
     
     $$('a[href=#]').addEvent('click', function(e){e.preventDefault();});
     
-    $$('a[rel=_blank]').addEvent('click', function(e){
+    $$('a[rel=_blank]').removeEvents('click').addEvent('click', function(e){
         e.preventDefault();
         window.open(this.getProperty('href'));
     });
