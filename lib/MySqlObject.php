@@ -133,6 +133,11 @@ abstract class MySqlObject extends Object
                 
             }
             
+        } elseif ($this->isNew() && $this->uid() != NULL) {
+            
+            $fields[] = $this->uidField();
+            $values[] = $this->uid();
+            
         }
         
         if (!$forceInsert && $this->uid() != NULL) {
@@ -144,11 +149,6 @@ abstract class MySqlObject extends Object
             $values[] = $this->uid();
             
         } else {
-            
-            if ($this->isNew() && $this->uid() != NULL) {
-                $fields[] = $this->uidField();
-                $values[] = $this->uid();
-            }
             
             $sql = sprintf("INSERT INTO %s (", $this->quoteField($this->_table));
             foreach ($fields as $field) $sql .= $this->quoteField($field) . ", ";
