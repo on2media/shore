@@ -1,6 +1,6 @@
 <?php
 
-class emailMethod
+class EmailMethod
 {
     private function __construct()
     {

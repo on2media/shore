@@ -34,6 +34,11 @@ abstract class MySqlObject extends Object
     protected $_varTypes = array("_fields", "_relationships");
     
     /**
+     *
+     */
+    protected $_new = TRUE;
+    
+    /**
      * Defines a MySqlCollection to store a data set of records.
      */
     public function __construct()
@@ -113,7 +118,7 @@ abstract class MySqlObject extends Object
             
         }
         
-        $forceInsert = FALSE;
+        $forceInsert = $this->isNew();
         
         if ($this->{$this->uidField()} instanceof MySqlObject) {
             
@@ -140,6 +145,11 @@ abstract class MySqlObject extends Object
             
         } else {
             
+            if ($this->isNew() && $this->uid() != NULL) {
+                $fields[] = $this->uidField();
+                $values[] = $this->uid();
+            }
+            
             $sql = sprintf("INSERT INTO %s (", $this->quoteField($this->_table));
             foreach ($fields as $field) $sql .= $this->quoteField($field) . ", ";
             $sql = substr($sql, 0, -strlen(", ")) . ") VALUES (";
@@ -157,6 +167,8 @@ abstract class MySqlObject extends Object
         }
         
         if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
+        
+        $this->isNew(FALSE);
         
         foreach($this->_relationships as $fieldName => $fieldSpec) {
             
@@ -403,5 +415,14 @@ abstract class MySqlObject extends Object
             }
             
         }
+    }
+    
+    /**
+     *
+     */
+    public function isNew($new=NULL)
+    {
+        if ($new !== NULL) $this->_new = (bool)$new;
+        return $this->_new;
     }
 }

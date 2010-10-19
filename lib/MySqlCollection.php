@@ -147,6 +147,8 @@ class MySqlCollection extends Collection
             
             $this->_obj->decryptCollection();
             
+            foreach ($this->_dataSet as $obj) $obj->isNew(FALSE);
+            
         }
         
         return $this;

@@ -9,6 +9,11 @@
 class Session
 {
     /**
+     *
+     */
+    protected $_sess_save_path;
+    
+    /**
      * Constructor
      *
      * This is private so that it's not possible to call new Session() - use Session::getInstance()
@@ -18,8 +23,17 @@ class Session
      */
     private function __construct()
     {
+        session_set_save_handler( 
+            array(&$this, "open"),
+            array(&$this, "close"),
+            array(&$this, "read"),
+            array(&$this, "write"),
+            array(&$this, "destroy"),
+            array(&$this, "gc")
+        );
+        
         session_name(SESSION_NAME);
-        @session_start();
+        session_start();
     }
     
     /**
@@ -33,11 +47,7 @@ class Session
     public static function &getInstance()
     {
         static $instance;
-        if (!is_object($instance)) {
-            
-            $instance = new Session();
-            
-        }
+        if (!is_object($instance)) $instance = new Session();
         return $instance;
     }
     
@@ -139,5 +149,89 @@ class Session
         }
         
         return FALSE;
+    }
+    
+    /**
+     *
+     */
+    function open($save_path, $session_name)
+    {
+        $this->_sess_save_path = "C:\\sess\\";
+        return TRUE;
+    }
+    
+    /**
+     *
+     */
+    function close()
+    {
+        return TRUE;
+    }
+    
+    /**
+     *
+     */
+    function read($id)
+    {
+        $sessionObj = new SessionObject();
+        if ($session = $sessionObj->fetchById($id)) {
+            return (string)$session->getData();
+        }
+        
+        return "";
+    }
+    
+    /**
+     *
+     */
+    function write($id, $data)
+    {
+        $sessionObj = new SessionObject();
+        if (!$session = $sessionObj->fetchById($id)) {
+            $session = new SessionObject();
+            $session->setId($id);
+        }
+        
+        $session->setData($data);
+        $session->setLastModified(time());
+        
+        return $session->save();
+    }
+    
+    /**
+     *
+     */
+    function destroy($id)
+    {
+        $sessionObj = new SessionObject();
+        if ($session = $sessionObj->fetchById($id)) {
+            return $session->delete();
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     *
+     */
+    function gc($maxlifetime)
+    {
+        $sessionObj = new SessionObject();
+        $sessions = $sessionObj->getCollection();
+        $sessions->setLimit("last_modified", "<", time() - $maxlifetime);
+        
+        foreach ($sessions->fetchAll() as $session) {
+            $session->delete();
+        }
+        
+        return TRUE;
+    }
+    
+    /**
+     *
+     */
+    function __destruct()
+    {
+        @session_write_close();
     }
 }
