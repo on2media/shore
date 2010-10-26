@@ -98,6 +98,7 @@ function classAutoloader($className)
 
 spl_autoload_register('classAutoloader');
 
+@ini_set("session.gc_maxlifetime", 3600); // Keep the session for an hour.
 Session::getInstance();
 
 /**

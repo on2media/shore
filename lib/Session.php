@@ -9,11 +9,6 @@
 class Session
 {
     /**
-     *
-     */
-    protected $_sess_save_path;
-    
-    /**
      * Constructor
      *
      * This is private so that it's not possible to call new Session() - use Session::getInstance()
@@ -24,12 +19,12 @@ class Session
     private function __construct()
     {
         session_set_save_handler( 
-            array(&$this, "open"),
-            array(&$this, "close"),
-            array(&$this, "read"),
-            array(&$this, "write"),
-            array(&$this, "destroy"),
-            array(&$this, "gc")
+            array(&$this, "sessionOpen"),
+            array(&$this, "sessionClose"),
+            array(&$this, "sessionRead"),
+            array(&$this, "sessionWrite"),
+            array(&$this, "sessionDestroy"),
+            array(&$this, "sessionGarbageCollector")
         );
         
         session_name(SESSION_NAME);
@@ -154,16 +149,7 @@ class Session
     /**
      *
      */
-    function open($save_path, $session_name)
-    {
-        $this->_sess_save_path = "C:\\sess\\";
-        return TRUE;
-    }
-    
-    /**
-     *
-     */
-    function close()
+    public function sessionOpen($save_path, $session_name)
     {
         return TRUE;
     }
@@ -171,7 +157,15 @@ class Session
     /**
      *
      */
-    function read($id)
+    public function sessionClose()
+    {
+        return TRUE;
+    }
+    
+    /**
+     *
+     */
+    public function sessionRead($id)
     {
         $sessionObj = new SessionObject();
         if ($session = $sessionObj->fetchById($id)) {
@@ -184,7 +178,7 @@ class Session
     /**
      *
      */
-    function write($id, $data)
+    public function sessionWrite($id, $data)
     {
         $sessionObj = new SessionObject();
         if (!$session = $sessionObj->fetchById($id)) {
@@ -201,7 +195,7 @@ class Session
     /**
      *
      */
-    function destroy($id)
+    public function sessionDestroy($id)
     {
         $sessionObj = new SessionObject();
         if ($session = $sessionObj->fetchById($id)) {
@@ -214,11 +208,13 @@ class Session
     /**
      *
      */
-    function gc($maxlifetime)
+    public function sessionGarbageCollector($maxlifetime=NULL)
     {
+        if ($maxlifetime === NULL) $maxlifetime = ini_get("session.gc_maxlifetime");
+        
         $sessionObj = new SessionObject();
         $sessions = $sessionObj->getCollection();
-        $sessions->setLimit("last_modified", "<", time() - $maxlifetime);
+        $sessions->setLimit("last_modified", "<", date("Y-m-d H:i:s", time() - $maxlifetime));
         
         foreach ($sessions->fetchAll() as $session) {
             $session->delete();
@@ -230,7 +226,7 @@ class Session
     /**
      *
      */
-    function __destruct()
+    public function __destruct()
     {
         @session_write_close();
     }

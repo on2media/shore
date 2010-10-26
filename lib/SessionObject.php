@@ -16,6 +16,7 @@ class SessionObject extends MySqlObject
         ),
         "data" => array(
             "value" => "",
+            "not_null" => TRUE,
             "type" => "text"
         ),
         "last_modified" => array(
