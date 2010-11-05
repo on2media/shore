@@ -123,7 +123,7 @@ abstract class Collection implements Iterator
     /**
      *
      */
-    protected function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d", $adjacents=6, $prev="&lt;", $next="%gt;")
+    protected function getPageLinks($startAt=0, $itemsPerPage=0, $totalRecords=0, $url="?p=%d", $adjacents=6, $prev="&lt;", $next="&gt;")
     {
         $page = ($startAt / $itemsPerPage) + 1;
         $lastpage = ceil($totalRecords / $itemsPerPage);
