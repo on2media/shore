@@ -313,6 +313,7 @@ abstract class Object
                         return nl2br($value);
                     
                     case "timestamp":
+                        if ($value == NULL) return "";
                         $pieces = explode(":", $this->_fields[$name]["type"], 2);
                         if (isset($pieces[1])) return date($pieces[1], $value);
                         return date("jS F Y H:i", $value);
