@@ -1,6 +1,6 @@
 window.addEvent('domready', function(){
     
-    $$('a[href=#]').addEvent('click', function(e){e.preventDefault();});
+    $$('a[href=#]').addEvent('click', function(e){if(e)e.preventDefault();});
     
     $$('a[rel=_blank]').removeEvents('click').addEvent('click', function(e){
         e.preventDefault();
