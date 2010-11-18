@@ -105,6 +105,14 @@ abstract class Object
     /**
      *
      */
+    public function getObjFields()
+    {
+        return $this->_fields;
+    }
+    
+    /**
+     *
+     */
     public function getFieldHeading($field)
     {
         if (isset($this->_fields[$field]) && ($spec = $this->_fields[$field])) {

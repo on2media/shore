@@ -83,9 +83,21 @@ class MySqlCollection extends Collection
      */
     public function fetchAll()
     {
-        $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, tbl.* FROM `%s` AS tbl %s",
+        $fields = $this->_obj->getObjFields();
+        
+        // remove LOBs from fields
+        foreach ($fields as $fieldName => $fieldSpec) {
+            if (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE) {
+                unset($fields[$fieldName]);
+            }
+        }
+        
+        $fieldNames = array_keys($fields);
+        
+        $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
             get_class($this->_obj),
             (substr($this->_obj->uidField(), 0, 1) == "*" ? substr($this->_obj->uidField(), 1) : "`" . $this->_obj->uidField() . "`"),
+            "tbl." . implode(", tbl.", $fieldNames),
             $this->_obj->getTable(),
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );

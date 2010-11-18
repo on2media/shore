@@ -305,6 +305,25 @@ abstract class MySqlObject extends Object
             
             if (isset($this->_fields[$fieldName]) && ($fieldSpec = $this->_fields[$fieldName])) {
                 
+                if (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE) {
+                    
+                    $dbh = MySqlDatabase::getInstance();
+                    
+                    $sql = sprintf("SELECT `%s` FROM `%s` WHERE %s=?",
+                        $fieldName,
+                        $this->getTable(),
+                        (substr($this->_uid, 0, 1) == "*" ? substr($this->_uid, 1) : "`" . $this->_uid . "`")
+                    );
+                    
+                    if ($sth = $dbh->prepare($sql)) {
+                        
+                        $sth->execute(array($this->{$this->_uid}));
+                        $this->_fields[$fieldName]["value"] = $sth->fetch(PDO::FETCH_COLUMN);
+                        
+                    }
+                    
+                }
+                
                 $value = parent::__call($func, array());
                 
                 switch ($this->typeOf($fieldName)) {
