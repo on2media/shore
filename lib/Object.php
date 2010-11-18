@@ -218,6 +218,10 @@ abstract class Object
     {
         if (!is_array($this->_controls)) {
             
+            $session = Session::getInstance();
+            $authModel = AUTH_MODEL;
+            $superUser = ($session->getUser() instanceof $authModel && $session->getUser()->getSuperuser());
+            
             $rtn = array();
             
             foreach ($this->_varTypes as $varType) {
@@ -226,15 +230,26 @@ abstract class Object
                     
                     if (isset($fieldSpec["on_edit"]) && ($spec = $fieldSpec["on_edit"])) {
                         
-                        $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
-                        $control = new $controlClass(
-                            $this,
-                            $this->_controlPrefix,
-                            $fieldName,
-                            $fieldSpec
-                        );
+                        $controlClass = FALSE;
                         
-                        $rtn[(int)$spec["position"]] = $control;
+                        if ($superUser && array_key_exists("superuser", $fieldSpec["on_edit"])) {
+                            $controlClass = $fieldSpec["on_edit"]["superuser"] . "Control";
+                        } elseif (array_key_exists("control", $fieldSpec["on_edit"])) {
+                            $controlClass = $fieldSpec["on_edit"]["control"] . "Control";
+                        }
+                        
+                        if ($controlClass) {
+                            
+                            $control = new $controlClass(
+                                $this,
+                                $this->_controlPrefix,
+                                $fieldName,
+                                $fieldSpec
+                            );
+                            
+                            $rtn[(int)$spec["position"]] = $control;
+                            
+                        }
                         
                     }
                     

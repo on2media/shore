@@ -74,7 +74,7 @@ abstract class MySqlObject extends Object
         
         $dbh = MySqlDatabase::getInstance();
         
-        $fields = $values = array();
+        $fields = $values = $lobs[] = array();
         
         foreach($this->_fields as $fieldName => $fieldSpec) {
             
@@ -113,6 +113,8 @@ abstract class MySqlObject extends Object
                 } else {
                     $values[] = $value;
                 }
+                
+                $lobs[] = (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE);
                 
             }
             
@@ -160,8 +162,17 @@ abstract class MySqlObject extends Object
         
         $sth = $dbh->prepare($sql);
         
+        $i=0;
+        foreach ($values as $index => &$value) {
+            if ($lobs[$index]) {
+                $sth->bindParam(++$i, $value, PDO::PARAM_LOB);
+            } else {
+                $sth->bindParam(++$i, $value);
+            }
+        }
+        
         try {
-            if (!$sth->execute($values)) return FALSE;
+            if (!$sth->execute()) return FALSE;
         } catch (PDOException $e) {
             exit('Database error: ' . $e->getMessage());
         }
