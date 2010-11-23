@@ -307,18 +307,24 @@ abstract class MySqlObject extends Object
                 
                 if (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE) {
                     
-                    $dbh = MySqlDatabase::getInstance();
-                    
-                    $sql = sprintf("SELECT `%s` FROM `%s` WHERE %s=?",
-                        $fieldName,
-                        $this->getTable(),
-                        (substr($this->_uid, 0, 1) == "*" ? substr($this->_uid, 1) : "`" . $this->_uid . "`")
-                    );
-                    
-                    if ($sth = $dbh->prepare($sql)) {
+                    if ($this->uid() != NULL && !isset($fieldSpec["lob_fetched"])) {
                         
-                        $sth->execute(array($this->{$this->_uid}));
-                        $this->_fields[$fieldName]["value"] = $sth->fetch(PDO::FETCH_COLUMN);
+                        $dbh = MySqlDatabase::getInstance();
+                        
+                        $sql = sprintf("SELECT `%s` FROM `%s` WHERE %s=?",
+                            $fieldName,
+                            $this->getTable(),
+                            (substr($this->_uid, 0, 1) == "*" ? substr($this->_uid, 1) : "`" . $this->_uid . "`")
+                        );
+                        
+                        if ($sth = $dbh->prepare($sql)) {
+                            
+                            $sth->execute(array($this->uid()));
+                            $this->_fields[$fieldName]["value"] = $sth->fetch(PDO::FETCH_COLUMN);
+                            
+                        }
+                        
+                        $this->_fields[$fieldName]["lob_fetched"] = TRUE;
                         
                     }
                     
