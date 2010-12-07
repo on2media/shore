@@ -140,6 +140,14 @@ abstract class Control
     /**
      *
      */
+    public function setError($error)
+    {
+        $this->_error = $error;
+    }
+    
+    /**
+     *
+     */
     abstract public function output();
     
     /**
@@ -151,7 +159,7 @@ abstract class Control
         
         if (!array_key_exists($this->_prefix . $this->_var, $formData)) {
             
-            $this->_error = "Field was missing from the received form data.";
+            $this->setError("Field was missing from the received form data.");
             $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var] = FALSE;
             
         } else {
@@ -168,7 +176,7 @@ abstract class Control
     {
         $value = $this->_obj->{$this->_var};
         
-        if ($this->_error != "") return FALSE;
+        if ($this->getError() != "") return FALSE;
         
         if ($this->_required == FALSE) {
             
@@ -182,7 +190,7 @@ abstract class Control
             if ($this->output() == "" && $this->_showEmpty == FALSE) return TRUE;
             
             // This is required!
-            $this->_error = "This field is required.";
+            $this->setError("This field is required.");
             return FALSE;
             
         }
@@ -245,7 +253,7 @@ abstract class Control
             }
             
             if ($fail) {
-                $this->_error = (isset($opts["message"]) ? $opts["message"] : $message);
+                $this->setError((isset($opts["message"]) ? $opts["message"] : $message));
                 return FALSE;
             }
             
