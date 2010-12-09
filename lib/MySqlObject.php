@@ -104,6 +104,8 @@ abstract class MySqlObject extends Object
                 
                 if (!isset($fieldSpec["not_null"]) || $fieldSpec["not_null"] != TRUE) {
                     if ($value === "") $value = NULL;
+                } elseif ($value === NULL) {
+                    $value = "";
                 }
                 
                 if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
