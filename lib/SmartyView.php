@@ -42,7 +42,11 @@ class SmartyView extends View
         
         $this->_smarty = new Smarty();
         
-        $this->_smarty->template_dir = DIR_VIEWS . DS . $dir;
+        if ($dir != "" && defined("DIR_USERVIEWS")) {
+            $this->_smarty->template_dir = DIR_USERVIEWS . DS . $dir;
+        } else {
+            $this->_smarty->template_dir = DIR_VIEWS . DS . $dir;
+        }
         
         $base = realpath(dirname(__FILE__)) . DS;
         
@@ -65,10 +69,6 @@ class SmartyView extends View
         if ($session->getSmarty() && is_array($session->getSmarty())) {
             $this->assign_array($session->getSmarty());
         }
-        
-        //$session->setSmarty("test");
-        //print_r($_SESSION);
-        //var_dump($session->getSmarty()); exit();
     }
     
     /**

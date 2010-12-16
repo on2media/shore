@@ -26,7 +26,7 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 }
 
 // automatically define some system variables - paths and urls
-define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
+if (!defined("_PATH")) define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
@@ -60,17 +60,17 @@ function classAutoloader($className)
         
         case (preg_match("/^([A-Za-z0-9]+)Controller$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLLERS . DS . $matches[1] . ".php";
-            $inc[] = _PATH . "core" . DS . "lib" . DS . "controllers" . DS . $matches[1] . ".php";
+            $inc[] = dirname(__FILE__) . DS . "controllers" . DS . $matches[1] . ".php";
             break;
         
         case (preg_match("/^([A-Za-z0-9]+)Component$/", $className, $matches)):
             $inc[] = _PATH . DIR_COMPONENTS . DS . $matches[1] . ".php";
-            $inc[] = _PATH . "core" . DS . "lib" . DS . "components" . DS . $matches[1] . ".php";
+            $inc[] = dirname(__FILE__) . DS . "components" . DS . $matches[1] . ".php";
             break;
         
         case (preg_match("/^([A-Za-z0-9]+)Control$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLS . DS . $matches[1] . ".php";
-            $inc[] = _PATH . "core" . DS . "lib" . DS . "controls" . DS . $matches[1] . ".php";
+            $inc[] = dirname(__FILE__) . DS . "controls" . DS . $matches[1] . ".php";
             break;
         
         case (
@@ -78,12 +78,13 @@ function classAutoloader($className)
             preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
         ):
             $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
-            $inc[] = _PATH . "core" . DS . "lib" . DS . "models" . DS . $matches[1] . ".php";
+            $inc[] = dirname(__FILE__) . DS . "models" . DS . $matches[1] . ".php";
             break;
         
         default:
+            if (defined("DIR_USERAPP")) $inc[] = _PATH . DIR_USERAPP . DS . $className . ".php";
             $inc[] = _PATH . DIR_APP . DS . $className . ".php";
-            $inc[] = _PATH . "core" . DS . "lib" . DS . $className . ".php";
+            $inc[] = dirname(__FILE__) . DS . $className . ".php";
             break;
         
     }
