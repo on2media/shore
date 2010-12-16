@@ -29,7 +29,7 @@
         </p>
     {/if}
     
-    <form action="./" method="post">
+    <form action="" method="post">
         
         <table class="grid">
             
@@ -83,7 +83,7 @@
         
         {if !$no_delete}
             <p>
-                <input type="submit" name="do" value= "Delete Selected" class="delete" />
+                <input type="submit" name="do" value="Delete Selected" class="delete" />
             </p>
         {/if}
         
