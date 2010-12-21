@@ -422,6 +422,21 @@ abstract class MySqlObject extends Object
                 
             }
             
+        } elseif (substr($func, 0, 3) == "set") {
+            
+            $fieldName = func2var(substr($func, 3));
+            
+            if (
+                isset($this->_fields[$fieldName]) &&
+                ($fieldSpec =& $this->_fields[$fieldName]) &&
+                isset($fieldSpec["lob"]) &&
+                $fieldSpec["lob"] == TRUE
+            ) {
+                
+                $fieldSpec["lob_fetched"] = TRUE;
+                
+            }
+            
         }
         
         return parent::__call($func, $arguments);
