@@ -57,9 +57,11 @@ class SmartyView extends View
         $this->setTemplate($template);
         
         $this->assign_array(array(
-            "base"   =>  _BASE,
-            "here"   =>  _PAGE,
-            "admin"  =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
+            "base"        =>  _BASE,
+            "base_http"   =>  _BASE_HTTP,
+            "base_https"  =>  _BASE_HTTPS,
+            "here"        =>  _PAGE,
+            "admin"       =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
         ));
         
         $session = Session::getInstance();

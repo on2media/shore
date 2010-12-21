@@ -12,6 +12,10 @@ if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
 // set the default timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);
 
+// empty the session bin more often (1 in 10 chance)
+ini_set("session.gc_probability", 1);
+ini_set("session.gc_divisor", 10);
+
 // remove the effects of magic quotes if they're turned on
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     function stripMagicQuotes($var)
@@ -28,10 +32,15 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 // automatically define some system variables - paths and urls
 if (!defined("_PATH")) define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 
+define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https"));
+
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
-define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https"));
-define("_BASE", _PROTOCOL . "://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir)));
+$base = "://" . $_SERVER["HTTP_HOST"] . str_replace("%2F", "/", rawurlencode($urlDir));
+
+define("_BASE", _PROTOCOL . $base);
+define("_BASE_HTTP", "http" . $base);
+define("_BASE_HTTPS", "https" . $base);
 
 if (!$urlParts = @parse_url($_SERVER["REQUEST_URI"])) exit(); $urlPath = $urlParts["path"];
 if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
