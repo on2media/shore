@@ -143,8 +143,36 @@ table.grid th {
 table.grid td {
     border-bottom: 1px solid #ccc;
 }
+table.grid tr.filters input, table.grid tr.filters select {
+    width: 95%;
+}
+table.grid tr.filters input[type=submit] {
+    width: auto;
+}
+table.grid tr.filters th {
+    background-color: #ddd;
+}
+table.grid thead a {
+    padding-right: 16px;
+    color: #444;
+    text-decoration: none;
+}
+table.grid thead a:hover {
+    text-decoration: underline;
+}
+table.grid thead a.asc {
+    background: url(img/ico/arrow_up.png) no-repeat 100% 50%;
+}
+table.grid thead a.desc {
+    background: url(img/ico/arrow_down.png) no-repeat 100% 50%;
+}
 form p {
     clear: both;
+}
+form p.floated {
+    float: left;
+    width: 50%;
+    clear: none;
 }
 form label {
     display: block;
@@ -210,7 +238,7 @@ ul.pagination li {
 }
 ul.pagination li a {
     display: block;
-    width: 22px;
+    min-width: 22px;
     border: 1px solid #778;
     -moz-border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
@@ -236,4 +264,7 @@ a img {
     width: 1px;
     height: 0;
     overflow: hidden;
+}
+.rgt {
+    text-align: right;
 }

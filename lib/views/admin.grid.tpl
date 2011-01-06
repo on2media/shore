@@ -10,42 +10,121 @@
     </form>
 {/if}
 
-{if $data->getCollection()->count() == 0}
+<form action="" method="post">
     
-    <p>
-        No records found.
+    <p class="floated">
+        
+        {if $data->getCollection()->count() > 0}
+            
+            {if !$no_delete}
+                Select: <span class="cb_sel_grid">
+                    <a href="#" rel="all">All</a>
+                    <a href="#" rel="range">Range</a>
+                    <a href="#" rel="invert">Invert</a>
+                    <a href="#" rel="none">None</a>
+                </span>
+            {else}
+                &nbsp;
+            {/if}
+            
+        {/if}
+        
     </p>
     
-{else}
+    <p class="floated rgt">
+        Records per page: <select name="pp">
+            <option value="10"{if $per_page == 10} selected="selected"{/if}>10</option>
+            <option value="20"{if $per_page == 20} selected="selected"{/if}>20</option>
+            <option value="50"{if $per_page == 50} selected="selected"{/if}>50</option>
+            <option value="100"{if $per_page == 100} selected="selected"{/if}>100</option>
+            <option value="250"{if $per_page == 250} selected="selected"{/if}>250</option>
+        </select>
+        &nbsp;
+        <input type="submit" name="do" value="Update" />
+    </p>
     
-    {if !$no_delete}
-        <p>
-            Select: <span class="cb_sel_grid">
-                <a href="#" rel="all">All</a>
-                <a href="#" rel="range">Range</a>
-                <a href="#" rel="invert">Invert</a>
-                <a href="#" rel="none">None</a>
-            </span>
-        </p>
-    {/if}
-    
-    <form action="" method="post">
+    <table class="grid" style="clear: both;">
         
-        <table class="grid">
+        <thead>
             
-            <thead>
-                <tr>
-                    {if !$no_delete}<th>&nbsp;</th>{/if}
-                    {foreach from=$data->getGridHead() item=th}
-                        <th>
+            <tr>
+                {if !$no_delete}<th>&nbsp;</th>{/if}
+                {foreach from=$data->getGridHead() key=pos item=th}
+                    <th>
+                        {if $th.sortable}
+                            
+                            {capture assign=asc}{$pos}a{/capture}
+                            {capture assign=desc}{$pos}d{/capture}
+                            {capture assign=class}{if $smarty.get.s == $asc}asc{elseif $smarty.get.s == $desc}desc{/if}{/capture}
+                            
+                            <a href="?s={$pos}{if !$class || $class == 'desc'}a{else}d{/if}{if $filter_str}&amp;{$filter_str}{/if}"{if $class} class="{$class}"{/if}>{$th.heading|escape}</a>
+                            
+                        {else}
+                            
                             {$th.heading|escape}
+                            
+                        {/if}
+                    </th>
+                {/foreach}
+                <th>&nbsp;</th>
+            </tr>
+            
+            {assign var=hasFilters value=false}{capture assign=filters}
+                <tr class="filters">
+                    {if !$no_delete}<th>&nbsp;</th>{/if}
+                    {foreach from=$data->getGridHead() key=pos item=th}
+                        <th>
+                            {if $th.filter}
+                                
+                                {assign var=hasFilters value=true}
+                                
+                                {capture assign=fPos}f{$pos}{/capture}
+                                {capture assign=fVal}{if $smarty.get.$fPos}{$smarty.get.$fPos}{/if}{/capture}
+                                
+                                {if $th.filter.type == 'freetext'}
+                                    
+                                    <input type="text" name="filter[{$pos}]" value="{$fVal|escape}" />
+                                    
+                                {elseif $th.filter.type == 'dropdown'}
+                                    
+                                    <select name="filter[{$pos}]">
+                                        <option value="0">&nbsp;</option>
+                                        {foreach from=$th.filter.options key=val item=opt}
+                                            <option value="{$val|escape}"{if $val == $fVal} selected="selected"{/if}>{$opt|escape}</option>
+                                        {/foreach}
+                                    </select>
+                                    
+                                {/if}
+                                
+                            {else}
+                                
+                                &nbsp;
+                                
+                            {/if}
                         </th>
                     {/foreach}
-                    <th>&nbsp;</th>
+                    <th>
+                        {if $smarty.get.s|escape}<input type="hidden" name="s" value="{$smarty.get.s|escape}" />{/if}
+                        <input type="submit" name="do" value="Filter" />
+                    </th>
                 </tr>
-            </thead>
+            {/capture}{if $hasFilters}{$filters}{/if}
             
-            <tbody>
+        </thead>
+        
+        <tbody>
+            
+            {if $data->getCollection()->count() == 0}
+                
+                <tr>
+                    <td colspan="{count($data->getGridHead())+2}">
+                        No records found.<br />
+                        <a href="{$base}{$here}">Reset Filters</a> |
+                        <a href="{$base}{$here}?{$filter_str}">Return to First Page</a>
+                    </td>
+                </tr>
+                
+            {else}
                 
                 {foreach from=$data->getCollection() key=id item=row}
                     <tr>
@@ -75,11 +154,16 @@
                     </tr>
                 {/foreach}
                 
-            </tbody>
+            {/if}
             
-        </table>
+        </tbody>
         
-        {$data->getCollection()->paginate()}
+    </table>
+    
+    {if $data->getCollection()->count() > 0}
+        
+        {capture assign=url}?p=%d{if $filter_str}&amp;{$filter_str}{/if}{if $smarty.get.s}&amp;s={$smarty.get.s|escape}{/if}{/capture}
+        {$data->getCollection()->paginate(true, 6, '&lt;', '&gt;', $url)}
         
         {if !$no_delete}
             <p>
@@ -87,6 +171,6 @@
             </p>
         {/if}
         
-    </form>
+    {/if}
     
-{/if}
+</form>

@@ -13,11 +13,90 @@ class GridComponent extends Component
      */
     public function draw(Object $obj, $title, $addSimilar=FALSE, $noDelete=FALSE)
     {
-        $obj->getCollection()->setPaginationPage((isset($_GET["p"]) ? (int)$_GET["p"] : 1));
+        $filterStr = "";
+        $filters = array();
+        
+        foreach ($_GET as $key => $value) {
+            if (substr($key, 0, strlen("f")) == "f") $filters[$key] = $value;
+        }
+        
+        if (count($filters) > 0) {
+            
+            $filterStr = http_build_query($filters);
+            
+            foreach ($obj->getObjFields() as $fieldName => $fieldSpec) {
+                
+                if (isset($fieldSpec["on_grid"], $fieldSpec["on_grid"]["position"], $fieldSpec["on_grid"]["filter"])) {
+                    
+                    $pos = $fieldSpec["on_grid"]["position"];
+                    $filter = $fieldSpec["on_grid"]["filter"];
+                    
+                    if (array_key_exists("f".$pos, $filters)) {
+                        
+                        switch ($filter) {
+                            
+                            case "freetext":
+                                
+                                $obj->getCollection()->setLimit($fieldName, "LIKE", "%" . $filters["f".$pos] . "%");
+                                break;
+                            
+                            case "dropdown":
+                                
+                                $obj->getCollection()->setLimit($fieldName, "=", $filters["f".$pos]);
+                                break;
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        if (isset($_GET["s"]) && preg_match("/([0-9]+)(a|d)/", $_GET["s"], $matches)) {
+            
+            foreach ($obj->getObjFields() as $fieldName => $fieldSpec) {
+                
+                if (isset($fieldSpec["on_grid"], $fieldSpec["on_grid"]["position"])) {
+                    
+                    $pos = $fieldSpec["on_grid"]["position"];
+                    
+                    if ($pos == $matches[1]) {
+                        
+                        if ($obj->typeOf($fieldName) != "object") {
+                            $obj->getCollection()->setOrder($fieldName . ($matches[2] == "a" ? " ASC" : " DESC"));
+                        }
+                        break;
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        $session = Session::getInstance();
+        
+        if ($_POST && isset($_POST["do"]) && $_POST["do"] == "Update" && isset($_POST["pp"])) {
+            
+            $perPage = (int)$_POST["pp"];
+            if ($perPage == 0) $perPage = 20;
+            $session->setRecordsPerPage($perPage);
+            
+        }
+        
+        if (!$perPage = (int)$session->getRecordsPerPage()) $session->setRecordsPerPage($perPage = 20);
+        
+        $obj->getCollection()->setPaginationPage((isset($_GET["p"]) ? (int)$_GET["p"] : 1), $perPage);
         $obj->getCollection()->fetchAll();
         
         $this->_controller->setView(new SmartyView("admin.grid.tpl"));
         $this->_controller->getView()->setLayout("layout.admin.tpl");
+        
+        $this->_controller->getView()->assign("filter_str", $filterStr);
+        $this->_controller->getView()->assign("per_page", $perPage);
         
         if ($addSimilar) $this->_controller->getView()->assign("add_similar", TRUE);
         if ($noDelete) $this->_controller->getView()->assign("no_delete", TRUE);
@@ -54,6 +133,21 @@ class GridComponent extends Component
                     $this->_controller->redirect();
                     
                 }
+                
+            }
+            
+            if (isset($_POST["do"]) && $_POST["do"] == "Filter" && isset($_POST["filter"]) && is_array($_POST["filter"])) {
+                
+                $filters = array();
+                
+                foreach ($_POST["filter"] as $pos => $value) {
+                    if ($value != "" && $value !== "0") $filters["f" . $pos] = trim($value);
+                }
+                
+                if (isset($_GET["s"])) $filters["s"] = $_GET["s"];
+                
+                $filterStr = http_build_query($filters);
+                $this->_controller->redirect(_BASE . _PAGE . ($filterStr != "" ? "?" . $filterStr : ""));
                 
             }
             

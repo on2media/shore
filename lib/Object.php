@@ -125,6 +125,48 @@ abstract class Object
     /**
      *
      */
+    public function getFieldFilter($field)
+    {
+        if (
+            isset($this->_fields[$field]) && ($fieldSpec = $this->_fields[$field]) &&
+            isset($fieldSpec["on_grid"]) && ($spec = $fieldSpec["on_grid"]) &&
+            isset($spec["filter"]) && ($filterType = $spec["filter"])
+        ) {
+            
+            switch ($filterType) {
+                
+                case "freetext":
+                    return array("type" => "freetext");
+                
+                case "dropdown":
+                    if (isset($fieldSpec["type"]) && substr($fieldSpec["type"], 0, strlen("object:")) == "object:") {
+                        
+                        $options = array();
+                        
+                        $className = substr($fieldSpec["type"], strlen("object:")) . "Object";
+                        
+                        $obj = new $className();
+                        foreach ($obj->getCollection()->fetchAll() as $obj) {
+                            $options[$obj->uid()] = $obj->cite();
+                        }
+                        
+                        return array(
+                            "type" => "dropdown",
+                            "options" => $options
+                        );
+                        
+                    }
+                
+            }
+            
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     *
+     */
     public function getGridHead()
     {
         if ($this->__gridHead != array()) return $this->__gridHead;
@@ -136,8 +178,10 @@ abstract class Object
             if (isset($fieldSpec["on_grid"]) && ($spec = $fieldSpec["on_grid"])) {
                 
                 $rtn[(int)$spec["position"]] = array(
-                    "field"    =>  "cite" . var2func($fieldName),
-                    "heading"  =>  $this->getFieldHeading($fieldName)
+                    "field"     =>  "cite" . var2func($fieldName),
+                    "heading"   =>  $this->getFieldHeading($fieldName),
+                    "filter"    =>  $this->getFieldFilter($fieldName),
+                    "sortable"  =>  (isset($spec["sortable"]) && $spec["sortable"] == TRUE)
                 );
                 
             }
@@ -147,8 +191,10 @@ abstract class Object
         foreach ($this->_customColumns as $name => $spec) {
             
             $rtn[(int)$spec["position"]] = array(
-                "field"    =>  (isset($spec["method"]) ? $spec["method"] : "cite" . var2func($name)),
-                "heading"  =>  (isset($spec["heading"]) ? $spec["heading"] : var2label($name))
+                "field"     =>  (isset($spec["method"]) ? $spec["method"] : "cite" . var2func($name)),
+                "heading"   =>  (isset($spec["heading"]) ? $spec["heading"] : var2label($name)),
+                "filter"    =>  FALSE,
+                "sortable"  =>  FALSE
             );
             
         }
@@ -162,8 +208,10 @@ abstract class Object
             foreach ($this->_fields as $fieldName => $fieldSpec) {
                 
                 $rtn[] = array(
-                    "field"    =>  "cite" . var2func($fieldName),
-                    "heading"  =>  var2label($fieldName)
+                    "field"     =>  "cite" . var2func($fieldName),
+                    "heading"   =>  var2label($fieldName),
+                    "filter"    =>  FALSE,
+                    "sortable"  =>  FALSE
                 );
                 
             }
