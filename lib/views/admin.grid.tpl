@@ -13,22 +13,16 @@
 <form action="" method="post">
     
     <p class="floated">
-        
-        {if $data->getCollection()->count() > 0}
-            
-            {if !$no_delete}
-                Select: <span class="cb_sel_grid">
-                    <a href="#" rel="all">All</a>
-                    <a href="#" rel="range">Range</a>
-                    <a href="#" rel="invert">Invert</a>
-                    <a href="#" rel="none">None</a>
-                </span>
-            {else}
-                &nbsp;
-            {/if}
-            
+        {if $data->getCollection()->count() > 0 && !$no_delete}
+            Select: <span class="cb_sel_grid">
+                <a href="#" rel="all">All</a>
+                <a href="#" rel="range">Range</a>
+                <a href="#" rel="invert">Invert</a>
+                <a href="#" rel="none">None</a>
+            </span>
+        {else}
+            &nbsp;
         {/if}
-        
     </p>
     
     <p class="floated rgt">
@@ -43,7 +37,7 @@
         <input type="submit" name="do" value="Update" />
     </p>
     
-    <table class="grid" style="clear: both;">
+    <table class="grid">
         
         <thead>
             

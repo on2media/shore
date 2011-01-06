@@ -85,6 +85,8 @@ class GridComponent extends Component
             if ($perPage == 0) $perPage = 20;
             $session->setRecordsPerPage($perPage);
             
+            $this->_controller->redirect();
+            
         }
         
         if (!$perPage = (int)$session->getRecordsPerPage()) $session->setRecordsPerPage($perPage = 20);

@@ -127,6 +127,7 @@ dl.stats dd {
     min-height: 1.4em;
 }
 table.grid {
+    clear: both;
     width: 100%;
     border-spacing: 0;
 }
