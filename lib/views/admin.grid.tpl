@@ -84,7 +84,7 @@
                                     <select name="filter[{$pos}]">
                                         <option value="0">&nbsp;</option>
                                         {foreach from=$th.filter.options key=val item=opt}
-                                            <option value="{$val|escape}"{if $val == $fVal} selected="selected"{/if}>{$opt|escape}</option>
+                                            <option value="{$val|escape}"{if $val == $fVal} selected="selected"{/if}>{$opt}</option>
                                         {/foreach}
                                     </select>
                                     

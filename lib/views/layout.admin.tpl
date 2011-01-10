@@ -35,7 +35,7 @@
             <div id="user">
                 {if $current_user}
                     Current User: <strong>{$current_user->getName()|escape}</strong>
-                    {if $current_user->getSuper()}(Super User){/if}
+                    {if $current_user->getSuperuser()}(Super User){/if}
                 {else}
                     Not Logged In
                 {/if}
