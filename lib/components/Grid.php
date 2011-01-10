@@ -33,6 +33,19 @@ class GridComponent extends Component
                     
                     if (array_key_exists("f".$pos, $filters)) {
                         
+                        if ($filter == "freetext" && $obj->typeOf($fieldName) == "object") {
+                            
+                            $pieces = explode(":", $fieldSpec["type"], 2);
+                            
+                            if (isset($pieces[1])) {
+                                
+                                $modelObject = $pieces[1] . "Object";
+                                $filterObj = new $modelObject();
+                                $fieldName = "*" . $filterObj->selectCite($fieldName);
+                            }
+                            
+                        }
+                        
                         switch ($filter) {
                             
                             case "freetext":
@@ -65,9 +78,20 @@ class GridComponent extends Component
                     
                     if ($pos == $matches[1]) {
                         
-                        if ($obj->typeOf($fieldName) != "object") {
-                            $obj->getCollection()->setOrder($fieldName . ($matches[2] == "a" ? " ASC" : " DESC"));
+                        if ($obj->typeOf($fieldName) == "object") {
+                            
+                            $pieces = explode(":", $fieldSpec["type"], 2);
+                            
+                            if (isset($pieces[1])) {
+                                
+                                $modelObject = $pieces[1] . "Object";
+                                $sortObj = new $modelObject();
+                                $fieldName = $sortObj->selectCite($fieldName);
+                            }
+                            
                         }
+                        
+                        $obj->getCollection()->setOrder($fieldName . ($matches[2] == "a" ? " ASC" : " DESC"));
                         break;
                     }
                     

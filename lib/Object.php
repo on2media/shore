@@ -453,6 +453,14 @@ abstract class Object
     /**
      *
      */
+    public function selectCite($foreign)
+    {
+        return "(SELECT {$this->_cite} FROM {$this->_table} WHERE {$this->_table}.{$this->_uid} = tbl.{$foreign})";
+    }
+    
+    /**
+     *
+     */
     abstract public function save();
     
     /**
