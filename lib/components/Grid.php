@@ -72,11 +72,11 @@ class GridComponent extends Component
             
             foreach ($obj->getObjFields() as $fieldName => $fieldSpec) {
                 
-                if (isset($fieldSpec["on_grid"], $fieldSpec["on_grid"]["position"])) {
+                if (isset($fieldSpec["on_grid"], $fieldSpec["on_grid"]["sortable"], $fieldSpec["on_grid"]["position"])) {
                     
                     $pos = $fieldSpec["on_grid"]["position"];
                     
-                    if ($pos == $matches[1]) {
+                    if ($fieldSpec["on_grid"]["sortable"] == TRUE && $pos == $matches[1]) {
                         
                         if ($obj->typeOf($fieldName) == "object") {
                             
