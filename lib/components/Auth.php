@@ -35,7 +35,6 @@ class AuthComponent extends Component
         if (!$session->getUser()) {
             
             $tpl = new SmartyView("admin.login.tpl");
-            $tpl->setLayout("layout.admin.tpl");
             
             $tpl->assign("page_title", "Login Required");
             
