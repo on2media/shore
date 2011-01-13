@@ -181,7 +181,9 @@ abstract class Object
                     "field"     =>  "cite" . var2func($fieldName),
                     "heading"   =>  $this->getFieldHeading($fieldName),
                     "filter"    =>  $this->getFieldFilter($fieldName),
-                    "sortable"  =>  (isset($spec["sortable"]) && $spec["sortable"] == TRUE)
+                    "sortable"  =>  (isset($spec["sortable"]) && $spec["sortable"] == TRUE),
+                    "prefix"    =>  (isset($fieldSpec["prefix"]) ? $fieldSpec["prefix"] : ""),
+                    "suffix"    =>  (isset($fieldSpec["suffix"]) ? $fieldSpec["suffix"] : "")
                 );
                 
             }

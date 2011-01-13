@@ -66,6 +66,16 @@ abstract class Control
     /**
      *
      */
+    protected $_fieldPrefix = "";
+    
+    /**
+     *
+     */
+    protected $_fieldSuffix = "";
+    
+    /**
+     *
+     */
     public function __construct(Object $obj, $prefix, $var, $fieldSpec=array())
     {
         $this->_obj = $obj;
@@ -90,6 +100,8 @@ abstract class Control
             if (isset($pieces[1])) $this->_objType = $pieces[1] . "Object";
         }
         
+        if (isset($fieldSpec["prefix"])) $this->_fieldPrefix = $fieldSpec["prefix"];
+        if (isset($fieldSpec["suffix"])) $this->_fieldSuffix = $fieldSpec["suffix"];
     }
     
     /**
@@ -99,11 +111,13 @@ abstract class Control
     {
         if ($field == "" && !$this->_showEmpty) return "";
         
-        $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s\n%s</p>\n",
+        $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s%s%s\n%s</p>\n",
             htmlspecialchars($this->_heading),
             ($this->_required ? "<em>*</em>" : ""),
             ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
+            ($this->_fieldPrefix == "" ? "" : $this->_fieldPrefix . " "),
             ($field == "" ? "&nbsp;" : $field),
+            ($this->_fieldSuffix == "" ? "" : " " . $this->_fieldSuffix),
             ($this->_showValidation == TRUE && $this->getError()
                 ? "<small>" . htmlspecialchars($this->getError()) . "</small>\n"
                 : ""

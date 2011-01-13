@@ -128,7 +128,8 @@
                             </td>
                         {/if}
                         {foreach from=$data->getGridHead() item=th}
-                            <td>
+                            <td>{strip}
+                                {$th.prefix}
                                 {assign var=func value=$th.field}
                                 {if $row->$func()|is_bool}
                                     {if $row->$func() == true}
@@ -139,7 +140,8 @@
                                 {else}
                                     {$row->$func()}
                                 {/if}
-                            </td>
+                                {$th.suffixx}
+                            {/strip}</td>
                         {/foreach}
                         <td>
                             <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|escape}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
