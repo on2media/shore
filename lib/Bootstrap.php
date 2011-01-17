@@ -60,6 +60,9 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "smarty") . DS . 
 // include Swift Mailer
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "swift") . DS . "swift_required.php");
 
+// include FPDF
+require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "fpdf") . DS . "fpdf.php");
+
 // class autoloader
 function classAutoloader($className)
 {
