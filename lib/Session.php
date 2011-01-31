@@ -49,55 +49,6 @@ class Session
     /**
      *
      */
-    public function getUsernameHeading()
-    {
-        $userObject = AUTH_MODEL; $users = new $userObject();
-        return $users->getFieldHeading(AUTH_USERNAME);
-    }
-    
-    /**
-     *
-     */
-    public function getPasswordHeading()
-    {
-        $userObject = AUTH_MODEL; $users = new $userObject();
-        return $users->getFieldHeading(AUTH_PASSWORD);
-    }
-    
-    /**
-     *
-     */
-    public function login($username, $password)
-    {
-        $userObject = AUTH_MODEL;
-        $users = new $userObject();
-        
-        $users->getCollection()->setLimit(AUTH_USERNAME, "=", $username);
-        $users->getCollection()->setLimit(AUTH_PASSWORD, "=", md5($password));
-        
-        if(!$currentUser = $users->getCollection()->fetchFirst()) {
-            
-            return FALSE;
-            
-        } else {
-            
-            $this->setUser($currentUser);
-            return TRUE;
-            
-        }
-    }
-    
-    /**
-     *
-     */
-    public function logout()
-    {
-        return $this->unsetUser();
-    }
-    
-    /**
-     *
-     */
     public function __get($name)
     {
         $func = "get" . var2func($name);
