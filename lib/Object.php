@@ -444,12 +444,12 @@ abstract class Object
     /**
      *
      */
-    public function cite()
+    public function cite($escape=TRUE)
     {
         $rtn = $this->{$this->_cite};
-        if ($rtn instanceof Object) $rtn = $rtn->cite();
+        if ($rtn instanceof Object) $rtn = $rtn->cite(FALSE);
         
-        return htmlspecialchars($rtn);
+        return ($escape == TRUE ? htmlspecialchars($rtn) : $rtn);
     }
     
     /**

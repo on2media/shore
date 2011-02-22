@@ -140,4 +140,34 @@ abstract class Controller
         
         return "An unknown upload error occured.";
     }
+    
+    /**
+     *
+     */
+    public function progressLog($message, $nl=TRUE)
+    {
+        $lineLen = 150;
+        
+        echo $log = sprintf("[%s] %s", date("H:i:s"), $message);
+        
+        if ($nl == TRUE) {
+            
+            $size = memory_get_usage();
+            $unit = array("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB");
+            $mem = " " . number_format(@round($size / pow(1024, ($i=floor(log($size,1024))) ),2),2) . " " . $unit[$i];
+            
+            $space = strlen($log) + strlen($mem);
+            
+            if ($space > $lineLen) {
+                echo "\n" . str_repeat(" ", $lineLen - strlen($mem));
+            } else {
+                echo str_repeat(" ", $lineLen - $space);
+            }
+            
+            echo "$mem\n";
+            
+        }
+        
+        flush();
+    }
 }
