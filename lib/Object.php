@@ -277,8 +277,13 @@ abstract class Object
         if (!is_array($this->_controls)) {
             
             $session = Session::getInstance();
-            $authModel = AUTH_MODEL;
-            $superUser = ($session->getUser() instanceof $authModel && $session->getUser()->getSuperuser());
+            
+            if (defined("AUTH_MODEL")) {
+                $authModel = AUTH_MODEL;
+                $superUser = ($session->getUser() instanceof $authModel && $session->getUser()->getSuperuser());
+            } else {
+                $superUser = FALSE;
+            }
             
             $rtn = array();
             
