@@ -12,6 +12,11 @@
 abstract class Collection implements Iterator
 {
     /**
+     *
+     */
+    protected $_obj = NULL;
+    
+    /**
      * Stores the current data set.
      * 
      * @var  array
