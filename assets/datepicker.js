@@ -1,6 +1,6 @@
 /**
  * datepicker.js - MooTools Datepicker class
- * @version 1.16
+ * @version 1.17
  * 
  * by MonkeyPhysics.com
  *
@@ -308,8 +308,8 @@ var DatePicker = new Class({
 		
 		var h = new Element('div', { 'class': 'header' }).inject(this.picker);
 		var titlecontainer = new Element('div', { 'class': 'title' }).inject(h);
-		new Element('div', { 'class': 'previous' }).addEvent('click', this.previous.bind(this)).set('html', '&laquo;').inject(h);
-		new Element('div', { 'class': 'next' }).addEvent('click', this.next.bind(this)).set('html', '&raquo;').inject(h);
+		new Element('div', { 'class': 'previous' }).addEvent('click', this.previous.bind(this)).set('text', '«').inject(h);
+		new Element('div', { 'class': 'next' }).addEvent('click', this.next.bind(this)).set('text', '»').inject(h);
 		new Element('div', { 'class': 'closeButton' }).addEvent('click', this.close.bindWithEvent(this, true)).set('text', 'x').inject(h);
 		new Element('span', { 'class': 'titleText' }).addEvent('click', this.zoomOut.bind(this)).inject(titlecontainer);
 		
@@ -566,6 +566,7 @@ var DatePicker = new Class({
 		} else if (this.mode == 'year') {
 			this.d.setFullYear(this.d.getFullYear() - 1);
 		} else if (this.mode == 'month') {
+			this.d.setDate(1);
 			this.d.setMonth(this.d.getMonth() - 1);
 		}
 		this.render('left');
@@ -577,6 +578,7 @@ var DatePicker = new Class({
 		} else if (this.mode == 'year') {
 			this.d.setFullYear(this.d.getFullYear() + 1);
 		} else if (this.mode == 'month') {
+			this.d.setDate(1);
 			this.d.setMonth(this.d.getMonth() + 1);
 		}
 		this.render('right');
@@ -621,7 +623,7 @@ var DatePicker = new Class({
 		for (var i = 0; i < format.length; i++) {
 			switch(format.charAt(i)) {
 				case '\\': i++; f+= format.charAt(i); break;
-				case 'y': f += (100 + t.getYear() + '').substring(1); break
+				case 'y': f += (t.getFullYear() + '').substring(2); break;
 				case 'Y': f += t.getFullYear(); break;
 				case 'm': f += this.leadZero(m + 1); break;
 				case 'n': f += (m + 1); break;
@@ -648,6 +650,8 @@ var DatePicker = new Class({
 	
 	unformat: function(t, format) {
 		var d = new Date();
+		d.setMonth(0);
+		d.setDate(1);
 		var a = {};
 		var c, m;
 		t = t.toString();
@@ -663,7 +667,7 @@ var DatePicker = new Class({
 				case 'M': r = '[A-Za-z]{'+this.options.monthShort+'}'; break;
 				case 'F': r = '[A-Za-z]+'; break;
 				case 'd': r = '0[1-9]|[12][0-9]|3[01]'; break;
-				case 'j': r = '[1-9]|[12][0-9]|3[01]'; break;
+				case 'j': r = '[12][0-9]|3[01]|[1-9]'; break;
 				case 'D': r = '[A-Za-z]{'+this.options.dayShort+'}'; break;
 				case 'l': r = '[A-Za-z]+'; break;
 				case 'G': 
