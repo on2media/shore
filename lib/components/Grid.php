@@ -101,6 +101,11 @@ class GridComponent extends Component
             
         }
         
+        // If we have custom limits execute them now.
+        if (method_exists($this->_controller, "gridLimits")) {
+            $this->_controller->gridLimits($obj->getCollection());
+        }
+        
         $session = Session::getInstance();
         
         if ($_POST && isset($_POST["do"]) && $_POST["do"] == "Update" && isset($_POST["pp"])) {
@@ -139,6 +144,9 @@ class GridComponent extends Component
                     $this->_controller->getView()->assign("status_alert", "Nothing to delete.");
                     
                 } else {
+                    
+                    // This only allows items on the current page to be deleted, which is good
+                    // when some items aren't visible due to user restrictions etc.
                     
                     foreach ($obj->getCollection() as $item) {
                         
