@@ -82,9 +82,11 @@ class SmartyView extends View
     {
         if (!file_exists($this->_smarty->template_dir . $template)) {
             $template = realpath(dirname(__FILE__)) . DS . "views" . DS . $template;
+        } else {
+            $template = $this->_smarty->template_dir . $template;
         }
         
-        $this->_template = $template;
+        $this->_template = _PATH . $template;
     }
     
     /**
@@ -164,6 +166,8 @@ class SmartyView extends View
         $session->unsetSmarty();
         
         if ($this->_layout != NULL) {
+            
+            $this->assign("template", $this->_template);
             
             $content = $this->_smarty->fetch($this->_template);
             $this->assign("content", $content);
