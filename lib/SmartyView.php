@@ -83,10 +83,10 @@ class SmartyView extends View
         if (!file_exists($this->_smarty->template_dir . $template)) {
             $template = realpath(dirname(__FILE__)) . DS . "views" . DS . $template;
         } else {
-            $template = $this->_smarty->template_dir . $template;
+            $template = _PATH . $this->_smarty->template_dir . $template;
         }
         
-        $this->_template = _PATH . $template;
+        $this->_template = $template;
     }
     
     /**
@@ -100,6 +100,8 @@ class SmartyView extends View
     /**
      * Defines the layout to use. A layout is wrapped around the template. The layout template
      * should contain a {$content} variable where the template content should be inserted.
+     *
+     * The path is relative to the template directory.
      *
      * @param  string|null  $layout  The layout template to use or NULL to not use a layout.
      */
