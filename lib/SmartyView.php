@@ -42,6 +42,8 @@ class SmartyView extends View
         
         $this->_smarty = new Smarty();
         
+        if ($dir != "" && substr($dir, -1) != DS) $dir .= DS;
+        
         if ($dir != "" && defined("DIR_USERVIEWS")) {
             $this->_smarty->template_dir = DIR_USERVIEWS . DS . $dir;
         } else {
