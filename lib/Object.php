@@ -410,7 +410,7 @@ abstract class Object
             
             case (substr($name, 0, 3) == "set"):
                 
-                if (isset($arguments[0]) || is_null($arguments[0])) {
+                if (array_key_exists(0, $arguments)) {
                     
                     $name = func2var(substr($name, 3));
                     
