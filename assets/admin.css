@@ -235,7 +235,7 @@ ul.pagination {
 }
 ul.pagination li {
     float: left;
-    margin-right: 4px;
+    margin: 0 4px 0 0;
     line-height: 22px;
 }
 ul.pagination li a {
