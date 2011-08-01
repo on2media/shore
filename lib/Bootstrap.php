@@ -63,6 +63,9 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "swift") . DS . "
 // include FPDF
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "fpdf") . DS . "fpdf.php");
 
+// include FPDF
+require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "lessphp") . DS . "lessc.inc.php");
+
 // class autoloader
 function classAutoloader($className)
 {
