@@ -55,7 +55,9 @@ class GridComponent extends Component
                             
                             case "dropdown":
                                 
-                                $obj->getCollection()->setLimit($fieldName, "=", $filters["f".$pos]);
+                                if ($filters["f".$pos] != 0) {
+                                    $obj->getCollection()->setLimit($fieldName, "=", $filters["f".$pos]);
+                                }
                                 break;
                             
                         }
