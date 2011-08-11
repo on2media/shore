@@ -140,12 +140,21 @@
                                 {else}
                                     {$row->$func()}
                                 {/if}
-                                {$th.suffixx}
+                                {$th.suffix}
                             {/strip}</td>
                         {/foreach}
                         <td>
-                            <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|escape}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
-                            {if $add_similar}| <a href="add-similar/{$row->uid()|escape}/">Add Similar</a>{/if}
+                            {if $row->uid() && $action !== false}
+                                {if $action|is_array}
+                                    {foreach from=$action key=act item=descr name=actions}
+                                        {if !$smarty.foreach.actions.first}|{/if}
+                                        <a href="{$act}/{$row->uid()|escape}/">{$descr|escape}</a>
+                                    {/foreach}
+                                {else}
+                                    <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|escape}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
+                                {/if}
+                                {if $add_similar}| <a href="add-similar/{$row->uid()|escape}/">Add Similar</a>{/if}
+                            {/if}
                         </td>
                     </tr>
                 {/foreach}
