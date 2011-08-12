@@ -134,7 +134,7 @@ abstract class Collection implements Iterator
         $lastpage = ceil($totalRecords / $itemsPerPage);
         if ($page == 0 || $lastpage <= 1) return "";
        
-        $rtn = "<ul class=\"pagination\">";
+        $rtn = "<ul class=\"pagination clearfix\">";
        
         if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">{$prev}</a></li>";
         if ($lastpage < (8+$adjacents)) {
