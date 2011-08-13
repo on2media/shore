@@ -30,7 +30,7 @@ class LessView extends View
         $lc = new lessc();
         $rtn = $lc->parse($this->_less);
         
-        return $this->minify($rtn);
+        return (IS_LIVE ? $this->minify($rtn) : $rtn);
     }
     
     /**
