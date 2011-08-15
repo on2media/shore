@@ -41,7 +41,7 @@ class AuthComponent extends Component
             $tpl->assign("label_u", $this->getUsernameHeading());
             $tpl->assign("label_p", $this->getPasswordHeading());
             
-            if ($_POST && isset($_POST["do"]) && $_POST["do"] == "Login") {
+            if ($_POST && isset($_POST["do"]) && in_array($_POST["do"], array("Login", "Sign In"))) {
                 
                 if (!isset($_POST["u"]) || !isset($_POST["p"]) || trim($_POST["u"]) == "" || trim($_POST["p"]) == "") {
                     
