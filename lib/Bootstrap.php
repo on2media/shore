@@ -9,8 +9,11 @@
 // create a shorthand version the DIRECTORY_SEPARATOR constant
 if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
 
-// we haven't defined the site as live or in developement, so assume in development
+// we haven't defined the site as live or in development, so assume in development
 if (!defined("IS_LIVE")) define("IS_LIVE", FALSE);
+
+// define the default tag used to show errors
+if (!defined("CONTROL_ERROR_TAG")) define("CONTROL_ERROR_TAG", "small");
 
 // set the default timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);

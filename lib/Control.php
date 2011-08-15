@@ -119,7 +119,7 @@ abstract class Control
             ($field == "" ? "&nbsp;" : $field),
             ($this->_fieldSuffix == "" ? "" : " " . $this->_fieldSuffix),
             ($this->_showValidation == TRUE && $this->getError()
-                ? "<small>" . htmlspecialchars($this->getError()) . "</small>\n"
+                ? "<" . CONTROL_ERROR_TAG . ">" . htmlspecialchars($this->getError()) . "</" . CONTROL_ERROR_TAG . ">\n"
                 : ""
             )
         );
