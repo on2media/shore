@@ -18,14 +18,14 @@ window.addEvent('domready', function(){
         positionOffset: {x:1, y:-1}
     });
     
-    $$('span[class^=cb_sel_]').each(function(el){
+    $$('[class^=cb_sel_]').each(function(el){
         
         var className = el.getProperty('class');
         
         // not really efficient, but stops multitple events occuring if we have two or more sets of controls
-        $$('span.'+className+' a').removeEvents();
+        $$('.'+className+' a').removeEvents();
         
-        $$('span.'+className+' a').addEvent('click', function(e){
+        $$('.'+className+' a').addEvent('click', function(e){
             e.preventDefault();
             var checkboxes = $$('input.'+className);
             var inRange = false; var eofRange = false;
