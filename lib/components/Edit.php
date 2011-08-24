@@ -72,7 +72,7 @@ class EditComponent extends Component
         }
         
         $tpl->assign("data", $data);
-        $tpl->assign("page_title", ($uid == "new" ? "Add" : "Edit") . " $title");
+        $tpl->assign("page_title", ($uid == "new" || $addSimilar == TRUE ? "Add" : "Edit") . " $title");
         
         return TRUE;
     }

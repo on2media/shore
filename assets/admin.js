@@ -18,21 +18,43 @@ window.addEvent('domready', function(){
         positionOffset: {x:1, y:-1}
     });
     
-    $$('[class^=cb_sel_]').each(function(el){
+    $$('span[class^=cb_sel_]').each(function(el){
         
-        var className = el.getProperty('class');
+        var className = el.getProperty('class').split(' ')[0];
+        var allOrNone = $$('.'+className+' input[type=checkbox]')[0];
         
         // not really efficient, but stops multitple events occuring if we have two or more sets of controls
-        $$('.'+className+' a').removeEvents();
+        $$('span.'+className+' a').removeEvents();
         
-        $$('.'+className+' a').addEvent('click', function(e){
-            e.preventDefault();
+        if (allOrNone) {
+            
+            allOrNone.removeEvents();
+            
+            allOrNone.addEvent('change', function(e){
+                
+                if (this.getProperty('checked')) {
+                    $$('span.'+className+' a[rel=all]')[0].fireEvent('click');
+                } else {
+                    $$('span.'+className+' a[rel=none]')[0].fireEvent('click');
+                }
+                
+            });
+            
+        }
+        
+        $$('span.'+className+' a').addEvent('click', function(e){
+            
+            if (e) e.preventDefault();
             var checkboxes = $$('input.'+className);
             var inRange = false; var eofRange = false;
+            
+            if (allOrNone) allOrNone.removeProperty('checked');
+            
             switch (this.getProperty('rel')) {
                 
                 case 'all':
                     checkboxes.each(function(el){el.setProperty('checked', 'checked');});
+                    if (allOrNone) allOrNone.setProperty('checked', 'checked');
                     break;
                 
                 case 'range':
@@ -65,6 +87,7 @@ window.addEvent('domready', function(){
                     break;
                 
             }
+            
         });
         
     });    
