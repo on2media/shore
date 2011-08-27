@@ -83,6 +83,14 @@ class MySqlCollection extends Collection
      */
     public function fetchAll()
     {
+        return $this->fetchDataSet($this->getSql());
+    }
+    
+    /**
+     *
+     */
+    public function getSql()
+    {
         $fields = $this->_obj->getObjFields();
         
         // remove LOBs from fields
@@ -94,15 +102,13 @@ class MySqlCollection extends Collection
         
         $fieldNames = array_keys($fields);
         
-        $sql = sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
+        return sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
             get_class($this->_obj),
             (substr($this->_obj->uidField(), 0, 1) == "*" ? substr($this->_obj->uidField(), 1) : "`" . $this->_obj->uidField() . "`"),
             "tbl." . implode(", tbl.", $fieldNames),
             $this->_obj->getTable(),
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );
-        
-        return $this->fetchDataSet($sql);
     }
     
     /**
