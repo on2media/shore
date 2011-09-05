@@ -130,8 +130,7 @@
                         {foreach from=$data->getGridHead() item=th}
                             <td>{strip}
                                 {assign var=func value=$th.field}
-                                {if $row->$func()}
-                                    {$th.prefix}
+                                {capture assign=td}
                                     {if $row->$func()|is_bool}
                                         {if $row->$func() == true}
                                             <img src="{$base}core/assets/img/ico/tick.png" width="16" height="16" alt="Yes" />
@@ -141,8 +140,8 @@
                                     {else}
                                         {$row->$func()}
                                     {/if}
-                                    {$th.suffix}
-                                {/if}
+                                {/capture}
+                                {if $td|trim != ''}{$th.prefix}{$td}{$th.suffix}{/if}
                             {/strip}</td>
                         {/foreach}
                         <td>
@@ -150,12 +149,12 @@
                                 {if $action|is_array}
                                     {foreach from=$action key=act item=descr name=actions}
                                         {if !$smarty.foreach.actions.first}|{/if}
-                                        <a href="{$act}/{$row->uid()|escape}/">{$descr|escape}</a>
+                                        <a href="{$act}/{$row->uid()|rawurlencode}/">{$descr|escape}</a>
                                     {/foreach}
                                 {else}
-                                    <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|escape}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
+                                    <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|rawurlencode}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
                                 {/if}
-                                {if $add_similar}| <a href="add-similar/{$row->uid()|escape}/">Add Similar</a>{/if}
+                                {if $add_similar}| <a href="add-similar/{$row->uid()|rawurlencode}/">Add Similar</a>{/if}
                             {/if}
                         </td>
                     </tr>

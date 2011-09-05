@@ -43,12 +43,19 @@ body {
     float: none;
     border-right: none;
 }
-#header li a {
+#header li a, #header li span {
     display: block;
     line-height: 26px;
     padding: 0 20px;
     text-decoration: none;
     color: #fff;
+}
+#header li span em {
+    display: block;
+    float: right;
+    width: 16px;
+    height: 26px;
+    background: url(img/ico/arrow_down.png) no-repeat 100% 50%;
 }
 #header li a:hover {
     text-decoration: underline;

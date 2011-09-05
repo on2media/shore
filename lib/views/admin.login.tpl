@@ -21,6 +21,10 @@
         
         <div id="wrapper">
             
+            <div id="user">
+                Not Logged In
+            </div>
+            
             <h1>{$page_title|escape}</h1>
             
             {if $status_confirm}<div class="status confirm">{$status_confirm}</div>{/if}
