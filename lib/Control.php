@@ -252,7 +252,9 @@ abstract class Control
                     
                     foreach ($collection->fetchAll() as $other) {
                         
-                        if ($other->uid() != $this->_obj->uid()) {
+                        $isNew = ($this->_obj instanceof MySqlObject && $this->_obj->isNew());
+                        
+                        if ($isNew || $other->uid() != $this->_obj->uid()) {
                             
                             $fail = TRUE;
                             $message = "This field must be unique.";
