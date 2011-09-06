@@ -149,12 +149,12 @@
                                 {if $action|is_array}
                                     {foreach from=$action key=act item=descr name=actions}
                                         {if !$smarty.foreach.actions.first}|{/if}
-                                        <a href="{$act}/{$row->uid()|rawurlencode}/">{$descr|escape}</a>
+                                        <a href="{$act}/{$row->uid()|urlencode}/">{$descr|escape}</a>
                                     {/foreach}
                                 {else}
-                                    <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|rawurlencode}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
+                                    <a href="{if $action}{$action}{else}edit{/if}/{$row->uid()|urlencode}/">{if $action}{$action|ucwords}{else}Edit{/if}</a>
                                 {/if}
-                                {if $add_similar}| <a href="add-similar/{$row->uid()|rawurlencode}/">Add Similar</a>{/if}
+                                {if $add_similar}| <a href="add-similar/{$row->uid()|urlencode}/">Add Similar</a>{/if}
                             {/if}
                         </td>
                     </tr>
