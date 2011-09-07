@@ -13,7 +13,7 @@ class EmailMethod
        
         if (!is_object($transport)) {
            
-            if ($_SERVER["SERVER_NAME"] == "localhost") {
+            if (IS_LIVE == FALSE) {
                
                 $transport = Swift_SmtpTransport::newInstance("smtp.gmail.com", 465, 'tls')
                     ->setUsername("***")

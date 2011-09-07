@@ -120,8 +120,18 @@ function classAutoloader($className)
 
 spl_autoload_register('classAutoloader');
 
-@ini_set("session.gc_maxlifetime", 3600); // Keep the session for an hour.
-Session::getInstance();
+/**
+ * Setup session timeout
+ *
+ * Each time the bootstrap is called the last activity time is updated. If it's been longer
+ * than the session timeout (an hour by default) the session is respawned removing all session
+ * data.
+ */
+$maxLifetime = (defined("SESSION_TIMEOUT") ? SESSION_TIMEOUT : 3600 ); // an hour by default
+@ini_set("session.gc_maxlifetime", $maxLifetime); // bin session after the maximum lifetime.
+$session = Session::getInstance();
+if ($session->getLastActivity() && (time() - $session->getLastActivity()) > $maxLifetime) $session->respawn();
+$session->setLastActivity(time());
 
 /**
  * This function converts a variable name in the format foo_bar into the corresponding function
