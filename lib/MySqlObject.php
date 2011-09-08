@@ -460,9 +460,13 @@ abstract class MySqlObject extends Object
             if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
                 
                 foreach ($this->_collection as $obj) {
-                    $obj->$fieldName = trim(mcrypt_decrypt(
-                        MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, base64_decode($obj->$fieldName), MCRYPT_MODE_ECB
-                    ));
+                    
+                    if ($obj->$fieldName != NULL) {
+                        $obj->$fieldName = trim(mcrypt_decrypt(
+                            MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, base64_decode($obj->$fieldName), MCRYPT_MODE_ECB
+                        ));
+                    }
+                    
                 }
                 
             }
