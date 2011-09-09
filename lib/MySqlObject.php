@@ -108,7 +108,7 @@ abstract class MySqlObject extends Object
                     $value = "";
                 }
                 
-                if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
+                if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE && $value != NULL) {
                     $values[] = base64_encode(mcrypt_encrypt(
                         MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, $value, MCRYPT_MODE_ECB
                     ));
