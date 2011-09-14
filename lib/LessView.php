@@ -16,10 +16,16 @@ class LessView extends View
     /**
      *
      */
-    public function __construct($styles)
+    protected $_dir = FALSE;
+    
+    /**
+     *
+     */
+    public function __construct($styles, $dir=FALSE)
     {
         @header("Content-Type: text/css;charset=utf-8");
         $this->_less = $styles;
+        if ($dir) $this->_dir = $dir;
     }
     
     /**
@@ -28,6 +34,7 @@ class LessView extends View
     public function output()
     {
         $lc = new lessc();
+        if ($this->_dir) $lc->importDir = $this->_dir;
         $rtn = $lc->parse($this->_less);
         
         return (IS_LIVE ? $this->minify($rtn) : $rtn);
