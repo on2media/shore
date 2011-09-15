@@ -201,7 +201,7 @@ form label span {
     color: #778;
     font-size: 11px;
 }
-input, textarea, button {
+input, textarea, button, .cb_list {
     font: 12px sans-serif;
     padding: 4px;
     border: 1px solid #778;
@@ -236,6 +236,30 @@ form small {
     font-size: 10px;
     line-height: 18px;
 }
+.cb_list {
+    display: block;
+    width: 930px;
+    max-height: 16em;
+    overflow: auto;
+}
+.cb_list:hover {
+    border: 1px solid #464646;
+}
+.cb_list label {
+    font-size: 1em !important;
+    height: 2em;
+    line-height: 2em !important;
+    margin-bottom: 0;
+    overflow: hidden;
+    border-bottom: none;
+    font-weight: normal;
+}
+.cb_list label:hover {
+    background-color: #f6ffbe;
+}
+.cb_list input[type=checkbox] {
+    margin-right: 0.4em;
+}
 ul.pagination {
     list-style: none;
     height: 24px;
@@ -255,6 +279,7 @@ ul.pagination li a {
     text-decoration: none;
     color: #000;
     background-color: #e2e2e2;
+    padding: 0 4px;
 }
 ul.pagination li.active a {
     font-weight: bold;
