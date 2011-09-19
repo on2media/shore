@@ -66,6 +66,11 @@ abstract class Control
     /**
      *
      */
+    protected $_error_code = "";
+    
+    /**
+     *
+     */
     protected $_fieldPrefix = "";
     
     /**
@@ -162,6 +167,22 @@ abstract class Control
     /**
      *
      */
+    public function getErrorCode()
+    {
+        return ($this->_error_code != "" ? $this->_error_code : FALSE);
+    }
+    
+    /**
+     *
+     */
+    public function setErrorCode($code)
+    {
+        $this->_error_code = $code;
+    }
+    
+    /**
+     *
+     */
     abstract public function output();
     
     /**
@@ -174,6 +195,7 @@ abstract class Control
         if (!array_key_exists($this->_prefix . $this->_var, $formData)) {
             
             $this->setError("Field was missing from the received form data.");
+            $this->setErrorCode("missing");
             $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var] = FALSE;
             
         } else {
@@ -205,6 +227,7 @@ abstract class Control
             
             // This is required!
             $this->setError("This field is required.");
+            $this->setErrorCode("required");
             return FALSE;
             
         }
@@ -212,6 +235,7 @@ abstract class Control
         foreach ($this->_validation as $rule => $opts) {
             
             $fail = FALSE;
+            $message = $code = "";
             
             switch ($rule) {
                 
@@ -219,27 +243,32 @@ abstract class Control
                     $modelObject = $opts["object"] . "Object";
                     $fail = (!is_object($value) || !$value instanceof $modelObject);
                     $message = "Please select from the list.";
+                    $code = "not_on_list";
                     break;
                 
                 case "timestamp":
                     $fail = ($value != NULL && !@date("U", $value));
                     $message = "Please enter a valid date/time.";
+                    $code = "time_invalid";
                     break;
                 
                 case "beforenow":
                     $fail = ($value != NULL && (!@date("U", $value) || $value > time()));
                     $message = "Please enter a valid date/time.";
+                    $code = "time_too_late";
                     break;
                 
                 case "afternow":
                     $fail = ($value != NULL && (!@date("U", $value) || $value < time()));
                     $message = "Please enter a valid date/time.";
+                    $code = "time_too_early";
                     break;
                 
                 case "regexp":
                     $subject = (is_object($value) ? $value->uid() : $value);
                     $fail = (!preg_match($opts["test"], $subject));
                     $message = "This field is invalid.";
+                    $code = "no_regexp_match";
                     break;
                 
                 case "unique":
@@ -258,6 +287,7 @@ abstract class Control
                             
                             $fail = TRUE;
                             $message = "This field must be unique.";
+                            $code = "not_unique";
                             break(2);
                             
                         }
@@ -270,6 +300,7 @@ abstract class Control
             
             if ($fail) {
                 $this->setError((isset($opts["message"]) ? $opts["message"] : $message));
+                $this->setErrorCode((isset($opts["error_code"]) ? $opts["error_code"] : $code));
                 return FALSE;
             }
             
