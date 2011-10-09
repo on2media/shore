@@ -168,5 +168,5 @@ function func2var($str)
  */
 function var2label($var)
 {
-    return preg_replace("/([A-Z])/", " $1", var2func($var));
+    return trim(preg_replace("/([A-Z])/", " $1", var2func($var)));
 }

@@ -111,7 +111,12 @@ class AuthComponent extends Component
     public function getUsernameHeading()
     {
         $userObject = AUTH_MODEL; $users = new $userObject();
-        return $users->getFieldHeading(AUTH_USERNAME);
+        
+        if ($spec = $users->getFieldSpec(AUTH_USERNAME)) {
+            return $spec["obj"]->heading;
+        }
+        
+        return FALSE;
     }
     
     /**
@@ -120,6 +125,11 @@ class AuthComponent extends Component
     public function getPasswordHeading()
     {
         $userObject = AUTH_MODEL; $users = new $userObject();
-        return $users->getFieldHeading(AUTH_PASSWORD);
+        
+        if ($spec = $users->getFieldSpec(AUTH_PASSWORD)) {
+            return $spec["obj"]->heading;
+        }
+        
+        return FALSE;
     }
 }

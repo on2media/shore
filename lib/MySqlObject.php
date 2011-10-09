@@ -44,7 +44,7 @@ abstract class MySqlObject extends Object
     public function __construct()
     {
         $this->_collection = new MySqlCollection($this);
-        $this->_collection->setOrder($this->_order);
+        $this->init();
     }
     
     /**

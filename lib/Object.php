@@ -72,7 +72,19 @@ abstract class Object
     public function __construct()
     {
         $this->_collection = new Collection($this);
+        $this->init();
+    }
+    
+    /**
+     *
+     */
+    protected function init()
+    {
         $this->_collection->setOrder($this->_order);
+        
+        foreach ($this->_fields as $fieldName => &$fieldSpec) {
+            $this->_fields[$fieldName]["obj"] = new ObjectField($this, $fieldName, $fieldSpec);
+        }
     }
     
     /**
@@ -108,18 +120,6 @@ abstract class Object
     public function getObjFields()
     {
         return $this->_fields;
-    }
-    
-    /**
-     *
-     */
-    public function getFieldHeading($field)
-    {
-        if (isset($this->_fields[$field]) && ($spec = $this->_fields[$field])) {
-            return (isset($spec["heading"]) ? $spec["heading"] : var2label($field));
-        }
-        
-        return FALSE;
     }
     
     /**
@@ -179,11 +179,11 @@ abstract class Object
                 
                 $rtn[(int)$spec["position"]] = array(
                     "field"     =>  "cite" . var2func($fieldName),
-                    "heading"   =>  $this->getFieldHeading($fieldName),
+                    "heading"   =>  $fieldSpec["obj"]->heading,
                     "filter"    =>  $this->getFieldFilter($fieldName),
                     "sortable"  =>  (isset($spec["sortable"]) && $spec["sortable"] == TRUE),
-                    "prefix"    =>  (isset($fieldSpec["prefix"]) ? $fieldSpec["prefix"] : ""),
-                    "suffix"    =>  (isset($fieldSpec["suffix"]) ? $fieldSpec["suffix"] : "")
+                    "prefix"    =>  $fieldSpec["obj"]->prefix,
+                    "suffix"    =>  $fieldSpec["obj"]->suffix
                 );
                 
             }
@@ -250,7 +250,13 @@ abstract class Object
     }
     
     /**
+     * Set the Control Prefix
+     * 
+     * By setting a control prefix the form element names are prefixed with the
+     * specified $prefix when using self::getControls(). This would be useful
+     * where you need to edit two objects on one form.
      *
+     * @param  string
      */
     public function setControlPrefix($prefix)
     {
@@ -440,10 +446,7 @@ abstract class Object
     public function typeOf($var)
     {
         if (!array_key_exists($var, $this->_fields)) return NULL;
-        if (!isset($this->_fields[$var]["type"])) return "string";
-        
-        $pieces = explode(":", $this->_fields[$var]["type"], 2);
-        return $pieces[0];
+        return $this->_fields[$var]["obj"]->type;
     }
     
     /**
@@ -463,6 +466,37 @@ abstract class Object
     public function selectCite($foreign)
     {
         return "(SELECT {$this->_cite} FROM {$this->_table} WHERE {$this->_table}.{$this->_uid} = tbl.{$foreign})";
+    }
+    
+    /**
+     *
+     */
+    public function toXml($laconic=FALSE)
+    {
+        $doc = new DOMDocument("1.0", "utf-8");
+        $doc->formatOutput = TRUE;
+        
+        $doc->appendChild($root = $doc->createElement(get_class($this)));
+        $root->setAttribute("uid", $this->_uid);
+        $root->setAttribute("cite", $this->_cite);
+        
+        if ($laconic == FALSE) {
+            $root->setAttribute("order", $this->_order);
+        }
+        
+        foreach ($this->_varTypes as $varType) {
+            
+            foreach ($this->$varType as $fieldName => $fieldSpec) {
+                
+                if (array_key_exists("obj", $fieldSpec)) {
+                    $fieldSpec["obj"]->toXml($doc, $root, $laconic);
+                }
+                
+            }
+            
+        }
+        
+        return $doc;
     }
     
     /**

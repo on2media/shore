@@ -88,15 +88,12 @@ abstract class Control
         $this->_prefix = $prefix;
         $this->_var = $var;
         
-        $heading = (isset($fieldSpec["heading"]) ? $fieldSpec["heading"] : NULL);
-        $this->_heading = ($heading != NULL ? $heading : var2label($var));
-        
-        $tip = (isset($fieldSpec["on_edit"]["tip"]) ? $fieldSpec["on_edit"]["tip"] : NULL);
-        $this->_tip = ($tip != NULL ? $tip : "");
+        $this->_heading = $fieldSpec["obj"]->heading;
+        $this->_tip = $fieldSpec["obj"]->tip;
         
         if (isset($fieldSpec["validation"])) $this->_validation = $fieldSpec["validation"];
         
-        if (isset($fieldSpec["required"]) && $fieldSpec["required"] == TRUE) $this->_required = TRUE;
+        $this->_required = $fieldSpec["obj"]->required;
         
         if (isset($fieldSpec["on_edit"]["show_empty"]) && $fieldSpec["on_edit"]["show_empty"] == FALSE) $this->_showEmpty = FALSE;
         
@@ -105,8 +102,8 @@ abstract class Control
             if (isset($pieces[1])) $this->_objType = $pieces[1] . "Object";
         }
         
-        if (isset($fieldSpec["prefix"])) $this->_fieldPrefix = $fieldSpec["prefix"];
-        if (isset($fieldSpec["suffix"])) $this->_fieldSuffix = $fieldSpec["suffix"];
+        $this->_fieldPrefix = $fieldSpec["obj"]->prefix;
+        $this->_fieldSuffix = $fieldSpec["obj"]->suffix;
     }
     
     /**

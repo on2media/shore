@@ -21,7 +21,7 @@ abstract class MapObject extends Object
     public function __construct()
     {
         $this->_collection = new MapCollection($this);
-        $this->_collection->setOrder($this->_order);
+        $this->init();
     }
     
     /**
