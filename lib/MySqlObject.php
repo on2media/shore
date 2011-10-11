@@ -47,7 +47,7 @@ abstract class MySqlObject extends Object
         $this->init();
         
         foreach ($this->_relationships as $fieldName => &$fieldSpec) {
-            $this->_relationships[$fieldName]["obj"] = new ObjectField($this, $fieldName, $fieldSpec);
+            $this->_relationships[$fieldName]["obj"] = new MySqlObjectRelationship($this, $fieldName, $fieldSpec);
         }
     }
     
