@@ -50,7 +50,7 @@ class SOAPComponent extends Component
             
             foreach ($obj->getControls() as $control) {
                 
-                if ($control->getError()) $errors[] = get_class($obj) . "::" . $control->getHeading() . ": " . $control->getError();
+                if ($control->getError()) $errors[] = get_class($obj) . "::" . $control->getVar() . ": " . $control->getError();
                 
             }
             
