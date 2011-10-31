@@ -156,7 +156,7 @@ abstract class Controller
             $unit = array("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB");
             $mem = " " . number_format(@round($size / pow(1024, ($i=floor(log($size,1024))) ),2),2) . " " . $unit[$i];
             
-            $space = mb_strlen($log) + mb_strlen($mem);
+            $space = mb_strlen($log, "UTF-8") + mb_strlen($mem, "UTF-8");
             
             if ($space > $lineLen) {
                 echo "\n" . str_repeat(" ", $lineLen - strlen($mem));
