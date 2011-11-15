@@ -286,7 +286,8 @@ abstract class Object
             
             if (defined("AUTH_MODEL")) {
                 $authModel = AUTH_MODEL;
-                $superUser = ($session->getUser() instanceof $authModel && $session->getUser()->getSuperuser());
+                $authUserUser = AUTH_SUPERUSER;
+                $superUser = ($session->getUser() instanceof $authModel && $session->getUser()->$authUserUser);
             } else {
                 $superUser = FALSE;
             }

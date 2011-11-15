@@ -35,7 +35,8 @@
             <div id="user">
                 {if $current_user}
                     Current User: <strong>{$current_user->getName()|escape}</strong>
-                    {if $current_user->getSuperuser()}(Super User){/if}
+                    {assign var=authSuperUser value=$smarty.const.AUTH_SUPERUSER}
+                    {if $current_user->$authSuperUser}(Super User){/if}
                 {else}
                     Not Logged In
                 {/if}
