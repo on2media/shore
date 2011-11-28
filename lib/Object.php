@@ -485,9 +485,9 @@ abstract class Object
             $root->setAttribute("order", $this->_order);
         }
         
-        foreach ($this->_varTypes as $varType) {
+        //foreach ($this->_varTypes as $varType) {
             
-            foreach ($this->$varType as $fieldName => $fieldSpec) {
+            foreach ($this->_fields /*$varType*/ as $fieldName => $fieldSpec) {
                 
                 if (array_key_exists("obj", $fieldSpec)) {
                     $fieldSpec["obj"]->toXml($doc, $root, $laconic);
@@ -495,7 +495,7 @@ abstract class Object
                 
             }
             
-        }
+        //}
         
         return $doc;
     }
