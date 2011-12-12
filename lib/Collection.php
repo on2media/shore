@@ -208,6 +208,14 @@ abstract class Collection implements Iterator
     /**
      *
      */
+    public function getTotal()
+    {
+        return $this->_total;
+    }
+    
+    /**
+     *
+     */
     public function add(Object $obj)
     {
         $this->_dataSet[] = $obj;
