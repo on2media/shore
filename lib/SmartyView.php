@@ -106,12 +106,21 @@ class SmartyView extends View
      * The path is relative to the template directory.
      *
      * @param  string|null  $layout  The layout template to use or NULL to not use a layout.
+     * @param  string|null  $path    You can override the template directory by providing a
+     *                               full path with a trailing directory separator.
      */
-    public function setLayout($layout=NULL)
+    public function setLayout($layout=NULL, $path=NULL)
     {
-        if ($layout != NULL && !file_exists($this->_smarty->template_dir . $layout)) {
+        if ($layout != NULL && $path != NULL) {
+            
+            $layout = $path . $layout;
+            
+        } else if ($layout != NULL && !file_exists($this->_smarty->template_dir . $layout)) {
+            
             $layout = realpath(dirname(__FILE__)) . DS . "views" . DS . $layout;
+            
         }
+        
         $this->_layout = $layout;
     }
     
