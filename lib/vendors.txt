@@ -1,0 +1,42 @@
+
+
+FPDF
+----
+http://www.fpdf.org/
+
+"you may use it for any kind of usage and modify it to suit your needs"
+
+
+Less PHP
+--------
+http://leafo.net/lessphp/
+
+MIT or GPLv3
+
+
+Smarty
+------
+http://www.smarty.net/
+
+GPLv3
+
+
+Swift Mailer
+------------
+http://swiftmailer.org/
+
+GPLv3
+
+
+Moo Tools
+---------
+http://mootools.net/
+
+MIT
+
+
+TinyMCE
+-------
+http://www.tinymce.com/
+
+LGPL
