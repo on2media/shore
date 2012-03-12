@@ -45,7 +45,7 @@ class PasswordControl extends Control
                 if ($value == "") {
                     $value = $this->_obj->{$this->_var};
                 } else {
-                    $value = md5($value);
+                    $value = $this->hash($value);
                 }
                 
             }
@@ -53,5 +53,13 @@ class PasswordControl extends Control
         }
         
         return parent::process($formData);
+    }
+    
+    /**
+     *
+     */
+    public function hash($password)
+    {
+        return md5($password);
     }
 }
