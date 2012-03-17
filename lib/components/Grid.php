@@ -60,6 +60,13 @@ class GridComponent extends Component
                                 }
                                 break;
                             
+                            case "boolean":
+                                
+                                if (in_array($filters["f".$pos], array("yes", "no"))) {
+                                    $obj->getCollection()->setLimit($fieldName, "=", ($filters["f".$pos] == "yes" ? 1 : 0));
+                                }
+                                break;
+                            
                         }
                         
                     }

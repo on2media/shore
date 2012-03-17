@@ -157,6 +157,9 @@ abstract class Object
                         
                     }
                 
+                case "boolean":
+                    return array("type" => "boolean");
+                
             }
             
         }

@@ -95,7 +95,7 @@ function classAutoloader($className)
             break;
         
         case (
-            !in_array($className, array("MySqlObject", "MapObject", "SessionObject")) &&
+            !in_array($className, array("MySqlObject", "MySqlViewObject", "MapObject", "SessionObject")) &&
             preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
         ):
             $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
