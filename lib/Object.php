@@ -475,7 +475,7 @@ abstract class Object
     /**
      *
      */
-    public function toXml($laconic=FALSE)
+    public function toXml($laconic=FALSE, array $blackListedFields=array())
     {
         $doc = new DOMDocument("1.0", "utf-8");
         $doc->formatOutput = TRUE;
@@ -488,9 +488,9 @@ abstract class Object
             $root->setAttribute("order", $this->_order);
         }
         
-        //foreach ($this->_varTypes as $varType) {
+        foreach ($this->_fields as $fieldName => $fieldSpec) {
             
-            foreach ($this->_fields /*$varType*/ as $fieldName => $fieldSpec) {
+            if (!in_array($fieldName, $blackListedFields)) {
                 
                 if (array_key_exists("obj", $fieldSpec)) {
                     $fieldSpec["obj"]->toXml($doc, $root, $laconic);
@@ -498,7 +498,7 @@ abstract class Object
                 
             }
             
-        //}
+        }
         
         return $doc;
     }

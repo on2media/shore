@@ -49,6 +49,11 @@ class ObjectField
     public $suffix;
     
     /**
+     *
+     */
+    public $format=NULL;
+    
+    /**
      * Recognised types:
      * 
      * string (default)
@@ -80,6 +85,7 @@ class ObjectField
         } else {
             $pieces = explode(":", $spec["type"], 2);
             $this->type = $pieces[0];
+            if (array_key_exists(1, $pieces)) $this->format = $pieces[1];
         }
     }
     
@@ -123,7 +129,7 @@ class ObjectField
                 
                 case "timestamp":
                     if ($this->value == NULL) return "";
-                    $outputValue = date("jS F Y H:i", $this->value);
+                    $outputValue = date((!$this->format ? "jS F Y H:i" : $this->format), $this->value);
                     break;
                 
                 case "boolean":
