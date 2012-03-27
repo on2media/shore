@@ -161,7 +161,22 @@ class GridComponent extends Component
                         
                         if (in_array($item->uid(), $_POST["items"])) {
                             
-                            $deleted = $item->delete();
+                            $deleted = FALSE;
+                            
+                            if ($item instanceof MySqlViewObject) {
+                                
+                                $objType = $item->getGridRel() . "Object";
+                                $relItemObj = new $objType();
+                                $relItem = $relItemObj->fetchById($item->uid());
+                                
+                                if ($relItem) $deleted = $relItem->delete();
+                                
+                            } else {
+                                
+                                $deleted = $item->delete();
+                                
+                            }
+                            
                             $numDeleted += ($deleted ? 1 : 0);
                             
                             $status .= "\"" . $item->cite() . "\"" . ($deleted ? " was" : " wasn't") . " deleted.<br />\n";

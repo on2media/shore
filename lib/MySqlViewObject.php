@@ -20,6 +20,11 @@ abstract class MySqlViewObject extends MySqlObject
     /**
      *
      */
+    protected $_gridrel = "";
+    
+    /**
+     *
+     */
     protected $_varTypes = array("_fields");
     
     /**
@@ -38,6 +43,14 @@ abstract class MySqlViewObject extends MySqlObject
     public function getTable()
     {
         return $this->_table;
+    }
+    
+    /**
+     *
+     */
+    public function getGridRel()
+    {
+        return $this->_gridrel;
     }
     
     /**
