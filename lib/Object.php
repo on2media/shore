@@ -83,15 +83,8 @@ abstract class Object
         $this->_collection->setOrder($this->_order);
         
         foreach ($this->_fields as $fieldName => &$fieldSpec) {
-        	$str = get_class($this);
-        	$str .= " ";
-        	$str .= $fieldName;
-        	$str .= " ";
-        	$str .= print_r($fieldSpec, true);
             $this->_fields[$fieldName]["obj"] = new ObjectField($this, $fieldName, $fieldSpec);
         }
-        
-        //var_dump($str);exit;
     }
     
     /**
