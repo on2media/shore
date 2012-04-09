@@ -168,7 +168,7 @@
     
     {if $data->getCollection()->count() > 0}
         
-        {capture assign=url}?p=%d{if $filter_str}&amp;{$filter_str}{/if}{if $smarty.get.s}&amp;s={$smarty.get.s|escape}{/if}{/capture}
+        {capture assign=url}?p=%d{if $filter_str}&amp;{'%'|str_replace:'%%':$filter_str}{/if}{if $smarty.get.s}&amp;s={$smarty.get.s|escape}{/if}{/capture}
         {$data->getCollection()->paginate(true, 6, '&lt;', '&gt;', $url)}
         
         {if !$no_delete}

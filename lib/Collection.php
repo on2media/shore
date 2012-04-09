@@ -167,7 +167,7 @@ abstract class Collection implements Iterator
     protected function paginateSection($start, $end, $url, $currentPage)
     {
         $rtn = "";
-       
+        
         for ($i=$start; $i<=$end;$i++) {
             $rtn .= sprintf("<li%s><a href=\"%s\">%d</a></li>\n",
                 ($currentPage == $i ? " class=\"active\"":""),
