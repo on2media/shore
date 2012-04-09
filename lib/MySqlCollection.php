@@ -104,7 +104,13 @@ class MySqlCollection extends Collection
         
         return sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
             get_class($this->_obj),
-            (substr($this->_obj->uidField(), 0, 1) == "*" ? substr($this->_obj->uidField(), 1) : "`" . $this->_obj->uidField() . "`"),
+            ($this->_obj->uidField() === NULL
+                ? "@rank:=@rank+1"
+                : (substr($this->_obj->uidField(), 0, 1) == "*"
+                    ? substr($this->_obj->uidField(), 1)
+                    : "`" . $this->_obj->uidField() . "`"
+                )
+            ),
             "tbl." . implode(", tbl.", $fieldNames),
             $this->_obj->getTable(),
             $this->limitSql() . $this->getOrder() . $this->getPagination()
@@ -150,6 +156,8 @@ class MySqlCollection extends Collection
     protected function fetchDataSet($sql)
     {
         $dbh = MySqlDatabase::getInstance();
+
+        if ($this->_obj->uidField() === NULL) $dbh->query("SET @rank=0");
         
         if ($sth = $dbh->prepare($sql)) {
             
