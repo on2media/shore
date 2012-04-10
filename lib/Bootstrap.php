@@ -42,10 +42,9 @@ define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "
 
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
-$urlDir = str_replace("%2F", "/", rawurlencode($urlDir));
-$base = "://" . $_SERVER["HTTP_HOST"] . $urlDir;
+define('URL_DIR', str_replace("%2F", "/", rawurlencode($urlDir)));
 
-define('URL_DIR', $urlDir);
+$base = "://" . $_SERVER["HTTP_HOST"] . URL_DIR;
 
 define("_BASE", _PROTOCOL . $base);
 define("_BASE_HTTP", "http" . $base);
