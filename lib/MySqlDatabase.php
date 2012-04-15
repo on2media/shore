@@ -36,8 +36,13 @@ class MySqlDatabase
         static $instance;
         if (!is_object($instance)) {
             
+            $driverOptions = array();
+            if ((defined("MYSQL_SET_NAMES_UTF8") && MYSQL_SET_NAMES_UTF8)) {
+                $driverOptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
+            }
+            
             try {
-                $instance = new PDO("mysql:dbname=" . MYSQL_DB_NAME . ";host=" . MYSQL_HOST . ";port=" . MYSQL_PORT, MYSQL_USERNAME, MYSQL_PASSWORD);
+                $instance = new PDO("mysql:dbname=" . MYSQL_DB_NAME . ";host=" . MYSQL_HOST . ";port=" . MYSQL_PORT, MYSQL_USERNAME, MYSQL_PASSWORD, $driverOptions);
                 $instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 throw new Exception("Database connection failed: " . $e->getMessage());
