@@ -44,9 +44,12 @@ $min_allowDebugFlag = false;
  * will have to load extra code to guess. Some examples below:
  */
 
-$min_cachePath = dirname(__DIR__) . '/pinnacle/core/cache/minify';
+$min_cachePath = realpath(dirname(__DIR__) . '/../../lib/cache/minify/');
 //$min_cachePath = '/tmp';
 //$min_cachePath = preg_replace('/^\\d+;/', '', session_save_path());
+
+
+
 /**
  * To use APC/Memcache/ZendPlatform for cache storage, require the class and
  * set $min_cachePath to an instance. Example below:
