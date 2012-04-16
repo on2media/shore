@@ -41,13 +41,26 @@ class SmartyView extends View
         @header("Content-Type: text/html;charset=utf-8");
         
         $this->_smarty = new Smarty();
+        $this->_smarty->error_reporting = E_ALL ^ E_NOTICE;
+        $this->_smarty->disableSecurity();
+
+        $this->_smarty->registerPlugin("modifier", "date", array($this, "modifierDate"));
+
+        if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
+
+        /*
+        $security = new Smarty_Security($this->_smarty);
+        $security->php_functions = array();
+        $security->php_modifiers = array();
+        $this->_smarty->enableSecurity($security);
+        */
         
         if ($dir != "" && substr($dir, -1) != DS) $dir .= DS;
         
         if ($dir != "" && defined("DIR_USERVIEWS")) {
-            $this->_smarty->template_dir = DIR_USERVIEWS . DS . $dir;
+            $this->_smarty->setTemplateDir(array("pinnacle" => DIR_USERVIEWS . DS . $dir));
         } else {
-            $this->_smarty->template_dir = DIR_VIEWS . DS . $dir;
+            $this->_smarty->setTemplateDir(array("pinnacle" => DIR_VIEWS . DS . $dir));
         }
         
         $base = realpath(dirname(__FILE__)) . DS;
@@ -82,10 +95,10 @@ class SmartyView extends View
      */
     public function setTemplate($template)
     {
-        if (!file_exists($this->_smarty->template_dir . $template)) {
+        if (!file_exists($this->_smarty->getTemplateDir("pinnacle") . $template)) {
             $template = realpath(dirname(__FILE__)) . DS . "views" . DS . $template;
         } else {
-            $template = _PATH . $this->_smarty->template_dir . $template;
+            $template = _PATH . $this->_smarty->getTemplateDir("pinnacle") . $template;
         }
         
         $this->_template = $template;
@@ -115,7 +128,7 @@ class SmartyView extends View
             
             $layout = $path . $layout;
             
-        } else if ($layout != NULL && !file_exists($this->_smarty->template_dir . $layout)) {
+        } else if ($layout != NULL && !file_exists($this->_smarty->getTemplateDir("pinnacle") . $layout)) {
             
             $layout = realpath(dirname(__FILE__)) . DS . "views" . DS . $layout;
             
@@ -138,9 +151,9 @@ class SmartyView extends View
      *
      * @see Smarty::assign()
      */
-    public function assign($tpl_var, $value=NULL, $nocache=FALSE, $scope=SMARTY_LOCAL_SCOPE)
+    public function assign($tpl_var, $value=NULL, $nocache=FALSE)
     {
-        $this->_smarty->assign($tpl_var, $value, $nocache, $scope);
+        $this->_smarty->assign($tpl_var, $value, $nocache);
     }
     
     /**
@@ -190,5 +203,10 @@ class SmartyView extends View
         }
         
         return $this->_smarty->fetch($this->_template);
+    }
+
+    public function modifierDate($timestamp, $format="d F Y H:i")
+    {
+        return ($timestamp ? date($format, $timestamp) : "");
     }
 }
