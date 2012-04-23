@@ -239,6 +239,7 @@ form small {
 .cb_list {
     display: block;
     width: 930px;
+    min-height: 2em;
     max-height: 16em;
     overflow: auto;
 }
@@ -301,4 +302,19 @@ a img {
 }
 .rgt {
     text-align: right;
+}
+.ssl_search {
+    display: block;
+    margin-top: 1em;
+}
+.ssl_searchresult {
+    display: block;
+    margin-top: 1em;
+}
+.ssl_search, .ssl_searchresult {
+    display: none;
+}
+.ssl_loading {
+    color: #f33;
+    font-style: italic;
 }

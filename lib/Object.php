@@ -475,6 +475,14 @@ abstract class Object
     {
         return "(SELECT {$this->_cite} FROM {$this->_table} WHERE {$this->_table}.{$this->_uid} = tbl.{$foreign})";
     }
+
+    /**
+     *
+     */
+    public function citeField()
+    {
+        return $this->_cite;
+    }
     
     /**
      *

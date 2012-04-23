@@ -140,6 +140,52 @@ abstract class Controller
         
         return "An unknown upload error occured.";
     }
+
+    /**
+     * SearchSelect JSON output
+     */
+    public function handleSearchSelects(array $mapping=array())
+    {
+        if (array_key_exists("do", $_GET) && $_GET["do"] == "search") {
+            
+            if (!IS_LIVE) sleep(1);
+            
+            $rtn = new stdClass();
+            $rtn->status = "ERROR";
+            
+            $results = array();
+            
+            $field = (array_key_exists("field", $_GET) ? $_GET["field"] : "");
+            $search = (array_key_exists("search", $_GET) ? $_GET["search"] : "");
+            
+            if ($field != "" && $search != "" && array_key_exists($field, $mapping)) {
+
+                $className = $mapping[$field];
+                $obj = new $className();
+                
+                $options = $obj->getCollection();
+                
+                $options->setLimit($obj->citeField(), "LIKE", "%" . $search . "%");
+                $options->setPagination(0, 20);
+                
+                foreach ($options->fetchAll() as $item) {
+                    
+                    $results[$item->uid()] = $item->cite();
+                    
+                }
+                
+                $rtn->status = "OK";
+                $rtn->results = $results;
+
+            }
+            
+            $this->setView(new JsonView($rtn));
+            return $this->output();
+            
+        }
+        
+        return FALSE;
+    }
     
     /**
      *
