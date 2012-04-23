@@ -146,7 +146,7 @@ abstract class Controller
      */
     public function handleSearchSelects(array $mapping=array())
     {
-        if (array_key_exists("do", $_GET) && $_GET["do"] == "search") {
+        if (array_key_exists("do", $_GET) && $_GET["do"] == "sslsearch") {
             
             if (!IS_LIVE) sleep(1);
             

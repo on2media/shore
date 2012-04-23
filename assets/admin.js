@@ -152,7 +152,7 @@ window.addEvent('domready', function(){
                         url: window.location.href,
                         method: 'get',
                         data: {
-                            'do': 'search',
+                            'do': 'sslsearch',
                             'field': name,
                             'search': q
                         },
