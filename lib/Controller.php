@@ -18,12 +18,14 @@ abstract class Controller
     protected $_view = NULL;
     
     /**
-     *
+     * Component classes used by this controller
+     * 
+     * @var array
      */
     protected $_components = array();
     
     /**
-     *
+     * Class Constructor
      */
     public function __construct()
     {
@@ -96,7 +98,11 @@ abstract class Controller
     }
     
     /**
-     *
+     * Returns the elapsed time as a sentence
+     * 
+     * @param int $timestamp Unix Timestamp
+     * @param int|null $now 
+     * @return string
      */
     public static function relativeTime($timestamp, $now=NULL)
     {
@@ -112,7 +118,10 @@ abstract class Controller
     }
     
     /**
-     *
+     * Helper method for form upload error messages
+     * 
+     * @param int $error The code for the error
+     * @return string The error message relating to code
      */
     public static function uploadErrorMessage($error)
     {
@@ -142,7 +151,9 @@ abstract class Controller
     }
 
     /**
-     * SearchSelect JSON output
+     * Search helper method
+     * 
+     * @param array $mapping
      */
     public function handleSearchSelects(array $mapping=array())
     {
@@ -188,7 +199,10 @@ abstract class Controller
     }
     
     /**
-     *
+     * Helper method to print log execution information
+     * 
+     * @param string $message The message to display with information.
+     * @param bool $nl Where we are processing a new line.
      */
     public function progressLog($message, $nl=TRUE)
     {
