@@ -95,6 +95,16 @@ class AuthComponent extends Component
             
         }
     }
+
+    /**
+     * Get User
+     * @return AUTH_MODEL
+     */
+    public function getUser()
+    {
+        $session = Session::getInstance();
+        return $session->getUser();
+    }
     
     /**
      *

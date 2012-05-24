@@ -74,6 +74,9 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "fpdf") . DS . "f
 // include FPDF
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "lessphp") . DS . "lessc.inc.php");
 
+// include Emogrifier
+require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "pelago") . DS . "emogrifier.php");
+
 // class autoloader
 function classAutoloader($className)
 {
