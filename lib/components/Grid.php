@@ -274,7 +274,7 @@ class GridComponent extends Component {
 					
 			}
 				
-			if (isset ($_POST ["do"] ) && $_POST ["do"] == "Clear Filter") {
+			if (isset ($_POST["do"] ) && $_POST["do"] == "Clear Filter") {
 				
 				$sess = Session::getInstance();
 				$sess->unsetFilters();
@@ -290,7 +290,7 @@ class GridComponent extends Component {
 				}						
 				
 				$sess->setAllSessionFilters($allSessionFilters);
-				$this->_controller->redirect ( _BASE . _PAGE );
+				$this->_controller->redirect( _BASE . _PAGE );
 			}
 				
 			$this->actions($obj, $noDelete, $page, $perPage);
@@ -354,8 +354,8 @@ class GridComponent extends Component {
 				
 				$statusType = ($numDeleted == count($_POST["items"]) ? "confirm" : ($numDeleted == 0 ? "alert" : "info"));
 				
-				$this->_controller->getView()->assign_session("status_" . $statusType, $status);
-				$this->_controller->redirect();
+				$this->_controller->getView()->assign("status_" . $statusType, $status);
+				
 			
 			}
 		
