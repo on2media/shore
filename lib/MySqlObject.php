@@ -178,9 +178,14 @@ abstract class MySqlObject extends Object
         }
         
         try {
+            
             if (!$sth->execute()) return FALSE;
+
         } catch (PDOException $e) {
-            exit('Database error: ' . $e->getMessage());
+
+            trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
+            exit();
+
         }
         
         if ($this->uid() == NULL) $this->{$this->uidField()} = $dbh->lastInsertId();
@@ -210,7 +215,10 @@ abstract class MySqlObject extends Object
                     }
                     
                 } catch (PDOException $e) {
-                    exit('Database error: ' . $e->getMessage());
+
+                    trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
+                    exit();
+
                 }
                 
                 if ($fieldSpec["type"] == "m-m") {
@@ -241,7 +249,10 @@ abstract class MySqlObject extends Object
                             if (!$inTransaction) $dbh->commit();
                             
                         } catch (PDOException $e) {
-                            exit('Database error: ' . $e->getMessage());
+                            
+                            trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
+                            exit();
+
                         }
                         
                     }
@@ -396,9 +407,14 @@ abstract class MySqlObject extends Object
                     if ($this->$func() instanceof MySqlObject) $value = $value->uid();
                     
                     try {
+                        
                         $sth->execute(array($value));
+
                     } catch (PDOException $e) {
-                        exit('Database error: ' . $e->getMessage() . " [$sql]");
+                        
+                        trigger_error("Database error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
+                        exit();
+
                     }
                     
                     $objIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);

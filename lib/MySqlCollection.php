@@ -162,9 +162,14 @@ class MySqlCollection extends Collection
         if ($sth = $dbh->prepare($sql)) {
             
             try {
+                
                 $sth->execute($this->_limits["values"]);
+
             } catch (PDOException $e) {
-                exit('Database error: ' . $e->getMessage() . " [$sql]");
+
+                trigger_error("Database error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
+                exit();
+
             }
             
             $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
