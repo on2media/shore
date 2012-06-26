@@ -281,4 +281,8 @@ abstract class Collection implements Iterator
     {
         return count($this->_dataSet);
     }
+    
+    public function setTotal($total) {
+    	$this->_total = $total;
+    }
 }
