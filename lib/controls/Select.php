@@ -24,7 +24,10 @@ class SelectControl extends Control
         
         if ($options->fetchAll()->count() > 0) {
             
-            $field = sprintf("<select name=\"%s\">\n    <option value=\"0\">&nbsp;</option>", $this->_prefix . $this->_var);
+            $field = sprintf("<select name=\"%s\"%s>\n    <option value=\"0\">&nbsp;</option>",
+                $this->_prefix . $this->_var,
+                ($this->usingBootstrap() ? " class=\"input-xxlarge\"" : "")
+            );
             
             foreach ($options as $option) {
                 $field .= sprintf("    <option value=\"%s\"%s>%s</option>\n",
