@@ -140,7 +140,7 @@ abstract class Control
                 ($field == "" ? "&nbsp;" : $field),
                 ($this->_fieldSuffix == "" ? "" : sprintf("<span class=\"add-on\">%s</span>", $this->_fieldSuffix)),
                 ($this->_showValidation == TRUE && $this->getError()
-                    ? "<span class=\"help-inline\">" . htmlspecialchars($this->getError()) . "</span>\n"
+                    ? "<p class=\"help-block\">" . htmlspecialchars($this->getError()) . "</p>\n"
                     : ""
                 ),
                 ($this->_tip != NULL ? sprintf("<p class=\"help-block\">%s</p>", $this->_tip) : ""),
