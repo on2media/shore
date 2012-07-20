@@ -209,4 +209,9 @@ class SmartyView extends View
     {
         return ($timestamp ? date($format, $timestamp) : "");
     }
+
+    public function getSmarty()
+    {
+        return $this->_smarty;
+    }
 }
