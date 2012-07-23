@@ -303,7 +303,7 @@ class GridComponent extends Component {
 	}
 		
 	public function actions(Object $obj, $noDelete = FALSE, $page = 1, $perPage = 20) {
-		
+
 		$perPage = 20;
 		$obj->getCollection()->setPaginationPage($page, $perPage);
 		$obj->getCollection()->fetchAll();
@@ -312,7 +312,7 @@ class GridComponent extends Component {
 		$numDeleted = 0;
 		
 		if (($noDelete == FALSE && isset ($_POST["do"]) && $_POST["do"] == "Delete Selected") ||
-				($_POST["do"] == "Perform Bulk Action" && isset($_POST['gridBulkAction']) && $_POST['gridBulkAction'] == "delete")) {
+				(isset($_POST['gridBulkAction']) && $_POST['gridBulkAction'] == "delete")) {
 			
 			if (!isset($_POST["items"]) || !is_array($_POST["items"]) || count($_POST["items"]) == 0) {
 				
