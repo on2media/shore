@@ -13,6 +13,6 @@ class SmallInputControl extends InputControl
      */
     public function getSize()
     {
-        return 10;
+        return 16;
     }  
 }

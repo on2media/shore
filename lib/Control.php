@@ -226,7 +226,7 @@ abstract class Control
      */
     public function process(array $formData)
     {
-        $this->_showValidation = TRUE;
+        $this->setShowValidation(TRUE);
         
         if (!array_key_exists($this->_prefix . $this->_var, $formData)) {
             
@@ -239,6 +239,11 @@ abstract class Control
             $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var];
             
         }
+    }
+
+    public function setShowValidation($value)
+    {
+        $this->_showValidation = $value;
     }
     
     /**
