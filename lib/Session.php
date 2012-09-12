@@ -210,4 +210,18 @@ class Session
         }
         $this->setAllSessionFilters($sessionFilters);
     }
+    
+    public function getNamespaceFilters($namespace = null) {
+        $sessionFilters = $this->getAllSessionFilters();
+        if(
+                !is_null($sessionFilters[$namespace]) && 
+                is_array($sessionFilters[$namespace]) && 
+                (count($sessionFilters[$namespace]) > 0) &&
+                (!(count($sessionFilters[$namespace]) == 1 && $sessionFilters[$namespace]['page']))
+         ) {
+            return $sessionFilters[$namespace];
+        }else {
+            return null;
+        }
+    }
 }
