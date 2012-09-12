@@ -247,7 +247,8 @@ class GridComponent extends Component {
 			if (isset($_POST["do"] ) && $_POST["do"] == "Filter" && isset ($_POST["filter"] ) && is_array( $_POST["filter"])) {
 	
 				$filters = array();
-	
+	            
+				// grid filters
 				foreach ($_POST["filter"] as $pos => $value) {
 					if ($value != "" && $value !== "0")
 						$filters["f" . $pos] = trim($value);
@@ -275,27 +276,17 @@ class GridComponent extends Component {
 			}
 				
 			if (isset ($_POST["do"] ) && $_POST["do"] == "Clear Filter") {
-				
-				$sess = Session::getInstance();
-				$sess->unsetFilters();
-				
-				$allSessionFilters = $sess->getAllSessionFilters();
-				if($allSessionFilters || is_array($allSessionFilters)) {
-					$namespace = get_class($this->_controller);
-					if(isset($allSessionFilters[$namespace])) {
-						unset($allSessionFilters[$namespace]);
-					}
-				}else {
-					$allSessionFilters = array();
-				}						
-				
-				$sess->setAllSessionFilters($allSessionFilters);
+			    
+			    $sess = Session::getInstance();
+			    $sess->unsetFilters();
+			    $sess->removeNamespaceFilters(get_class($this->_controller));
 				$this->_controller->redirect( _BASE . _PAGE );
 			}
 				
 			$this->actions($obj, $noDelete, $page, $perPage);
 	
 		}
+		
 		$this->_controller->getView()->assign("session", Session::getInstance());
 		$this->_controller->getView()->assign("data", $obj);
 		$this->_controller->getView()->assign("page_title", $title);

@@ -200,4 +200,14 @@ class Session
         session_destroy();
         session_start();
     }
+    
+    public function removeNamespaceFilters($namespace = null) {
+        $sessionFilters = $this->getAllSessionFilters();
+        if($sessionFilters || is_array($sessionFilters)) {
+            if(isset($sessionFilters[$namespace])) {
+                unset($sessionFilters[$namespace]);
+            }
+        }
+        $this->setAllSessionFilters($sessionFilters);
+    }
 }
