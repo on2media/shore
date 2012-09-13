@@ -245,6 +245,11 @@ abstract class Control
     {
         $this->_showValidation = $value;
     }
+
+    public function getShowValidation()
+    {
+        return $this->_showValidation;
+    }
     
     /**
      *
