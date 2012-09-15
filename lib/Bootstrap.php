@@ -1,11 +1,12 @@
 <?php
-require_once('Utilities.php');
 /**
  * From here the site settings are defined before the execution is passed on to the relevant
  * controller class.
  *
  * @package core
  */
+
+require_once('utilities.php');
 
 // create a shorthand version the DIRECTORY_SEPARATOR constant
 if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
