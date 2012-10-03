@@ -126,9 +126,9 @@ abstract class Control
                 "    <div class=\"controls\">" .
                 "        %s" . // Add-ons Wrapper
                 "        %s%s%s\n" . // Prefix, Field, Suffix
+                "        %s" . // Add-ons Wrapper
                 "        %s" . // Validation
                 "        %s" . // Tip
-                "        %s" . // Add-ons Wrapper
                 "    </div>\n" .
                 "</div>\n",
 
@@ -139,12 +139,12 @@ abstract class Control
                 ($this->_fieldPrefix == "" ? "" : sprintf("<span class=\"add-on\">%s</span>", $this->_fieldPrefix)),
                 ($field == "" ? "&nbsp;" : $field),
                 ($this->_fieldSuffix == "" ? "" : sprintf("<span class=\"add-on\">%s</span>", $this->_fieldSuffix)),
+                ($addOns == "" ? "" : "</div>"),
                 ($this->_showValidation == TRUE && $this->getError()
                     ? "<p class=\"help-block\">" . htmlspecialchars($this->getError()) . "</p>\n"
                     : ""
                 ),
-                ($this->_tip != NULL ? sprintf("<p class=\"help-block\">%s</p>", $this->_tip) : ""),
-                ($addOns == "" ? "" : "</div>")
+                ($this->_tip != NULL ? sprintf("<p class=\"help-block\">%s</p>", $this->_tip) : "")
 
             );
 
