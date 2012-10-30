@@ -191,4 +191,9 @@ class SmartyView extends View
         
         return $this->_smarty->fetch($this->_template);
     }
+    
+    public function getSmarty()
+    {
+        return $this->_smarty;
+    }
 }
