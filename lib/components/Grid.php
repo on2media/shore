@@ -49,8 +49,15 @@ class GridComponent extends Component
                         switch ($filter) {
                             
                             case "freetext":
+
+                                $like = $filters["f".$pos];
+
+                                // if "strip" is set all whitespace is removed from the filter text
+                                if (array_key_exists("strip", $fieldSpec["on_grid"]) && $fieldSpec["on_grid"]["strip"] == TRUE) {
+                                    $like = preg_replace("/\s+/", "", $like);
+                                }
                                 
-                                $obj->getCollection()->setLimit($fieldName, "LIKE", "%" . $filters["f".$pos] . "%");
+                                $obj->getCollection()->setLimit($fieldName, "LIKE", "%" . $like . "%");
                                 break;
                             
                             case "dropdown":
