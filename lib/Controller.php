@@ -177,7 +177,7 @@ abstract class Controller
                 $options = $obj->getCollection();
                 
                 $options->setLimit($obj->citeField(), "LIKE", "%" . $search . "%");
-                $options->setPagination(0, 20);
+                //$options->setPagination(0, 20);
                 
                 foreach ($options->fetchAll() as $item) {
                     
