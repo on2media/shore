@@ -119,8 +119,8 @@ function classAutoloader($className)
         if (file_exists($filename) && include_once($filename)) return;
     }
     
-    throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
-    exit();
+    //throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
+    //exit();
 }
 
 spl_autoload_register('classAutoloader');
