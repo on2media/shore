@@ -113,18 +113,57 @@ abstract class Control
     {
         if ($field == "" && !$this->_showEmpty) return "";
         
-        $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s%s%s\n%s</p>\n",
-            htmlspecialchars($this->_heading),
-            ($this->_required ? "<em>*</em>" : ""),
-            ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
-            ($this->_fieldPrefix == "" ? "" : $this->_fieldPrefix . " "),
-            ($field == "" ? "&nbsp;" : $field),
-            ($this->_fieldSuffix == "" ? "" : " " . $this->_fieldSuffix),
-            ($this->_showValidation == TRUE && $this->getError()
-                ? "<" . CONTROL_ERROR_TAG . ">" . htmlspecialchars($this->getError()) . "</" . CONTROL_ERROR_TAG . ">\n"
-                : ""
-            )
-        );
+        if ($this->usingBootstrap()) {
+
+            $addOns = ($this->_fieldPrefix != "" ? " input-prepend" : "");
+            if ($this->_fieldSuffix != "") $addOns .= " input-append";
+            $addOns = trim($addOns);
+
+            $rtn = sprintf(
+                
+                "<div class=\"control-group%s\">\n" .
+                "    <label class=\"control-label\">%s%s</label>\n" . // Heading, Required
+                "    <div class=\"controls\">" .
+                "        %s" . // Add-ons Wrapper
+                "        %s%s%s\n" . // Prefix, Field, Suffix
+                "        %s" . // Add-ons Wrapper
+                "        %s" . // Validation
+                "        %s" . // Tip
+                "    </div>\n" .
+                "</div>\n",
+
+                ($this->_showValidation != TRUE ? "" : ($this->getError() ? " error" : " success")),
+                htmlspecialchars($this->_heading),
+                ($this->_required ? " <i class=\"icon-asterisk\"></i>" : ""),
+                ($addOns == "" ? "" : sprintf("<div class=\"%s\">", $addOns)),
+                ($this->_fieldPrefix == "" ? "" : sprintf("<span class=\"add-on\">%s</span>", $this->_fieldPrefix)),
+                ($field == "" ? "&nbsp;" : $field),
+                ($this->_fieldSuffix == "" ? "" : sprintf("<span class=\"add-on\">%s</span>", $this->_fieldSuffix)),
+                ($addOns == "" ? "" : "</div>"),
+                ($this->_showValidation == TRUE && $this->getError()
+                    ? "<p class=\"help-block\">" . htmlspecialchars($this->getError()) . "</p>\n"
+                    : ""
+                ),
+                ($this->_tip != NULL ? sprintf("<p class=\"help-block\">%s</p>", $this->_tip) : "")
+
+            );
+
+        } else {
+
+            $rtn = sprintf("<p>\n    <label>%s%s%s</label>\n    %s%s%s\n%s</p>\n",
+                htmlspecialchars($this->_heading),
+                ($this->_required ? "<em>*</em>" : ""),
+                ($this->_tip != NULL ? sprintf("<span class=\"tip\">%s</span>", $this->_tip) : ""),
+                ($this->_fieldPrefix == "" ? "" : $this->_fieldPrefix . " "),
+                ($field == "" ? "&nbsp;" : $field),
+                ($this->_fieldSuffix == "" ? "" : " " . $this->_fieldSuffix),
+                ($this->_showValidation == TRUE && $this->getError()
+                    ? "<" . CONTROL_ERROR_TAG . ">" . htmlspecialchars($this->getError()) . "</" . CONTROL_ERROR_TAG . ">\n"
+                    : ""
+                )
+            );
+
+        }
         
         return $rtn;
     }
@@ -187,7 +226,7 @@ abstract class Control
      */
     public function process(array $formData)
     {
-        $this->_showValidation = TRUE;
+        $this->setShowValidation(TRUE);
         
         if (!array_key_exists($this->_prefix . $this->_var, $formData)) {
             
@@ -200,6 +239,16 @@ abstract class Control
             $this->_obj->{$this->_var} = $formData[$this->_prefix . $this->_var];
             
         }
+    }
+
+    public function setShowValidation($value)
+    {
+        $this->_showValidation = $value;
+    }
+
+    public function getShowValidation()
+    {
+        return $this->_showValidation;
     }
     
     /**
@@ -304,5 +353,10 @@ abstract class Control
         }
         
         return TRUE;
+    }
+
+    public function usingBootstrap()
+    {
+        return (defined("USING_BOOTSTRAP") && USING_BOOTSTRAP == TRUE);
     }
 }

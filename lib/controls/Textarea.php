@@ -15,8 +15,9 @@ class TextareaControl extends Control
     {
         $func = "get" . var2func($this->_var);
         
-        $field = sprintf("<textarea name=\"%s\" cols=\"80\" rows=\"10\">%s</textarea>",
+        $field = sprintf("<textarea name=\"%s\" %s rows=\"10\">%s</textarea>",
             $this->_prefix . $this->_var,
+            ($this->usingBootstrap() ? "class=\"input-xxlarge\"" : "cols=\"80\""),
             htmlspecialchars($this->_obj->$func())
         );
         

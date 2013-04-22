@@ -18,14 +18,14 @@ class Session
      */
     private function __construct()
     {
-        session_set_save_handler( 
+        /*session_set_save_handler( 
             array(&$this, "sessionOpen"),
             array(&$this, "sessionClose"),
             array(&$this, "sessionRead"),
             array(&$this, "sessionWrite"),
             array(&$this, "sessionDestroy"),
             array(&$this, "sessionGarbageCollector")
-        );
+        );*/
         
         session_name(SESSION_NAME);
         session_start();
@@ -39,7 +39,7 @@ class Session
      * @access public
      * @static
      */
-    public static function &getInstance()
+    public static function getInstance()
     {
         static $instance;
         if (!is_object($instance)) $instance = new Session();
@@ -72,7 +72,7 @@ class Session
         if (substr($name, 0, 3) == "get") {
             
             $name = substr($name, 3);
-            if (isset($_SESSION[$name])) return $_SESSION[$name];
+            if (array_key_exists($name, $_SESSION)) return $_SESSION[$name];
             
         } else if (substr($name, 0, 5) == "unset") {
             
@@ -89,6 +89,7 @@ class Session
                     $name = substr($name, 3);
                     $_SESSION[$name] = $arguments[0];
                     return TRUE;
+
                 }
                 
             }

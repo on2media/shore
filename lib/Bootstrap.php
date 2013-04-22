@@ -76,6 +76,9 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "fpdf") . DS . "f
 // include FPDF
 require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "lessphp") . DS . "lessc.inc.php");
 
+// include Emogrifier
+require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "pelago") . DS . "emogrifier.php");
+
 // class autoloader
 function classAutoloader($className)
 {
@@ -118,8 +121,8 @@ function classAutoloader($className)
         if (file_exists($filename) && include_once($filename)) return;
     }
     
-    throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
-    exit();
+    //throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
+    //exit();
 }
 
 spl_autoload_register('classAutoloader');

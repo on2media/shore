@@ -32,7 +32,8 @@ class CheckboxesControl extends Control
         if ($options->count() > 0) {
             
             foreach ($options as $option) {
-                $field .= sprintf("    <label><input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s</label>\n",
+                $field .= sprintf("    <label%s><input type=\"checkbox\" name=\"%s[]\" value=\"%s\"%s /> %s</label>\n",
+                    ($this->usingBootstrap() ? " class=\"checkbox\"" : ""),
                     $this->_prefix . $this->_var,
                     $option->uid(),
                     (in_array($option->uid(), $checked_options) ? " checked=\"checked\"" : ""),
@@ -40,7 +41,7 @@ class CheckboxesControl extends Control
                 );
             }
             
-            $field = "<span class=\"cb_list\">\n" . $field . "</span>\n";
+            if (!$this->usingBootstrap()) $field = "<span class=\"cb_list\">\n" . $field . "</span>\n";
             
         }
         
