@@ -46,7 +46,7 @@ class SmartyView extends View
 
         $this->_smarty->registerPlugin("modifier", "date", array($this, "modifierDate"));
 
-        if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
+        // if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
         // compile check is TRUE by default
         if (IS_LIVE) $this->_smarty->compile_check = FALSE;
 
