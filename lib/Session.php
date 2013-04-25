@@ -18,14 +18,14 @@ class Session
      */
     private function __construct()
     {
-        /*session_set_save_handler( 
+        session_set_save_handler( 
             array(&$this, "sessionOpen"),
             array(&$this, "sessionClose"),
             array(&$this, "sessionRead"),
             array(&$this, "sessionWrite"),
             array(&$this, "sessionDestroy"),
             array(&$this, "sessionGarbageCollector")
-        );*/
+        );
         
         session_name(SESSION_NAME);
         session_start();
