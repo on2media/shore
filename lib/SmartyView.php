@@ -48,7 +48,7 @@ class SmartyView extends View
 
         // if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
         // compile check is TRUE by default
-        if (IS_LIVE) $this->_smarty->compile_check = FALSE;
+        // if (IS_LIVE) $this->_smarty->compile_check = FALSE;
 
         /*
         $security = new Smarty_Security($this->_smarty);
