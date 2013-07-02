@@ -283,7 +283,7 @@ abstract class Object
      */
     public function getControls($field=NULL)
     {
-        if (!is_array($this->_controls)) {
+        if (!is_array($this->_controls) && (is_array($this->_varTypes) && !empty($this->_varTypes)) ) {
             
             $session = Session::getInstance();
             
@@ -357,11 +357,14 @@ abstract class Object
     public function validate()
     {
         $errors = 0;
-        
-        foreach ($this->getControls() as $control) {
-            $errors += ($control->validate() ? 0 : 1);
-        }
-        
+
+		$controls = $this->getControls();
+		if(is_array($controls) && !empty($controls)) {
+	        foreach ($controls as $control) {
+	            $errors += ($control->validate() ? 0 : 1);
+	        }
+		}
+
         return ($errors == 0);
     }
     
@@ -428,17 +431,20 @@ abstract class Object
                     
                     $name = func2var(substr($name, 3));
                     
-                    foreach ($this->_varTypes as $varType) {
-                        if (array_key_exists($name, $this->$varType)) {
+                    if(isset($this->_varTypes) && !empty($this->_varTypes)) {
                             
-                            $vars =& $this->$varType;
-                            $vars[$name]["value"] = $arguments[0];
+	                    foreach ($this->_varTypes as $varType) {
+	                        if (array_key_exists($name, $this->$varType)) {
                             
-                            return TRUE;
+	                            $vars =& $this->$varType;
+	                            $vars[$name]["value"] = $arguments[0];
                             
-                        }
+	                            return TRUE;
+
+	                        }
+	                    }
                     }
-                    
+
                 }
                 
                 return FALSE;
