@@ -77,21 +77,23 @@ class Router
     public static function route()
     {
         $_this = Router::getInstance();
+		$routes = array();
+        if($_this && (isset($_this->_routes) && !empty($_this->_routes))) {
+	        foreach ($_this->_routes as $regexp => $route) {
 
-        foreach ($_this->_routes as $regexp => $route) {
+	            if (preg_match($regexp, _PAGE, $matches)) {
 
-            if (preg_match($regexp, _PAGE, $matches)) {
+	                $controllerClass = "{$route["controller"]}Controller";
 
-                $controllerClass = "{$route["controller"]}Controller";
+	                $controller = new $controllerClass();
+	                echo $controller->{$route["call"]}($matches);
+	                return;
 
-                $controller = new $controllerClass();
-                echo $controller->{$route["call"]}($matches);
-                return;
+	            }
 
-            }
-
+	        }
+	        $routes = $_this->_routes;
         }
-
-        exit("Unable to route the request through a controller");
+        exit("Unable to route the request through a controller: " . print_r($routes, true));
     }
 }
