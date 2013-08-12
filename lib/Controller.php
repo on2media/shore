@@ -25,6 +25,13 @@ abstract class Controller
     protected $_components = array();
     
     /**
+     * Error messages
+     *
+     * @var array
+     */
+    protected $_messages = array();
+    
+    /**
      * Class Constructor
      */
     public function __construct()
@@ -231,7 +238,16 @@ abstract class Controller
         flush();
     }
     
+    /**
+     * Get any error messages
+     *
+     * @return array
+     */
+    public function getMessages() {
+        return $this->_messages;
+    }
+
     public function __toString() {
-    	return get_class($this);
+        return get_class($this);
     }
 }

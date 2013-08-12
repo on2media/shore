@@ -12,21 +12,24 @@ abstract class MySqlViewObject extends MySqlObject
 {
     /**
      * Stores the table name for the model.
-     * 
-     * @var  string|null
+     *
+     * @var string|null
      */
     protected $_table = NULL;
-    
+
     /**
      *
      */
     protected $_gridrel = "";
-    
+
     /**
+     * Denotes array key names that point to
+     * model properties. Used in xxxxObject classes
      *
+     * @var array
      */
     protected $_varTypes = array("_fields");
-    
+
     /**
      * Defines a MySqlCollection to store a data set of records.
      */
@@ -35,7 +38,7 @@ abstract class MySqlViewObject extends MySqlObject
         $this->_collection = new MySqlCollection($this);
         $this->init();
     }
-    
+
     /**
      * Returns the MySQL table name.
      * @return  string
@@ -44,7 +47,7 @@ abstract class MySqlViewObject extends MySqlObject
     {
         return $this->_table;
     }
-    
+
     /**
      *
      */
@@ -52,15 +55,18 @@ abstract class MySqlViewObject extends MySqlObject
     {
         return $this->_gridrel;
     }
-    
+
     /**
+     * Save method for model objects
      *
+     * @param bool $inTransaction
+     * @return bool|int Boolean or last insert id
      */
     public function save()
     {
         throw new Exception("MySQL View Objects can't be created or updated.");
     }
-    
+
     /**
      *
      */
@@ -68,16 +74,19 @@ abstract class MySqlViewObject extends MySqlObject
     {
         throw new Exception("MySQL View Objects can't be deleted.");
     }
-    
+
     /**
      *
      */
     public function decryptCollection() {}
-    
+
     /**
+     * Check if object is new, i.e. for updating or inserting
      *
+     * @param bool $new|null
+     * @return bool
      */
-    public function isNew()
+    public function isNew($new=NULL)
     {
         return FALSE;
     }

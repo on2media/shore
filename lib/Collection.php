@@ -52,13 +52,36 @@ abstract class Collection implements Iterator
     protected $_total = 0;
 
     /**
+     * Model fields for object in collection
+     *
+     * @var array
+     * @see Any <Model>Object class
+     */
+    protected $_fields = NULL;
+
+    /**
+     * Model uid field for collection objects
+     *
+     * @var string
+     */
+    protected $_uidField = NULL;
+
+    /**
+     * Model table name for collection objects. Used
+     * when building SQL statement
+     *
+     * @var string
+     */
+    protected $_modelTable = NULL;
+
+    /**
      * Constructor.
      *
-     * @param  Object  $obj  Specify what model the collection is for.
+     * @param  Object $obj Specify what model the collection is for.
      */
     public function __construct(Object $obj)
     {
-        $this->_obj = clone($obj);
+        $this->_obj = $obj;
     }
 
     /**
@@ -67,6 +90,40 @@ abstract class Collection implements Iterator
     public function getObject()
     {
         return $this->_obj;
+    }
+
+    /**
+     * Set the Model fields for object in collection
+     *
+     * @param array $fields
+     */
+    public function setObjFields(array $fields = array())
+    {
+    	$this->_fields = $fields;
+    }
+
+    /**
+     * Set the Model's uid field name for collection object
+     *
+     * @param string $uidFieldName The name of the uid field
+     */
+    public function setUidField($uidFieldName)
+    {
+    	$this->_uidField = $uidFieldName;
+    }
+
+	public function getUidField()
+	{
+		return $this->_uidField;
+	}
+
+    /**
+     * Set the model table name for collection object
+     *
+     * @param string $tableName
+     */
+    public function setModelTable($tableName) {
+    	$this->_modelTable = $tableName;
     }
 
     /**
@@ -219,6 +276,7 @@ abstract class Collection implements Iterator
 
     /**
      *
+     * @param mixed Object
      */
     public function add(Object $obj)
     {

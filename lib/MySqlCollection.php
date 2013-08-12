@@ -10,6 +10,14 @@
  */
 class MySqlCollection extends Collection
 {
+
+	/**
+	 * Class name to use for collection objects
+	 *
+	 * @var string
+	 */
+	protected $_alternateClassName;
+
     /**
      * Stores the limits put in place using the setLimit() method.
      *
@@ -20,12 +28,34 @@ class MySqlCollection extends Collection
     /**
      * Calls the parent constructor, but forces the model to be a MySqlObject by utilising type
      * hinting.
+     *
+     * @param \MySqlObject $obj
      */
     public function __construct(MySqlObject $obj)
     {
-        parent::__construct($obj);
+		parent::__construct($obj);
     }
     
+    /**
+     * Set the class name that will make up object collections
+     *
+     * @param string $className
+     */
+    public function setAlternateClassName($className)
+    {
+		$this->_alternateClassName = $className;
+    }
+
+    /**
+     * Get the class name that will make up object collections
+     *
+     * @return string
+     */
+    public function getAlternateClassName()
+    {
+    	return $this->_alternateClassName;
+    }
+
     /**
      * Limits the records returned when the collection is fetched.
      *
@@ -78,7 +108,8 @@ class MySqlCollection extends Collection
     }
     
     /**
-     * Fetches the data set from the MySQL database.
+     * Fetches the data set from the MySQL database
+     *
      * @return MySqlCollection
      */
     public function fetchAll()
@@ -87,12 +118,29 @@ class MySqlCollection extends Collection
     }
     
     /**
+     * Get sql query string
      *
+     * @return string
      */
     public function getSql()
     {
-        $fields = $this->_obj->getObjFields();
+		// below used in new model layer mapper classes
         
+    	$fields = $this->_fields;
+    	$uidField = $this->_uidField;
+    	$modelTable = $this->_modelTable;
+    	if(empty($fields)) {
+        	$fields = $this->_obj->getObjFields();
+    	}
+
+    	if(empty($uidField)) {
+    		$uidField = (is_object($this->_obj) ? $this->_obj->uidField() : NULL); // uidfield can by NULL
+    	}
+
+    	if(empty($modelTable)) {
+    		$modelTable = $this->_obj->getTable();
+    	}
+
         // remove LOBs from fields
         foreach ($fields as $fieldName => $fieldSpec) {
             if (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE) {
@@ -101,25 +149,27 @@ class MySqlCollection extends Collection
         }
         
         $fieldNames = array_keys($fields);
-        
+
         return sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
-            get_class($this->_obj),
-            ($this->_obj->uidField() === NULL
+            (empty($this->_alternateClassName) ? get_class($this->_obj) : $this->_alternateClassName),
+            ($uidField === NULL
                 ? "@rank:=@rank+1"
-                : (substr($this->_obj->uidField(), 0, 1) == "*"
-                    ? substr($this->_obj->uidField(), 1)
-                    : "`" . $this->_obj->uidField() . "`"
+                : (substr($uidField, 0, 1) == "*"
+                    ? substr($uidField, 1)
+                    : "`" . $uidField . "`"
                 )
             ),
             "tbl." . implode(", tbl.", $fieldNames),
-            $this->_obj->getTable(),
+            $modelTable,
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );
+
     }
     
     /**
-     * Returns the SQL used to filter the data set.
-     * @return  string  Will return an empty string if no filters have been set.
+     * Returns the SQL used to filter the data set
+     *
+     * @return string Will return an empty string if no filters have been set.
      */
     protected function limitSql()
     {
@@ -127,8 +177,9 @@ class MySqlCollection extends Collection
     }
     
     /**
-     * Returns the SQL used to set the offset and limit the number of records to return.
-     * @return  string  Will return an empty string if no limits have been set.
+     * Returns the SQL used to set the offset and limit the number of records to return
+     *
+     * @return string Will return an empty string if no limits have been set.
      */
     protected function getPagination()
     {
@@ -141,7 +192,7 @@ class MySqlCollection extends Collection
     /**
      * Returns the SQL used to define the sort order.
      *
-     * @return  string
+     * @return string
      */
     public function getOrder()
     {
@@ -149,34 +200,32 @@ class MySqlCollection extends Collection
     }
     
     /**
-     * Fetches the filtered data set and sets the total number of records found.
-     * @param  string  $sql  The SQL to execute.
-     * @return  MySqlCollection
+     * Fetches the filtered data set and sets the total number of records found
+     *
+     * @param string $sql The SQL to execute.
+     * @return MySqlCollection
      */
     protected function fetchDataSet($sql)
     {
         $dbh = MySqlDatabase::getInstance();
 
-        if ($this->_obj->uidField() === NULL) $dbh->query("SET @rank=0");
+        if ((is_object($this->_obj) && $this->_obj->uidField() === NULL) || empty($this->_uidField)) $dbh->query("SET @rank=0");
         
         if ($sth = $dbh->prepare($sql)) {
             
             try {
-                
                 $sth->execute($this->_limits["values"]);
-
             } catch (PDOException $e) {
+                exit('Database error: ' . $e->getMessage() . " [$sql]");
+            } catch (Exception $e) {
+            	exit('Generic error: ' . $e->getMessage() . " [$sql]");
+			}
 
-                trigger_error("Database error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
-                exit();
-
-            }
-            
             $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
             
             if ($sth = $dbh->query("SELECT FOUND_ROWS()")) $this->_total = $sth->fetchColumn(0);
             
-            $this->_obj->decryptCollection();
+            //$this->_obj->decryptCollection();
             
             foreach ($this->_dataSet as $obj) $obj->isNew(FALSE);
             
