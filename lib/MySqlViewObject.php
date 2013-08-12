@@ -77,7 +77,7 @@ abstract class MySqlViewObject extends MySqlObject
     /**
      *
      */
-    public function isNew()
+    public function isNew($new=NULL)
     {
         return FALSE;
     }
