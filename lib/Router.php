@@ -10,6 +10,8 @@
  */
 class Router
 {
+	static $instance;
+
     /**
      * Array to store the connected routes.
      *
@@ -41,9 +43,8 @@ class Router
      */
     public static function &getInstance()
     {
-        static $instance;
-        if (!is_object($instance)) $instance = new Router();
-        return $instance;
+        if (!is_object(self::$instance)) self::$instance = new Router();
+        return self::$instance;
     }
 
     /**
@@ -78,7 +79,7 @@ class Router
     {
         $_this = Router::getInstance();
 		$routes = array();
-        if($_this && (isset($_this->_routes) && !empty($_this->_routes) && is_array($_this->_routes))) {
+        if($_this && (isset($_this->_routes) && !empty($_this->_routes))) {
 	        foreach ($_this->_routes as $regexp => $route) {
 
 	            if (preg_match($regexp, _PAGE, $matches)) {
