@@ -78,7 +78,7 @@ class Router
     {
         $_this = Router::getInstance();
 		$routes = array();
-        if($_this && (isset($_this->_routes) && !empty($_this->_routes))) {
+        if($_this && (isset($_this->_routes) && !empty($_this->_routes) && is_array($_this->_routes))) {
 	        foreach ($_this->_routes as $regexp => $route) {
 
 	            if (preg_match($regexp, _PAGE, $matches)) {
