@@ -211,7 +211,7 @@ abstract class MySqlObject extends Object
             if (!$sth->execute()) return FALSE;
 
         } catch (PDOException $e) {
-            trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
+            trigger_error("Database error: " . $e->getMessage() . ". SQL: [" . $sql . "]", E_USER_ERROR);
             exit();
         }
 
