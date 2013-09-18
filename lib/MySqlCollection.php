@@ -24,7 +24,7 @@ class MySqlCollection extends Collection
      * @var  array
      */
     protected $_limits = array("conditions" => array(), "values" => array());
-    
+
     /**
      * Calls the parent constructor, but forces the model to be a MySqlObject by utilising type
      * hinting.
@@ -212,7 +212,7 @@ class MySqlCollection extends Collection
         if ((is_object($this->_obj) && $this->_obj->uidField() === NULL) || empty($this->_uidField)) $dbh->query("SET @rank=0");
         
         if ($sth = $dbh->prepare($sql)) {
-            
+
             try {
                 $sth->execute($this->_limits["values"]);
             } catch (PDOException $e) {
@@ -222,13 +222,13 @@ class MySqlCollection extends Collection
 			}
 
             $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
-            
+
             if ($sth = $dbh->query("SELECT FOUND_ROWS()")) $this->_total = $sth->fetchColumn(0);
-            
-            //$this->_obj->decryptCollection();
-            
+
+            $this->_obj->decryptCollection();
+
             foreach ($this->_dataSet as $obj) $obj->isNew(FALSE);
-            
+
         }
         
         return $this;
