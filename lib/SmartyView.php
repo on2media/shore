@@ -198,7 +198,7 @@ class SmartyView extends View
             $this->assign("template", $this->_template);
             
             $content = $this->_smarty->fetch($this->_template);
-            $this->assign("content", $content);
+            @$this->assign("content", $content);
             
             return $this->_smarty->fetch($this->_layout);
             
