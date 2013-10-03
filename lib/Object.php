@@ -594,4 +594,13 @@ abstract class Object
 		return $this->_messages;
 	}
 
+	/**
+	 * Set any messages when updating or inserting
+	 *
+	 * @param array $messages
+	 */
+	public function setMessages(array $messages = array()) {
+		$this->_messages = $messages;
+	}
+
 }

@@ -76,4 +76,63 @@ class EditComponent extends Component
         
         return TRUE;
     }
+
+    public function validateObj(Object $obj, $uid, array $postData = array()) {
+
+//      if (!$data = ($uid == "new" ? $obj : $obj->fetchById($uid))) {
+
+//          $tpl = new SmartyView($this->_defaultLayout);
+//          $tpl->assign("page_title", "Invalid Identifier");
+//          $tpl->assign("status_alert", "Unable to match the identifier supplied to a dataset.");
+//          $this->_controller->setView($tpl);
+//          return FALSE;
+
+//      }
+
+        $data = $obj;
+
+        if ($_POST && !empty($postData)) {
+
+            foreach ($data->getControls() as $control) {
+                $control->process($postData);
+            }
+
+            $messages = array();
+            $dataValid = $data->validate();
+            foreach ($data->getControls() as $control) {
+                $error = $control->getError();
+                if(!empty($error)) {
+                    $messages[$control->getVar()] = $control->getError();
+                }
+            }
+            $obj->setMessages($messages);
+            //$customValid = ($this->_controller->validateCustomFields($data));
+
+            if (!$dataValid) {// || !$customValid) {
+                //var_dump($data->getMessages());exit;
+                return FALSE;
+
+            } else {
+
+                $dbh = MySqlDatabase::getInstance();
+                $dbh->beginTransaction();
+
+                if ($data->save(TRUE)) {// && ($this->_controller->saveCustomFields($data))) {
+
+                    $dbh->commit();
+                    return TRUE;
+
+                } else {
+
+                    $dbh->rollBack();
+                    return FALSE;
+
+                }
+
+            }
+
+        }
+
+        return FALSE;
+    }
 }

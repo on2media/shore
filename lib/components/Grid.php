@@ -7,8 +7,9 @@
  */
 class GridComponent extends Component {
     
+    protected $_viewTemplateName = 'admin.grid.tpl';
     
-    public function draw(Object $obj, $title, $addSimilar = FALSE, $noDelete = FALSE) {
+    public function draw(Object $obj, $title, $addSimilar = FALSE, $noDelete = FALSE, $uidsForSqlInClause = array()) {
         $filterStr = "";
         $filters = array ();
     
@@ -193,6 +194,9 @@ class GridComponent extends Component {
         
     
         $obj->getCollection()->setPaginationPage($page, $perPage);
+        if(!empty($uidsForSqlInClause)) {
+            $obj->getCollection()->setLimit('id', 'IN', $uidsForSqlInClause);
+        }
         $obj->getCollection()->fetchAll();
     
         $this->_controller->setView(new SmartyView($this->getView()));
@@ -372,10 +376,5 @@ class GridComponent extends Component {
         
         return $doneAction;
     
-    }
-    
-    public function getView()
-    {
-        return "admin.grid.tpl";
     }
 }
