@@ -63,3 +63,28 @@ function getUKPostcodeRegex($caseSensitive = false) {
 function stripInvalidStringChars($string, $antiPattern) {
 	return preg_replace('/ {2,}/',' ',preg_replace($antiPattern, '', $string));
 }
+
+function sendNotificationEmail(array $options = array()) {
+
+	$mailer = Swift_Mailer::newInstance(EmailMethod::getInstance());
+
+	$templateName = $options['templateName'];
+	$subject = $options['subject'];
+	$from = $options['from'];
+	$to = $options['to'];
+	$bcc = $options['bcc'];
+	$assign = $options['assign'];
+
+	$emailTpl = new SmartyView($templateName);
+	$emailTpl->assign_array($assign);
+
+	$message = Swift_Message::newInstance()
+	->setSubject($subject)
+	->setFrom($from)
+	->setTo($to)
+	->setBcc($bcc)
+	->setBody($emailTpl->output(), "text/html");
+
+	return $mailer->send($message);
+
+}
