@@ -138,8 +138,10 @@ class GridComponent extends Component {
                                 $obj->getCollection()->setOrder($fieldName . ($matches [2] == "a" ? " ASC" : " DESC"));
                             }
     
+                        }elseif ($obj->typeOf($fieldName) == "string") {
+                            $obj->getCollection()->setOrder($fieldName . ($matches[2] == "a" ? " ASC" : " DESC"));
                         }
-    
+
 
                         break;
                     }
