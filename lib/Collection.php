@@ -197,10 +197,14 @@ abstract class Collection implements Iterator
         $rtn = ($bootstrap == TRUE ? "<div class=\"pagination\"><ul>" : "<ul class=\"pagination clearfix\">");
         $gap = ($bootstrap == TRUE ? "<li class=\"disabled\"><a href=\"#\">&hellip;</a></li>" : "<li><span>&hellip;</span></li>");
 
-        if ($page > 1) $rtn .= "<li><a href=\"" . sprintf($url, ($page-1)) . "\">{$prev}</a></li>";
+        $urlcpy = str_replace("%d", (int)$page-1, $url);
+        if ($page > 1) $rtn .= sprintf("<li><a href=\"%s\">%s</a></li>", $urlcpy, $prev);
+
         if ($lastpage < (8+$adjacents)) {
+
             $rtn .= $this->paginateSection(1, $lastpage, $url, $page);
         } else {
+
             if ($page < (3+$adjacents)) {
                 $rtn .= $this->paginateSection(1, $i=(3+$adjacents), $url, $page);
             } else {
@@ -217,7 +221,9 @@ abstract class Collection implements Iterator
                 $rtn .= $this->paginateSection($lastpage-1, $lastpage, $url, $page);
             }
         }
-        if ($page < $lastpage) $rtn .= "<li><a href=\"" . sprintf($url, ($page+1)) . "\">{$next}</a></li>";
+
+        $urlcpy = str_replace("%d", (int)$page+1, $url);
+        if ($page < $lastpage) $rtn .= sprintf("<li><a href=\"%s\">%s</a></li>", $urlcpy, $next);
 
         return $rtn . "</ul>" . ($bootstrap == TRUE ? "</div>" : "");
     }
@@ -228,13 +234,9 @@ abstract class Collection implements Iterator
     protected function paginateSection($start, $end, $url, $currentPage)
     {
         $rtn = "";
-
         for ($i=$start; $i<=$end;$i++) {
-            $rtn .= sprintf("<li%s><a href=\"%s\">%d</a></li>\n",
-                ($currentPage == $i ? " class=\"active\"":""),
-                sprintf($url, $i),
-                $i
-            );
+        	$urlcpy = str_replace("%d", $i, $url);
+            $rtn .= sprintf("<li%s><a href=\"%s\">%d</a></li>\n", ($currentPage == $i ? " class=\"active\"":""), $urlcpy, $i);
         }
 
         return $rtn;
