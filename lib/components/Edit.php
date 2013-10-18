@@ -79,16 +79,6 @@ class EditComponent extends Component
 
     public function validateObj(Object $obj, $uid, array $postData = array()) {
 
-//      if (!$data = ($uid == "new" ? $obj : $obj->fetchById($uid))) {
-
-//          $tpl = new SmartyView($this->_defaultLayout);
-//          $tpl->assign("page_title", "Invalid Identifier");
-//          $tpl->assign("status_alert", "Unable to match the identifier supplied to a dataset.");
-//          $this->_controller->setView($tpl);
-//          return FALSE;
-
-//      }
-
         $data = $obj;
 
         if ($_POST && !empty($postData)) {
@@ -106,10 +96,8 @@ class EditComponent extends Component
                 }
             }
             $obj->setMessages($messages);
-            //$customValid = ($this->_controller->validateCustomFields($data));
 
-            if (!$dataValid) {// || !$customValid) {
-                //var_dump($data->getMessages());exit;
+            if (!$dataValid) {
                 return FALSE;
 
             } else {
@@ -117,7 +105,7 @@ class EditComponent extends Component
                 $dbh = MySqlDatabase::getInstance();
                 $dbh->beginTransaction();
 
-                if ($data->save(TRUE)) {// && ($this->_controller->saveCustomFields($data))) {
+                if ($data->save(TRUE)) {
 
                     $dbh->commit();
                     return TRUE;
