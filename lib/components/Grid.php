@@ -8,7 +8,9 @@
 class GridComponent extends Component {
     
     protected $_viewTemplateName = 'admin.grid.tpl';
-    
+
+    protected $_layoutTemplateName = 'layout.admin.tpl';
+
     public function draw(Object $obj, $title, $addSimilar = FALSE, $noDelete = FALSE, $uidsForSqlInClause = array()) {
         $filterStr = "";
         $filters = array ();
@@ -202,7 +204,7 @@ class GridComponent extends Component {
         $obj->getCollection()->fetchAll();
     
         $this->_controller->setView(new SmartyView($this->getView()));
-        $this->_controller->getView()->setLayout("layout.admin.tpl");
+        $this->_controller->getView()->setLayout($this->getLayoutTemplateName());
     
         $this->_controller->getView()->assign("filter_str", $filterStr);
         $this->_controller->getView()->assign("per_page", $perPage);

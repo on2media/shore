@@ -14,6 +14,8 @@ abstract class Component {
 	 */
 	protected $_viewTemplateName = '';
 
+	protected $_layoutTemplateName = '';
+
     /**
      *
      */
@@ -43,5 +45,13 @@ abstract class Component {
 
     public function setView($name) {
     	$this->_viewTemplateName = $name;
+    }
+
+    public function getLayoutTemplateName() {
+    	return $this->_layoutTemplateName;
+    }
+
+    public function setLayoutTemplateName($name) {
+    	$this->_layoutTemplateName = $name;
     }
 }
