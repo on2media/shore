@@ -184,4 +184,39 @@ class MySqlCollection extends Collection
         
         return $this;
     }
+
+    /**
+     * Fetch Count
+     *
+     * Simple function to count records for the MySqlCollection
+     *
+     * @return count of the number of records that match the given limits
+     */
+    public function fetchCount()
+    {
+        $sql = sprintf("SELECT COUNT(1) AS total FROM `%s` AS tbl %s",
+            $this->_obj->getTable(),
+            $this->limitSql() . $this->getPagination()
+        );
+
+        $dbh = MySqlDatabase::getInstance();
+
+        if ($sth = $dbh->prepare($sql)) {
+
+            try {
+
+                $sth->execute($this->_limits["values"]);
+                return $sth->fetchColumn(0);
+
+            } catch (PDOException $e) {
+
+                trigger_error("Database counting error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
+                exit();
+
+            }
+
+        }
+
+        return FALSE;
+    }
 }
