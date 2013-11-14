@@ -103,6 +103,11 @@ function classAutoloader($className)
             !in_array($className, array("MySqlObject", "MySqlViewObject", "MapObject", "SessionObject")) &&
             preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
         ):
+            $inc[] = _PATH . DIR_OBJECTS . DS . $matches[1] . ".php";
+            $inc[] = dirname(__FILE__) . DS . "objects" . DS . $matches[1] . ".php";
+            break;
+        
+        case (preg_match("/^([A-Za-z0-9]+)Model$/", $className, $matches)):
             $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
             $inc[] = dirname(__FILE__) . DS . "models" . DS . $matches[1] . ".php";
             break;
