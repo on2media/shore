@@ -104,6 +104,8 @@ function classAutoloader($className)
             preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
         ):
             $inc[] = _PATH . (defined("DIR_OBJECTS") ? DIR_OBJECTS : DIR_MODELS) . DS . $matches[1] . ".php";
+            if (defined("DIR_LIBRARIES")) $inc[] = _PATH . DIR_LIBRARIES . DS . $matches[1] . ".php";
+
             $inc[] = dirname(__FILE__) . DS . (defined("DIR_OBJECTS") ? "objects" : "models") . DS . $matches[1] . ".php";
             break;
         
