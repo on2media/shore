@@ -13,14 +13,14 @@ abstract class Object
     /**
      * Stores the associated collection.
      * 
-     * @var  Collection
+     * @var \Collection
      */
     protected $_collection;
     
     /**
      * Stores the model's data dictionary of fields, values and validation rules.
      * 
-     * @var  array
+     * @var array
      */
     protected $_fields = array();
     
@@ -37,7 +37,7 @@ abstract class Object
     /**
      * Stores the default sort order for a data set.
      *
-     * @var  string
+     * @var string
      */
     protected $_order = "";
     
@@ -67,6 +67,13 @@ abstract class Object
     protected $_controls = NULL;
     
     /**
+     * Any object messages, ie when saving, editing
+     *
+     * @var array
+     */
+	protected $_messages = array();
+
+    /**
      * Defines a Collection to store a data set of records.
      */
     public function __construct()
@@ -75,6 +82,16 @@ abstract class Object
         $this->init();
     }
     
+    /**
+     *
+     */
+    abstract public function save();
+
+    /**
+     *
+     */
+    abstract public function delete();
+
     /**
      *
      */
@@ -97,7 +114,10 @@ abstract class Object
     }
     
     /**
-     * Returns the first record from a data set by filtering by ID.
+     * Returns the first record from a data set by filtering by ID
+     *
+     * @param int $id The model uid
+     * @param string $className The model class name
      * @return  Object|boolean  Returns a model, or FALSE if the ID isn't found.
      */
     public function fetchById($id)
@@ -283,8 +303,7 @@ abstract class Object
      */
     public function getControls($field=NULL)
     {
-        if (!is_array($this->_controls)) {
-            
+        if (!is_array($this->_controls) && (is_array($this->_varTypes) && !empty($this->_varTypes)) ) {
             $session = Session::getInstance();
             
             if (defined("AUTH_MODEL")) {
@@ -357,11 +376,15 @@ abstract class Object
     public function validate()
     {
         $errors = 0;
-        
-        foreach ($this->getControls() as $control) {
-            $errors += ($control->validate() ? 0 : 1);
-        }
-        
+
+		$controls = $this->getControls();
+		if(is_array($controls) && !empty($controls)) {
+	        foreach ($controls as $control) {
+	            $errors += ($control->validate() ? 0 : 1);
+	            $this->_messages[$control->getVar()] = $control->getError();
+	        }
+		}
+
         return ($errors == 0);
     }
     
@@ -427,18 +450,20 @@ abstract class Object
                 if (array_key_exists(0, $arguments)) {
                     
                     $name = func2var(substr($name, 3));
-                    
-                    foreach ($this->_varTypes as $varType) {
-                        if (array_key_exists($name, $this->$varType)) {
+                    if(isset($this->_varTypes) && !empty($this->_varTypes)) {
                             
-                            $vars =& $this->$varType;
-                            $vars[$name]["value"] = $arguments[0];
+	                    foreach ($this->_varTypes as $varType) {
+	                        if (array_key_exists($name, $this->$varType)) {
                             
-                            return TRUE;
+	                            $vars =& $this->$varType;
+	                            $vars[$name]["value"] = $arguments[0];
                             
-                        }
+	                            return TRUE;
+
+	                        }
+	                    }
                     }
-                    
+
                 }
                 
                 return FALSE;
@@ -475,6 +500,14 @@ abstract class Object
     {
         return "(SELECT {$this->_cite} FROM {$this->_table} WHERE {$this->_table}.{$this->_uid} = tbl.{$foreign})";
     }
+
+    /**
+     *
+     */
+    public function citeField()
+    {
+        return $this->_cite;
+    }
     
     /**
      *
@@ -506,17 +539,7 @@ abstract class Object
         
         return $doc;
     }
-    
-    /**
-     *
-     */
-    abstract public function save();
-    
-    /**
-     *
-     */
-    abstract public function delete();
-    
+
     /**
      * Variable reading overload handler - uses the __call() method to fetch a variable within
      * the $this->_fields array.
@@ -552,4 +575,32 @@ abstract class Object
             }
         }
     }
+
+    /**
+     * Gets the default sort order for a data set
+     *
+     * @return string
+     */
+	public function getOrder() {
+		return $this->_order;
+	}
+
+	/**
+	 * Get any messages when updating or inserting
+	 *
+	 * @return array
+	 */
+	public function getMessages() {
+		return $this->_messages;
+	}
+
+	/**
+	 * Set any messages when updating or inserting
+	 *
+	 * @param array $messages
+	 */
+	public function setMessages(array $messages = array()) {
+		$this->_messages = $messages;
+	}
+
 }

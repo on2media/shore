@@ -18,12 +18,21 @@ abstract class Controller
     protected $_view = NULL;
     
     /**
-     *
+     * Component classes used by this controller
+     * 
+     * @var array
      */
     protected $_components = array();
     
     /**
+     * Error messages
      *
+     * @var array
+     */
+    protected $_messages = array();
+    
+    /**
+     * Class Constructor
      */
     public function __construct()
     {
@@ -96,7 +105,11 @@ abstract class Controller
     }
     
     /**
-     *
+     * Returns the elapsed time as a sentence
+     * 
+     * @param int $timestamp Unix Timestamp
+     * @param int|null $now 
+     * @return string
      */
     public static function relativeTime($timestamp, $now=NULL)
     {
@@ -112,7 +125,10 @@ abstract class Controller
     }
     
     /**
-     *
+     * Helper method for form upload error messages
+     * 
+     * @param int $error The code for the error
+     * @return string The error message relating to code
      */
     public static function uploadErrorMessage($error)
     {
@@ -140,9 +156,60 @@ abstract class Controller
         
         return "An unknown upload error occured.";
     }
+
+    /**
+     * Search helper method
+     * 
+     * @param array $mapping
+     */
+    public function handleSearchSelects(array $mapping=array())
+    {
+        if (array_key_exists("do", $_GET) && $_GET["do"] == "sslsearch") {
+            
+            if (!IS_LIVE) sleep(1);
+            
+            $rtn = new stdClass();
+            $rtn->status = "ERROR";
+            
+            $results = array();
+            
+            $field = (array_key_exists("field", $_GET) ? $_GET["field"] : "");
+            $search = (array_key_exists("search", $_GET) ? $_GET["search"] : "");
+            
+            if ($field != "" && $search != "" && array_key_exists($field, $mapping)) {
+
+                $className = $mapping[$field];
+                $obj = new $className();
+                
+                $options = $obj->getCollection();
+                
+                $options->setLimit($obj->citeField(), "LIKE", "%" . $search . "%");
+                //$options->setPagination(0, 20);
+                
+                foreach ($options->fetchAll() as $item) {
+                    
+                    $results[$item->uid()] = $item->cite();
+                    
+                }
+                
+                $rtn->status = "OK";
+                $rtn->results = $results;
+
+            }
+            
+            $this->setView(new JsonView($rtn));
+            return $this->output();
+            
+        }
+        
+        return FALSE;
+    }
     
     /**
-     *
+     * Helper method to print log execution information
+     * 
+     * @param string $message The message to display with information.
+     * @param bool $nl Where we are processing a new line.
      */
     public function progressLog($message, $nl=TRUE)
     {
@@ -169,5 +236,18 @@ abstract class Controller
         }
         
         flush();
+    }
+    
+    /**
+     * Get any error messages
+     *
+     * @return array
+     */
+    public function getMessages() {
+        return $this->_messages;
+    }
+
+    public function __toString() {
+        return get_class($this);
     }
 }

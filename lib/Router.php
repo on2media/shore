@@ -1,7 +1,7 @@
 <?php
 /**
  * Router Library
- * 
+ *
  * @package core
  */
 
@@ -10,14 +10,16 @@
  */
 class Router
 {
+	static $instance;
+
     /**
      * Array to store the connected routes.
-     * 
+     *
      * @access protected
      * @var array
      */
     protected $_routes = array();
-    
+
     /**
      * Constructor
      *
@@ -28,9 +30,9 @@ class Router
      */
     private function __construct()
     {
-        
+
     }
-    
+
     /**
      * Get Router Instance
      *
@@ -39,33 +41,30 @@ class Router
      * @access public
      * @static
      */
-    public static function &getInstance()
+    public static function getInstance()
     {
-        static $instance;
-        if (!is_object($instance)) $instance = new Router();
-        return $instance;
+        if (is_null(self::$instance)) self::$instance = new self();
+        return self::$instance;
     }
-    
+
     /**
      * Define a Route
      *
      * @access public
      * @static
-     * 
+     *
      * @param  string  $regexp      A regular expression of the URL for which this route is for
      * @param  string  $controller  Name of the controller to call
      * @param  string  $call        The method to call in the controller
      */
-    public static function connect($regexp, $controller, $call="list")
+    public function connect($regexp, $controller, $call="list")
     {
-        $_this = Router::getInstance();
-        
-        $_this->_routes[$regexp] = array(
-            "controller"  =>  $controller,
-            "call"        =>  $call
-        );
+    	$this->_routes[$regexp] = array(
+			"controller"  =>  $controller,
+			"call"        =>  $call
+    	);
     }
-    
+
     /**
      * Get Directions
      *
@@ -74,25 +73,22 @@ class Router
      * @access public
      * @static
      */
-    public static function route()
+    public function route()
     {
-        $_this = Router::getInstance();
-        
-        foreach ($_this->_routes as $regexp => $route) {
-            
-            if (preg_match($regexp, _PAGE, $matches)) {
-                
-                $controllerClass = "{$route["controller"]}Controller";
-                
-                $controller = new $controllerClass();
-                echo $controller->{$route["call"]}($matches);
-                return;
-                
-            }
-            
-        }
-        
-        throw new Exception("Unable to route the request through a controller");
-        exit();
+    	foreach ($this->_routes as $regexp => $route) {
+
+    		if (preg_match($regexp, _PAGE, $matches)) {
+
+    			$controllerClass = "{$route["controller"]}Controller";
+
+    			$controller = new $controllerClass();
+    			echo $controller->{$route["call"]}($matches);
+    			return;
+
+    		}
+
+    	}
+    	$routes = $this->_routes;
+        exit("Unable to route the request through a controller: " . print_r($routes, true));
     }
 }

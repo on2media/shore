@@ -90,6 +90,120 @@ window.addEvent('domready', function(){
             
         });
         
-    });    
+    });
+    
+    $$('.ssl_change').addEvent('click', function(e){
+
+        if (e) e.preventDefault();
+
+        if (this.getProperty('text') == 'Change') {
+
+            this.setProperty('text', 'Cancel');
+            this.getParent('.ssl_wrapper').getElement('.ssl_search').setStyle('display', 'block');
+
+         } else {
+
+            this.setProperty('text', 'Change');
+            this.getParent('.ssl_wrapper').getElement('.ssl_search').setStyle('display', 'none');
+
+         }
+
+    });
+
+    $$('.ssl_search input').addEvent('keydown', function(e){
+
+        if (e && e.key == 'enter') {
+            e.preventDefault();
+            this.getNext('.ssl_searchbutton').fireEvent('click');
+        }
+
+    });
+
+    $$('.ssl_searchbutton').addEvent('click', function(e){
+        
+        if (e) e.preventDefault();
+
+        var wrapper = this.getParent('.ssl_wrapper');
+        
+        var searchInput = this.getPrevious('input');
+        
+        if (searchInput) {
+            
+            var q = searchInput.getProperty('value');
+            var name = searchInput.getProperty('name').substr('search__'.length);
+            
+            if (q.length < 3) {
+                
+                alert('Enter at least 3 characters to search!');
+                
+            } else {
+                
+                var target = this.getNext('.ssl_searchresult');
+
+                if (target) {
+
+                    target.empty();
+                    target.setStyle('display', 'none');
+                
+                    var loading = this.getNext('.ssl_loading');
+                    if (loading) loading.setProperty('text', 'Please Wait…');
+                    
+                    new Request.JSON({
+                        url: window.location.href,
+                        method: 'get',
+                        data: {
+                            'do': 'sslsearch',
+                            'field': name,
+                            'search': q
+                        },
+                        noCache: true,
+                        onSuccess: function(response, text){
+                            
+                            if (loading) loading.empty();
+
+                            var json = new Hash(response || {});
+                            
+                            if ((json.get('status') == 'OK') && json.get('results') && target) {
+                                
+                                target.setStyle('display', 'block');
+
+                                var results = new Hash(json.get('results'));
+                                
+                                results.each(function(value, key){
+                                    
+                                    new Element('label', {
+                                        'data-id': key,
+                                        'text': value,
+                                        'events': {
+                                            'click': function(e){
+                                                
+                                                var cb = wrapper.getElement('input[type=checkbox]');
+                                                var cite = wrapper.getElement('.ssl_cite');
+
+                                                cb.setProperty('value', this.getProperty('data-id'));
+                                                cb.setProperty('checked', 'checked');
+                                                cite.setProperty('text', this.getProperty('text'));
+
+                                                target.setStyle('display', 'none');
+                                                wrapper.getElement('.ssl_change').fireEvent('click');
+                                                
+                                            }
+                                        }
+                                    }).inject(target);
+                                    
+                                });
+                                
+                            }
+                            
+                        }
+                    }).send();
+
+                }
+                
+            }
+            
+        }
+        
+    });
     
 });

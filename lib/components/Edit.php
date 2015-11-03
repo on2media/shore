@@ -76,4 +76,51 @@ class EditComponent extends Component
         
         return TRUE;
     }
+
+    public function validateObj(Object $obj, $uid, array $postData = array()) {
+
+        $data = $obj;
+
+        if ($_POST && !empty($postData)) {
+
+            foreach ($data->getControls() as $control) {
+                $control->process($postData);
+            }
+
+            $messages = array();
+            $dataValid = $data->validate();
+            foreach ($data->getControls() as $control) {
+                $error = $control->getError();
+                if(!empty($error)) {
+                    $messages[$control->getVar()] = $control->getError();
+                }
+            }
+            $obj->setMessages($messages);
+
+            if (!$dataValid) {
+                return FALSE;
+
+            } else {
+
+                $dbh = MySqlDatabase::getInstance();
+                $dbh->beginTransaction();
+
+                if ($data->save(TRUE)) {
+
+                    $dbh->commit();
+                    return TRUE;
+
+                } else {
+
+                    $dbh->rollBack();
+                    return FALSE;
+
+                }
+
+            }
+
+        }
+
+        return FALSE;
+    }
 }

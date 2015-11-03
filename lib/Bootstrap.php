@@ -6,6 +6,8 @@
  * @package core
  */
 
+require_once('utilities.php');
+
 // create a shorthand version the DIRECTORY_SEPARATOR constant
 if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
 
@@ -147,41 +149,3 @@ $maxLifetime = (defined("SESSION_TIMEOUT") ? SESSION_TIMEOUT : 3600 ); // an hou
 $session = Session::getInstance();
 if ($session->getLastActivity() && (time() - $session->getLastActivity()) > $maxLifetime) $session->respawn();
 $session->setLastActivity(time());
-
-/**
- * This function converts a variable name in the format foo_bar into the corresponding function
- * name FooBar.
- *
- * @param  string  $str  The variable name to convert
- * @return string
- */
-function var2func($str)
-{
-    return preg_replace_callback("/_([a-z])/", "chrToUpper", ucfirst(strtolower($str)));
-}
-
-function chrToUpper($chr)
-{
-    return strtoupper($chr[1]);
-}
-
-/**
- * This function converts a function name in the format FooBar into the corresponding variable
- * name foo_bar.
- *
- * @param  string  $str  The function name to convert
- * @return string
- */
-function func2var($str)
-{
-    $str[0] = strtolower($str[0]);
-    return strtolower(preg_replace("/([A-Z])/", "_$1", $str));
-}
-
-/**
- *
- */
-function var2label($var)
-{
-    return trim(preg_replace("/([A-Z])/", " $1", var2func($var)));
-}

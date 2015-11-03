@@ -46,7 +46,9 @@ class SmartyView extends View
 
         $this->_smarty->registerPlugin("modifier", "date", array($this, "modifierDate"));
 
-        if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
+        // if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
+        // compile check is TRUE by default
+        // if (IS_LIVE) $this->_smarty->compile_check = FALSE;
 
         /*
         $security = new Smarty_Security($this->_smarty);
@@ -151,9 +153,9 @@ class SmartyView extends View
      *
      * @see Smarty::assign()
      */
-    public function assign($tpl_var, $value=NULL, $nocache=FALSE)
+    public function assign($tpl_var, $value=NULL, $nocache=FALSE, $scope=SMARTY_LOCAL_SCOPE)
     {
-        $this->_smarty->assign($tpl_var, $value, $nocache);
+        $this->_smarty->assign($tpl_var, $value, $nocache, $scope);
     }
     
     /**
@@ -196,7 +198,7 @@ class SmartyView extends View
             $this->assign("template", $this->_template);
             
             $content = $this->_smarty->fetch($this->_template);
-            $this->assign("content", $content);
+            @$this->assign("content", $content);
             
             return $this->_smarty->fetch($this->_layout);
             
