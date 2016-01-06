@@ -20,6 +20,8 @@ if (!defined("CONTROL_ERROR_TAG")) define("CONTROL_ERROR_TAG", "small");
 // set the default timezone
 date_default_timezone_set(DEFAULT_TIMEZONE);
 
+ini_set('session.save_path', dirname(__FILE__) . DS . 'cache' . DS . 'sessions');
+
 // empty the session bin more often (1 in 10 chance)
 ini_set("session.gc_probability", 1);
 ini_set("session.gc_divisor", 10);

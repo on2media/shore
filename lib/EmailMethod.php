@@ -22,7 +22,10 @@ class EmailMethod
                
             } else {
                
-                $transport = Swift_MailTransport::newInstance();
+                $transport = Swift_SmtpTransport::newInstance("smtp.gmail.com", 465, 'ssl')
+                    ->setUsername("***")
+                    ->setPassword("***")
+                ;
                
             }
            
