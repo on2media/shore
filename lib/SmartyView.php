@@ -126,6 +126,11 @@ class SmartyView extends View
      */
     public function setLayout($layout=NULL, $path=NULL)
     {
+        if (substr($layout, 0, strlen('string:')) == 'string:') {
+            $this->_layout = $layout;
+            return;
+        }
+        
         if ($layout != NULL && $path != NULL) {
             
             $layout = $path . $layout;
