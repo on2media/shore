@@ -16,20 +16,20 @@ class SmartyView extends View
      * @var Smarty|null
      */
     protected $_smarty = NULL;
-    
+
     /**
      * Stores the template filename.
      * @var  string
      */
     protected $_template = "";
-    
+
     /**
      * Stores the layout template filename.
      *
      * @var string|null
      */
     protected $_layout = NULL;
-    
+
     /**
      * Initiates a Smarty instance and configures it. Sets the template to use and assigns any
      * variables stored in the session and any global variables (e.g. _BASE and _PAGE).
@@ -39,7 +39,7 @@ class SmartyView extends View
     public function __construct($template, $dir="")
     {
         @header("Content-Type: text/html;charset=utf-8");
-        
+
         $this->_smarty = new Smarty();
         $this->_smarty->error_reporting = E_ALL ^ E_NOTICE;
         $this->_smarty->disableSecurity();
@@ -56,23 +56,23 @@ class SmartyView extends View
         $security->php_modifiers = array();
         $this->_smarty->enableSecurity($security);
         */
-        
+
         if ($dir != "" && substr($dir, -1) != DS) $dir .= DS;
-        
+
         if ($dir != "" && defined("DIR_USERVIEWS")) {
             $this->_smarty->setTemplateDir(array("pinnacle" => DIR_USERVIEWS . DS . $dir));
         } else {
             $this->_smarty->setTemplateDir(array("pinnacle" => DIR_VIEWS . DS . $dir));
         }
-        
+
         $base = realpath(dirname(__FILE__)) . DS;
-        
+
         $this->_smarty->compile_dir   =  $base . "cache" . DS . "smarty_compiled" . DS;
         $this->_smarty->config_dir    =  $base . "cache" . DS . "smarty_configs" . DS;
         $this->_smarty->cache_dir     =  $base . "cache" . DS . "smarty_cache" . DS;
-        
+
         $this->setTemplate($template);
-        
+
         $this->assign_array(array(
             "base"        =>  _BASE,
             "base_http"   =>  _BASE_HTTP,
@@ -80,16 +80,16 @@ class SmartyView extends View
             "here"        =>  _PAGE,
             "admin"       =>  (defined("ADMIN_URL") ? ADMIN_URL ."/" : "")
         ));
-        
+
         $session = Session::getInstance();
         $this->assign("current_user", $session->getUser());
-        
+
         $session = Session::getInstance();
         if ($session->getSmarty() && is_array($session->getSmarty())) {
             $this->assign_array($session->getSmarty());
         }
     }
-    
+
     /**
      * Defines the template to use.
      *
@@ -102,10 +102,10 @@ class SmartyView extends View
         } else {
             $template = _PATH . $this->_smarty->getTemplateDir("pinnacle") . $template;
         }
-        
+
         $this->_template = $template;
     }
-    
+
     /**
      *
      */
@@ -113,7 +113,7 @@ class SmartyView extends View
     {
         return $this->_template;
     }
-    
+
     /**
      * Defines the layout to use. A layout is wrapped around the template. The layout template
      * should contain a {$content} variable where the template content should be inserted.
@@ -130,20 +130,20 @@ class SmartyView extends View
             $this->_layout = $layout;
             return;
         }
-        
+
         if ($layout != NULL && $path != NULL) {
-            
+
             $layout = $path . $layout;
-            
+
         } else if ($layout != NULL && !file_exists($this->_smarty->getTemplateDir("pinnacle") . $layout)) {
-            
+
             $layout = realpath(dirname(__FILE__)) . DS . "views" . DS . $layout;
-            
+
         }
-        
+
         $this->_layout = $layout;
     }
-    
+
     /**
      * Returns the layout template.
      * @return  string|null  Returns the layout template filename or NULL if no layout is set.
@@ -152,17 +152,17 @@ class SmartyView extends View
     {
         return $this->_layout;
     }
-    
+
     /**
      * Calls Smarty's assign() method to assign a variable to the template.
      *
      * @see Smarty::assign()
      */
-    public function assign($tpl_var, $value=NULL, $nocache=FALSE, $scope=SMARTY_LOCAL_SCOPE)
+    public function assign($tpl_var, $value=NULL, $nocache=FALSE)
     {
-        $this->_smarty->assign($tpl_var, $value, $nocache, $scope);
+        $this->_smarty->assign($tpl_var, $value, $nocache);
     }
-    
+
     /**
      * Assigns an array of variables to the template.
      *
@@ -172,7 +172,7 @@ class SmartyView extends View
     {
         foreach ($array as $key => $value) $this->_smarty->assign($key, $value);
     }
-    
+
     /**
      * Assigns a variable to the session so that it is available to the next template that is
      * initiated.
@@ -187,7 +187,7 @@ class SmartyView extends View
         $vars[$key] = $value;
         $session->setSmarty($vars);
     }
-    
+
     /**
      * Returns the processed template or layout.
      *
@@ -197,18 +197,18 @@ class SmartyView extends View
     {
         $session = Session::getInstance();
         $session->unsetSmarty();
-        
+
         if ($this->_layout != NULL) {
-            
+
             $this->assign("template", $this->_template);
-            
+
             $content = $this->_smarty->fetch($this->_template);
             @$this->assign("content", $content);
-            
+
             return $this->_smarty->fetch($this->_layout);
-            
+
         }
-        
+
         return $this->_smarty->fetch($this->_template);
     }
 

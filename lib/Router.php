@@ -10,8 +10,6 @@
  */
 class Router
 {
-	static $instance;
-
     /**
      * Array to store the connected routes.
      *
@@ -41,10 +39,11 @@ class Router
      * @access public
      * @static
      */
-    public static function getInstance()
+    public static function &getInstance()
     {
-        if (is_null(self::$instance)) self::$instance = new self();
-        return self::$instance;
+        static $instance;
+        if (!is_object($instance)) $instance = new Router();
+        return $instance;
     }
 
     /**
@@ -57,12 +56,14 @@ class Router
      * @param  string  $controller  Name of the controller to call
      * @param  string  $call        The method to call in the controller
      */
-    public function connect($regexp, $controller, $call="list")
+    public static function connect($regexp, $controller, $call="list")
     {
-    	$this->_routes[$regexp] = array(
-			"controller"  =>  $controller,
-			"call"        =>  $call
-    	);
+        $_this = Router::getInstance();
+
+        $_this->_routes[$regexp] = array(
+            "controller"  =>  $controller,
+            "call"        =>  $call
+        );
     }
 
     /**
@@ -73,22 +74,25 @@ class Router
      * @access public
      * @static
      */
-    public function route()
+    public static function route()
     {
-    	foreach ($this->_routes as $regexp => $route) {
+        $_this = Router::getInstance();
 
-    		if (preg_match($regexp, _PAGE, $matches)) {
+        foreach ($_this->_routes as $regexp => $route) {
 
-    			$controllerClass = "{$route["controller"]}Controller";
+            if (preg_match($regexp, _PAGE, $matches)) {
 
-    			$controller = new $controllerClass();
-    			echo $controller->{$route["call"]}($matches);
-    			return;
+                $controllerClass = "{$route["controller"]}Controller";
 
-    		}
+                $controller = new $controllerClass();
+                echo $controller->{$route["call"]}($matches);
+                return;
 
-    	}
-    	$routes = $this->_routes;
-        exit("Unable to route the request through a controller: " . print_r($routes, true));
+            }
+
+        }
+
+        throw new Exception("Unable to route the request through a controller");
+        exit();
     }
 }
