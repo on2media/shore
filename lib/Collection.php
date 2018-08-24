@@ -268,9 +268,17 @@ abstract class Collection implements Iterator
      */
     abstract public function fetchAll();
 
-    /**
-     *
-     */
+    public function getPreviousPageNumber()
+    {
+        $rtn = $this->_start / $this->_range;
+        return ($rtn == 0 ? null : $rtn);
+    }
+
+    public function getNextPageNumber()
+    {
+        $rtn = ($this->_start / $this->_range) + 2;
+        return ($rtn > ceil($this->_total / $this->_range) ? null : $rtn);
+    }
     public function getTotal()
     {
         return $this->_total;
