@@ -60,10 +60,16 @@ class SmartyView extends View
         if ($dir != "" && substr($dir, -1) != DS) $dir .= DS;
 
         if ($dir != "" && defined("DIR_USERVIEWS")) {
-            $this->_smarty->setTemplateDir(array("pinnacle" => DIR_USERVIEWS . DS . $dir));
+            $this->_smarty->setTemplateDir(array("app" => DIR_USERVIEWS . DS . $dir));
         } else {
-            $this->_smarty->setTemplateDir(array("pinnacle" => DIR_VIEWS . DS . $dir));
+            $this->_smarty->setTemplateDir(array("app" => DIR_VIEWS . DS . $dir));
         }
+
+        $this->_smarty->addTemplateDir(
+            [
+                'shore' => realpath(dirname(__FILE__)) . DS . "views" . DS,
+            ]
+        );
 
         $base = realpath(dirname(__FILE__)) . DS;
 
@@ -97,13 +103,13 @@ class SmartyView extends View
      */
     public function setTemplate($template)
     {
-        if (!file_exists($this->_smarty->getTemplateDir("pinnacle") . $template)) {
-            $template = realpath(dirname(__FILE__)) . DS . "views" . DS . $template;
+        if (file_exists($this->_smarty->getTemplateDir('app') . $template)) {
+            $prefix = '[app]';
         } else {
-            $template = _PATH . $this->_smarty->getTemplateDir("pinnacle") . $template;
+            $prefix = '[shore]';
         }
 
-        $this->_template = $template;
+        $this->_template = 'file:' . $prefix . $template;
     }
 
     /**
@@ -135,13 +141,14 @@ class SmartyView extends View
 
             $layout = $path . $layout;
 
-        } else if ($layout != NULL && !file_exists($this->_smarty->getTemplateDir("pinnacle") . $layout)) {
-
-            $layout = realpath(dirname(__FILE__)) . DS . "views" . DS . $layout;
-
+        } else if ($layout != NULL &&
+            !file_exists($this->_smarty->getTemplateDir("app") . $layout)) {
+            $layout = '[shore]' . $layout;
+        } else {
+            $layout = '[app]' . $layout;
         }
 
-        $this->_layout = $layout;
+        $this->_layout = 'file:' . $layout;
     }
 
     /**

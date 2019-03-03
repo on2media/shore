@@ -66,21 +66,6 @@ if (strpos(_PAGE, ".") === FALSE && _PAGE != "" && substr(_PAGE, -1) != "/") {
     exit();
 }
 
-// include Smarty
-require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "smarty") . DS . "Smarty.class.php");
-
-// include Swift Mailer
-require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "swift") . DS . "swift_required.php");
-
-// include FPDF
-require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "fpdf") . DS . "fpdf.php");
-
-// include FPDF
-require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "lessphp") . DS . "lessc.inc.php");
-
-// include Emogrifier
-require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "pelago") . DS . "emogrifier.php");
-
 // class autoloader
 function classAutoloader($className)
 {

@@ -1,1 +1,2 @@
-.svn
+/lib/cache/*/*.php
+/lib/cache/sessions/sess_*
