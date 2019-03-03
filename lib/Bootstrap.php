@@ -6,8 +6,6 @@
  * @package core
  */
 
-require_once('utilities.php');
-
 // create a shorthand version the DIRECTORY_SEPARATOR constant
 if (!defined("DS")) define("DS", DIRECTORY_SEPARATOR);
 
