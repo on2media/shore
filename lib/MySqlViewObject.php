@@ -76,11 +76,6 @@ abstract class MySqlViewObject extends MySqlObject
     }
 
     /**
-     *
-     */
-    public function decryptCollection() {}
-
-    /**
      * Check if object is new, i.e. for updating or inserting
      *
      * @param bool $new|null

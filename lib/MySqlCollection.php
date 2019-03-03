@@ -100,8 +100,8 @@ class MySqlCollection extends Collection
         } else {
             
             $this->_limits["conditions"][] = $field . " " . $condition . " ?";
-            $this->_limits["values"][] = ($value instanceof Object ? $value->uid() : $value);
-            
+            $this->_limits["values"][] = ($value instanceof ShoreObject ? $value->uid() : $value);
+
         }
         
         return TRUE;
@@ -224,8 +224,6 @@ class MySqlCollection extends Collection
             $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
 
             if ($sth = $dbh->query("SELECT FOUND_ROWS()")) $this->_total = $sth->fetchColumn(0);
-
-            $this->_obj->decryptCollection();
 
             foreach ($this->_dataSet as $obj) $obj->isNew(FALSE);
 

@@ -42,7 +42,7 @@ class SOAPComponent extends Component
     /**
      *
      */
-    public function verify(Object $obj)
+    public function verify(ShoreObject $obj)
     {
         if (!$obj->validate()) {
             
@@ -63,14 +63,14 @@ class SOAPComponent extends Component
 
     /**
     * Finds the foreign key UID from the $field value
-    * 
-    * @param  Object
+    *
+    * @param  ShoreObject
     * @param  string
     * @param  string
     * @param  boolean
     * @return int
     */
-    public function getForeignKey(Object $obj, $data, $field=NULL, $lookup=TRUE)
+    public function getForeignKey(ShoreObject $obj, $data, $field=NULL, $lookup=TRUE)
     {
         $isId = (is_numeric($data) || $field === NULL);
         

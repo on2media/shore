@@ -8,7 +8,7 @@
 /**
  * MySQL Object abstract class
  */
-abstract class MySqlObject extends Object
+abstract class MySqlObject extends ShoreObject
 {
     /**
      * Stores the table name for the model.
@@ -140,15 +140,9 @@ abstract class MySqlObject extends Object
                 } elseif ($value === NULL) {
                     $value = "";
                 }
-                
-                if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE && $value != NULL) {
-                    $values[] = base64_encode(mcrypt_encrypt(
-                        MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, $value, MCRYPT_MODE_ECB
-                    ));
-                } else {
-                    $values[] = $value;
-                }
-                
+
+                $values[] = $value;
+
                 $lobs[] = (isset($fieldSpec["lob"]) && $fieldSpec["lob"] == TRUE);
                 
             }
@@ -502,33 +496,7 @@ abstract class MySqlObject extends Object
     {
         return (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
     }
-    
-    /**
-     * Decrypt collection
-     *
-     * @return void
-     */
-    public function decryptCollection()
-    {
-        foreach ($this->_fields as $fieldName => $fieldSpec) {
-            
-            if (isset($fieldSpec["encrypt"]) && $fieldSpec["encrypt"] == TRUE) {
-                
-                foreach ($this->_collection as $obj) {
-                    
-                    if ($obj->$fieldName != NULL) {
-                        $obj->$fieldName = trim(mcrypt_decrypt(
-                            MCRYPT_RIJNDAEL_128, ENCRYPTION_SALT, base64_decode($obj->$fieldName), MCRYPT_MODE_ECB
-                        ));
-                    }
-                    
-                }
-                
-            }
-            
-        }
-    }
-    
+
     /**
      * Check if object is new, i.e. for updating or inserting
      *

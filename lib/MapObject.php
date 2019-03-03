@@ -8,7 +8,7 @@
 /**
  * Map Object abstract class
  */
-abstract class MapObject extends Object
+abstract class MapObject extends ShoreObject
 {
     /**
      *

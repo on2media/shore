@@ -77,9 +77,9 @@ abstract class Collection implements Iterator
     /**
      * Constructor.
      *
-     * @param  Object $obj Specify what model the collection is for.
+     * @param  ShoreObject $obj Specify what model the collection is for.
      */
-    public function __construct(Object $obj)
+    public function __construct(ShoreObject $obj)
     {
         $this->_obj = $obj;
     }
@@ -286,9 +286,9 @@ abstract class Collection implements Iterator
 
     /**
      *
-     * @param mixed Object
+     * @param mixed ShoreObject
      */
-    public function add(Object $obj)
+    public function add(ShoreObject $obj)
     {
         $this->_dataSet[] = $obj;
     }

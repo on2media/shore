@@ -8,7 +8,7 @@
 /**
  * Object abstract class
  */
-abstract class Object
+abstract class ShoreObject
 {
     /**
      * Stores the associated collection.
@@ -118,7 +118,7 @@ abstract class Object
      *
      * @param int $id The model uid
      * @param string $className The model class name
-     * @return  Object|boolean  Returns a model, or FALSE if the ID isn't found.
+     * @return ShoreObject|boolean  Returns a model, or FALSE if the ID isn't found.
      */
     public function fetchById($id)
     {
@@ -259,7 +259,7 @@ abstract class Object
             
             $rtn = $rtn->{$rtn->uidField()};
             
-        } while ($rtn instanceof Object);
+        } while ($rtn instanceof ShoreObject);
         
         return $rtn;
     }
@@ -437,7 +437,7 @@ abstract class Object
                         // do nothing - template handles boolean values
                     
                     case "object":
-                        if ($value instanceof Object) {
+                        if ($value instanceof ShoreObject) {
                             return $value->cite();
                         }
                     
@@ -488,7 +488,7 @@ abstract class Object
     public function cite($escape=TRUE)
     {
         $rtn = $this->{$this->_cite};
-        if ($rtn instanceof Object) $rtn = $rtn->cite(FALSE);
+        if ($rtn instanceof ShoreObject) $rtn = $rtn->cite(FALSE);
         
         return ($escape == TRUE ? htmlspecialchars($rtn) : $rtn);
     }

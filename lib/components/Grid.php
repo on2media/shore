@@ -11,7 +11,7 @@ class GridComponent extends Component {
 
     protected $_layoutTemplateName = 'layout.admin.tpl';
 
-    public function draw(Object $obj, $title, $addSimilar = FALSE, $noDelete = FALSE, $uidsForSqlInClause = array()) {
+    public function draw(ShoreObject $obj, $title, $addSimilar = FALSE, $noDelete = FALSE, $uidsForSqlInClause = array()) {
         $filterStr = "";
         $filters = array ();
     
@@ -317,8 +317,8 @@ class GridComponent extends Component {
         $this->_controller->getView()->assign("page_title", $title);
     
     }
-        
-    public function actions(Object $obj, $noDelete = FALSE, $page = 1, $perPage = 20) {
+
+    public function actions(ShoreObject $obj, $noDelete = FALSE, $page = 1, $perPage = 20) {
 
         $obj->getCollection()->setPaginationPage($page, $perPage);
         $obj->getCollection()->fetchAll();

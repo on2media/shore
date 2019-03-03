@@ -68,7 +68,7 @@ class ObjectField
     /**
      *
      */
-    public function __construct(Object $obj, $name, &$spec)
+    public function __construct(ShoreObject $obj, $name, &$spec)
     {
         $this->_obj = $obj;
         
@@ -139,10 +139,10 @@ class ObjectField
             }
             
             $outputNode = $doc->createTextNode($outputValue);
-            
-            
-        } else if ($outputValue instanceof Object) { // Object
-            
+
+
+        } else if ($outputValue instanceof ShoreObject) { // Object
+
             $foreign = $outputValue->toXml($laconic);
             $x = $foreign->getElementsByTagName("*")->item(0);
             

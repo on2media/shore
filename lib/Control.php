@@ -80,7 +80,7 @@ abstract class Control
 
     /**
      *
-     * @param Object $obj
+     * @param ShoreObject $obj
      */
     public function __construct($obj, $prefix, $var, $fieldSpec = array())
     {

@@ -11,7 +11,7 @@ class EditComponent extends Component
     /**
      *
      */
-    public function draw(Object $obj, $uid, $title, $hasCustomFields=FALSE, $addSimilar=FALSE)
+    public function draw(ShoreObject $obj, $uid, $title, $hasCustomFields=FALSE, $addSimilar=FALSE)
     {
         if (!$data = ($uid == "new" ? $obj : $obj->fetchById($uid))) {
             
@@ -77,7 +77,7 @@ class EditComponent extends Component
         return TRUE;
     }
 
-    public function validateObj(Object $obj, $uid, array $postData = array()) {
+    public function validateObj(ShoreObject $obj, $uid, array $postData = array()) {
 
         $data = $obj;
 
