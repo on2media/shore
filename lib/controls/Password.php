@@ -17,44 +17,44 @@ class PasswordControl extends Control
         "Confirm Password: <input type=\"password\" name=\"%1\$s[]\" value=\"\" size=\"30\" />",
             $this->_prefix . $this->_var
         );
-        
+
         return $this->getWrapper($field);
     }
-    
+
     /**
      *
      */
     public function process(array $formData)
     {
         if (isset($formData[$this->_prefix . $this->_var])) {
-            
+
             $value =& $formData[$this->_prefix . $this->_var];
-            
+
             if (!is_array($value)) {
-                
+
                 $value = FALSE;
                 $this->_error = "Unexpected password value.";
-                
+
             } else {
-                
+
                 $unique = array_unique($value);
                 $value = reset($value);
-                
+
                 if (count($unique) != 1) $this->_error = "The passwords entered did not match.";
-                
+
                 if ($value == "") {
                     $value = $this->_obj->{$this->_var};
                 } else {
                     $value = $this->hash($value);
                 }
-                
+
             }
-            
+
         }
-        
+
         return parent::process($formData);
     }
-    
+
     /**
      *
      */

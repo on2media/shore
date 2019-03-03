@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class TextView extends View
 {
@@ -12,7 +12,7 @@ class TextView extends View
      *
      */
     protected $_text = array();
-    
+
     /**
      *
      */
@@ -21,7 +21,7 @@ class TextView extends View
         @header("Content-Type: text/plain;charset=utf-8");
         $this->_text = $text;
     }
-    
+
     /**
      *
      */

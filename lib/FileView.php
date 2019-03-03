@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class FileView extends View
 {
@@ -12,17 +12,17 @@ class FileView extends View
      *
      */
     protected $_mime = FALSE;
-    
+
     /**
      *
      */
     protected $_filename = FALSE;
-    
+
     /**
      *
      */
     protected $_data = "\0x";
-    
+
     /**
      *
      */
@@ -31,7 +31,7 @@ class FileView extends View
         ini_set("session.cache_limiter", "private_no_expire");
         @header("Content-Description: File Transfer");
     }
-    
+
     /**
      *
      */
@@ -39,7 +39,7 @@ class FileView extends View
     {
         $this->_mime = $mime;
     }
-    
+
     /**
      *
      */
@@ -47,7 +47,7 @@ class FileView extends View
     {
         $this->_filename = $filename;
     }
-    
+
     /**
      *
      */
@@ -55,7 +55,7 @@ class FileView extends View
     {
         $this->_data = $data;
     }
-    
+
     /**
      *
      */
@@ -67,7 +67,7 @@ class FileView extends View
             $this->_filename
         ));
         @header("Content-Length: " . strlen($this->_data));
-        
+
         return $this->_data;
     }
 }

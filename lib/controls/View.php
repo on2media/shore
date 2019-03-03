@@ -17,7 +17,7 @@ class ViewControl extends Control
         $field = htmlspecialchars($this->_obj->$func());
         return $this->getWrapper($field);
     }
-    
+
     /**
      *
      */

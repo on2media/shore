@@ -35,7 +35,7 @@ class MySqlCollection extends Collection
     {
 		parent::__construct($obj);
     }
-    
+
     /**
      * Set the class name that will make up object collections
      *
@@ -70,43 +70,43 @@ class MySqlCollection extends Collection
     public function setLimit($field, $condition, $value)
     {
         $field = (substr($field, 0, 1) == "*" ? substr($field, 1) : "`" . $field . "`");
-        
+
         if ((strtoupper($condition) == "IN" || strtoupper($condition) == "NOT IN")) {
-            
+
             if (is_array($value)) {
-                
+
                 if (count($value) == 0) return FALSE;
-                
+
                 $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
                 " (" . substr(str_repeat("?, ", count($value)), 0, -strlen(", ")) . ")";
-                
+
                 foreach ($value as $inValue) $this->_limits["values"][] = $inValue;
-                
+
             } else if ($value instanceof Collection) {
-                
+
                 if ($value->count() == 0) return FALSE;
-                
+
                 $this->_limits["conditions"][] = $field . " " . strtoupper($condition) .
                 " (" . substr(str_repeat("?, ", $value->count()), 0, -strlen(", ")) . ")";
-                
+
                 foreach ($value as $inValue) $this->_limits["values"][] = $inValue->uid();
-                
+
             } else {
-                
+
                 return FALSE;
-                
+
             }
-            
+
         } else {
-            
+
             $this->_limits["conditions"][] = $field . " " . $condition . " ?";
             $this->_limits["values"][] = ($value instanceof ShoreObject ? $value->uid() : $value);
 
         }
-        
+
         return TRUE;
     }
-    
+
     /**
      * Fetches the data set from the MySQL database
      *
@@ -116,7 +116,7 @@ class MySqlCollection extends Collection
     {
         return $this->fetchDataSet($this->getSql());
     }
-    
+
     /**
      * Get sql query string
      *
@@ -125,7 +125,7 @@ class MySqlCollection extends Collection
     public function getSql()
     {
 		// below used in new model layer mapper classes
-        
+
     	$fields = $this->_fields;
     	$uidField = $this->_uidField;
     	$modelTable = $this->_modelTable;
@@ -147,7 +147,7 @@ class MySqlCollection extends Collection
                 unset($fields[$fieldName]);
             }
         }
-        
+
         $fieldNames = array_keys($fields);
 
         return sprintf("SELECT SQL_CALC_FOUND_ROWS '%s' AS PDOclass, %s AS PDOid, %s FROM `%s` AS tbl %s",
@@ -165,7 +165,7 @@ class MySqlCollection extends Collection
         );
 
     }
-    
+
     /**
      * Returns the SQL used to filter the data set
      *
@@ -175,7 +175,7 @@ class MySqlCollection extends Collection
     {
         return (count($this->_limits["conditions"]) > 0 ? " WHERE " . implode(" AND ", $this->_limits["conditions"]) : "");
     }
-    
+
     /**
      * Returns the SQL used to set the offset and limit the number of records to return
      *
@@ -188,7 +188,7 @@ class MySqlCollection extends Collection
         }
         return "";
     }
-    
+
     /**
      * Returns the SQL used to define the sort order.
      *
@@ -198,7 +198,7 @@ class MySqlCollection extends Collection
     {
         return " ORDER BY " . $this->_order;
     }
-    
+
     /**
      * Fetches the filtered data set and sets the total number of records found
      *
@@ -210,7 +210,7 @@ class MySqlCollection extends Collection
         $dbh = MySqlDatabase::getInstance();
 
         if ((is_object($this->_obj) && $this->_obj->uidField() === NULL) || empty($this->_uidField)) $dbh->query("SET @rank=0");
-        
+
         if ($sth = $dbh->prepare($sql)) {
 
             try {
@@ -228,7 +228,7 @@ class MySqlCollection extends Collection
             foreach ($this->_dataSet as $obj) $obj->isNew(FALSE);
 
         }
-        
+
         return $this;
     }
 

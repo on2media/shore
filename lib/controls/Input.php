@@ -14,7 +14,7 @@ class InputControl extends Control
     public function output()
     {
         $func = "get" . var2func($this->_var);
-        
+
         $field = sprintf("<input type=\"text\" name=\"%s\" value=\"%s\"%s />",
             $this->_prefix . $this->_var,
             htmlspecialchars(($this->_obj->$func() instanceof ShoreObject ? $this->_obj->$func()->uid() : $this->_obj->$func())),
@@ -23,10 +23,10 @@ class InputControl extends Control
                 : sprintf(" size=\"%d\"", $this->getSize())
             )
         );
-        
+
         return $this->getWrapper($field);
     }
-    
+
     /**
      *
      */
@@ -37,7 +37,7 @@ class InputControl extends Control
         }
         return parent::process($formData);
     }
-    
+
     /**
      *
      */
@@ -58,7 +58,7 @@ class InputControl extends Control
         if ($this->getSize() < 40) return "input-medium";
         if ($this->getSize() < 60) return "input-large";
         if ($this->getSize() < 80) return "input-xlarge";
-        
+
         return "input-xxlarge";
     }
 }

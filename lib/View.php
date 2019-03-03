@@ -10,5 +10,5 @@
  */
 abstract class View
 {
-    
+
 }

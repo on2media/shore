@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class Session
 {
@@ -26,11 +26,11 @@ class Session
         //     array(&$this, "sessionDestroy"),
         //     array(&$this, "sessionGarbageCollector")
         // );
-        
+
         session_name(SESSION_NAME);
         session_start();
     }
-    
+
     /**
      * Get Session Instance
      *
@@ -45,7 +45,7 @@ class Session
         if (!is_object($instance)) $instance = new Session();
         return $instance;
     }
-    
+
     /**
      *
      */
@@ -54,7 +54,7 @@ class Session
         $func = "get" . var2func($name);
         return $this->$func();
     }
-    
+
     /**
      *
      */
@@ -63,41 +63,41 @@ class Session
         $func = "set" . var2func($name);
         return $this->$func($value);
     }
-    
+
     /**
      *
      */
     public function __call($name, $arguments)
     {
         if (substr($name, 0, 3) == "get") {
-            
+
             $name = substr($name, 3);
             if (array_key_exists($name, $_SESSION)) return $_SESSION[$name];
-            
+
         } else if (substr($name, 0, 5) == "unset") {
-            
+
             $name = substr($name, 5);
             unset($_SESSION[$name]);
             return TRUE;
-            
+
         } else {
-            
+
             if (isset($arguments) && is_array($arguments) && isset($arguments[0])) {
-                
+
                 if (substr($name, 0, 3) == "set" && (isset($arguments[0]) || is_null($arguments[0]))) {
-                    
+
                     $name = substr($name, 3);
                     $_SESSION[$name] = $arguments[0];
                     return TRUE;
 
                 }
-                
+
             }
         }
-        
+
         return FALSE;
     }
-    
+
     /**
      *
      */
@@ -105,7 +105,7 @@ class Session
     {
         return TRUE;
     }
-    
+
     /**
      *
      */
@@ -113,7 +113,7 @@ class Session
     {
         return TRUE;
     }
-    
+
     /**
      *
      */
@@ -123,10 +123,10 @@ class Session
         if ($session = $sessionObj->fetchById($id)) {
             return (string)$session->getData();
         }
-        
+
         return "";
     }
-    
+
     /**
      *
      */
@@ -137,13 +137,13 @@ class Session
             $session = new SessionObject();
             $session->setId($id);
         }
-        
+
         $session->setData($data);
         $session->setLastModified(time());
-        
+
         return $session->save();
     }
-    
+
     /**
      *
      */
@@ -153,17 +153,17 @@ class Session
         if ($session = $sessionObj->fetchById($id)) {
             return $session->delete();
         }
-        
+
         return FALSE;
     }
-    
+
     /**
      *
      */
     public function sessionGarbageCollector($maxlifetime=NULL)
     {
         if ($maxlifetime === NULL) $maxlifetime = ini_get("session.gc_maxlifetime");
-        
+
         $sessionObj = new SessionObject();
         $sessions = $sessionObj->getCollection();
 
@@ -173,10 +173,10 @@ class Session
         		$session->delete();
         	}
         }
-        
+
         return TRUE;
     }
-    
+
     /**
      *
      */
@@ -184,26 +184,26 @@ class Session
     {
         @session_write_close();
     }
-    
+
     /**
      *
      */
     public function respawn()
     {
         $_SESSION = array();
-        
+
         if (ini_get("session.use_cookies")) {
-            
+
             // Remove session cookie
             $params = session_get_cookie_params();
             setcookie(session_name(), "", time() - 3600, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-            
+
         }
-        
+
         session_destroy();
         session_start();
     }
-    
+
     public function removeNamespaceFilters($namespace = null) {
         $sessionFilters = $this->getAllSessionFilters();
         if($sessionFilters || is_array($sessionFilters)) {
@@ -213,12 +213,12 @@ class Session
         }
         $this->setAllSessionFilters($sessionFilters);
     }
-    
+
     public function getNamespaceFilters($namespace = null) {
         $sessionFilters = $this->getAllSessionFilters();
         if(
-                !is_null($sessionFilters[$namespace]) && 
-                is_array($sessionFilters[$namespace]) && 
+                !is_null($sessionFilters[$namespace]) &&
+                is_array($sessionFilters[$namespace]) &&
                 (count($sessionFilters[$namespace]) > 0) &&
                 (!(count($sessionFilters[$namespace]) == 1 && $sessionFilters[$namespace]['page']))
          ) {

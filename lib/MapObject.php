@@ -14,7 +14,7 @@ abstract class MapObject extends ShoreObject
      *
      */
     protected $_values = array();
-    
+
     /**
      * Defines an ArrayCollection to store a data set of records.
      */
@@ -23,7 +23,7 @@ abstract class MapObject extends ShoreObject
         $this->_collection = new MapCollection($this);
         $this->init();
     }
-    
+
     /**
      *
      */
@@ -31,7 +31,7 @@ abstract class MapObject extends ShoreObject
     {
         return $this->_values;
     }
-    
+
     /**
      *
      */
@@ -39,7 +39,7 @@ abstract class MapObject extends ShoreObject
     {
         throw new Exception("Map Objects can't be created or updated.");
     }
-    
+
     /**
      *
      */

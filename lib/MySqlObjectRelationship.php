@@ -8,5 +8,5 @@
  */
 class MySqlObjectRelationship extends ObjectField
 {
-    
+
 }

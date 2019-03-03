@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class JsonView extends View
 {
@@ -12,7 +12,7 @@ class JsonView extends View
      *
      */
     protected $_json = array();
-    
+
     /**
      *
      */
@@ -21,7 +21,7 @@ class JsonView extends View
         @header("Content-Type: application/json;charset=utf-8");
         $this->_json = $data;
     }
-    
+
     /**
      *
      */

@@ -3,9 +3,9 @@
 </p>
 
 <form action="./logout/" method="get">
-    
+
     <p>
         <input type="submit" value="Logout" />
-    </p>    
-    
+    </p>
+
 </form>

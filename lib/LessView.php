@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class LessView extends View
 {
@@ -12,12 +12,12 @@ class LessView extends View
      *
      */
     protected $_less = array();
-    
+
     /**
      *
      */
     protected $_dir = FALSE;
-    
+
     /**
      *
      */
@@ -27,7 +27,7 @@ class LessView extends View
         $this->_less = $styles;
         if ($dir) $this->_dir = $dir;
     }
-    
+
     /**
      *
      */
@@ -36,13 +36,13 @@ class LessView extends View
         $lc = new lessc();
         if ($this->_dir) $lc->importDir = $this->_dir;
         $rtn = $lc->parse($this->_less);
-        
+
         return (IS_LIVE ? $this->minify($rtn) : $rtn);
     }
-    
+
     /**
      * Minify the CSS (based on Joe Scylla's ccsmin class)
-     * 
+     *
      * @see http://code.google.com/p/cssmin/
      */
     protected function minify($styles)

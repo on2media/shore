@@ -4,7 +4,7 @@
  */
 
 /**
- * 
+ *
  */
 class XmlView extends View
 {
@@ -12,7 +12,7 @@ class XmlView extends View
      *
      */
     protected $_xml = array();
-    
+
     /**
      *
      */
@@ -21,7 +21,7 @@ class XmlView extends View
         @header("Content-Type: text/xml;charset=utf-8");
         $this->_xml = $xml;
     }
-    
+
     /**
      *
      */

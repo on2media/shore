@@ -85,24 +85,24 @@ require_once(realpath(dirname(__FILE__) . DS . "vendor" . DS . "pelago") . DS . 
 function classAutoloader($className)
 {
     $inc = array();
-    
+
     switch (TRUE) {
-        
+
         case (preg_match("/^([A-Za-z0-9]+)Controller$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLLERS . DS . $matches[1] . ".php";
             $inc[] = dirname(__FILE__) . DS . "controllers" . DS . $matches[1] . ".php";
             break;
-        
+
         case (preg_match("/^([A-Za-z0-9]+)Component$/", $className, $matches)):
             $inc[] = _PATH . DIR_COMPONENTS . DS . $matches[1] . ".php";
             $inc[] = dirname(__FILE__) . DS . "components" . DS . $matches[1] . ".php";
             break;
-        
+
         case (preg_match("/^([A-Za-z0-9]+)Control$/", $className, $matches)):
             $inc[] = _PATH . DIR_CONTROLS . DS . $matches[1] . ".php";
             $inc[] = dirname(__FILE__) . DS . "controls" . DS . $matches[1] . ".php";
             break;
-        
+
         case (
             !in_array($className, array("ShoreObject", "MySqlObject", "MySqlViewObject", "MapObject", "SessionObject")) &&
             preg_match("/^([A-Za-z0-9]+)Object$/", $className, $matches)
@@ -112,7 +112,7 @@ function classAutoloader($className)
 
             $inc[] = dirname(__FILE__) . DS . (defined("DIR_OBJECTS") ? "objects" : "models") . DS . $matches[1] . ".php";
             break;
-        
+
         case (
             defined("DIR_OBJECTS") &&
             preg_match("/^([A-Za-z0-9]+)Model$/", $className, $matches)
@@ -120,19 +120,19 @@ function classAutoloader($className)
             $inc[] = _PATH . DIR_MODELS . DS . $matches[1] . ".php";
             $inc[] = dirname(__FILE__) . DS . "models" . DS . $matches[1] . ".php";
             break;
-        
+
         default:
             if (defined("DIR_USERAPP")) $inc[] = _PATH . DIR_USERAPP . DS . $className . ".php";
             $inc[] = _PATH . DIR_APP . DS . $className . ".php";
             $inc[] = dirname(__FILE__) . DS . $className . ".php";
             break;
-        
+
     }
-    
+
     foreach ($inc as $filename) {
         if (file_exists($filename) && include_once($filename)) return;
     }
-    
+
     //throw new Exception("Class autoloading failed for '" . htmlspecialchars($className) . "'");
     //exit();
 }
