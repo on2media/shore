@@ -6,17 +6,17 @@
         <title>{$page_title|escape} &laquo; Admin</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <link rel="stylesheet" type="text/css" href="{$base}core/assets/admin.css" />
-        <link rel="stylesheet" type="text/css" href="{$base}core/assets/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}shore-assets/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}shore-assets/datepicker.css" />
 
         <script type="text/javascript">var base = '{$base}';</script>
 
-        <script type="text/javascript" src="{$base}core/assets/vendor/tiny_mce/tiny_mce.js"></script>
+        <script type="text/javascript" src="{$base}shore-assets/vendor/tiny_mce/tiny_mce.js"></script>
         <script type="text/javascript" src="{$base}assets/editor.js"></script>
 
-        <script type="text/javascript" src="{$base}core/assets/moo-core.js"></script>
-        <script type="text/javascript" src="{$base}core/assets/datepicker.js"></script>
-        <script type="text/javascript" src="{$base}core/assets/admin.js"></script>
+        <script type="text/javascript" src="{$base}shore-assets/moo-core.js"></script>
+        <script type="text/javascript" src="{$base}shore-assets/datepicker.js"></script>
+        <script type="text/javascript" src="{$base}shore-assets/admin.js"></script>
 
     </head>
 

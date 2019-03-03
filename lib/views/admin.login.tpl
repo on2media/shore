@@ -5,7 +5,7 @@
 
         <title>{$page_title|escape} &laquo; Admin</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="{$base}core/assets/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$base}shore-assets/admin.css" />
 
     </head>
 

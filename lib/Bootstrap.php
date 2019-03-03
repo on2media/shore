@@ -26,19 +26,6 @@ ini_set('session.save_path', dirname(__FILE__) . DS . 'cache' . DS . 'sessions')
 ini_set("session.gc_probability", 1);
 ini_set("session.gc_divisor", 10);
 
-// remove the effects of magic quotes if they're turned on
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-    function stripMagicQuotes($var)
-    {
-        return (is_array($var) ? array_map('stripMagicQuotes', $var) : stripslashes($var));
-    }
-
-    $_GET     = stripMagicQuotes($_GET);
-    $_POST    = stripMagicQuotes($_POST);
-    $_COOKIE  = stripMagicQuotes($_COOKIE);
-    $_REQUEST = stripMagicQuotes($_REQUEST);
-}
-
 // automatically define some system variables - paths and urls
 if (!defined("_PATH")) define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
 

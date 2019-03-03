@@ -133,9 +133,9 @@
                                 {capture assign=td}
                                     {if $row->$func()|is_bool}
                                         {if $row->$func() == true}
-                                            <img src="{$base}core/assets/img/ico/tick.png" width="16" height="16" alt="Yes" />
+                                            <img src="{$base}shore-assets/img/ico/tick.png" width="16" height="16" alt="Yes" />
                                         {else}
-                                            <img src="{$base}core/assets/img/ico/cross.png" width="16" height="16" alt="No" />
+                                            <img src="{$base}shore-assets/img/ico/cross.png" width="16" height="16" alt="No" />
                                         {/if}
                                     {else}
                                         {$row->$func()}
