@@ -71,7 +71,7 @@ abstract class ShoreObject
      *
      * @var array
      */
-	protected $_messages = array();
+    protected $_messages = array();
 
     /**
      * Defines a Collection to store a data set of records.
@@ -377,13 +377,13 @@ abstract class ShoreObject
     {
         $errors = 0;
 
-		$controls = $this->getControls();
-		if(is_array($controls) && !empty($controls)) {
-	        foreach ($controls as $control) {
-	            $errors += ($control->validate() ? 0 : 1);
-	            $this->_messages[$control->getVar()] = $control->getError();
-	        }
-		}
+        $controls = $this->getControls();
+        if(is_array($controls) && !empty($controls)) {
+            foreach ($controls as $control) {
+                $errors += ($control->validate() ? 0 : 1);
+                $this->_messages[$control->getVar()] = $control->getError();
+            }
+        }
 
         return ($errors == 0);
     }
@@ -452,16 +452,16 @@ abstract class ShoreObject
                     $name = func2var(substr($name, 3));
                     if(isset($this->_varTypes) && !empty($this->_varTypes)) {
 
-	                    foreach ($this->_varTypes as $varType) {
-	                        if (array_key_exists($name, $this->$varType)) {
+                        foreach ($this->_varTypes as $varType) {
+                            if (array_key_exists($name, $this->$varType)) {
 
-	                            $vars =& $this->$varType;
-	                            $vars[$name]["value"] = $arguments[0];
+                                $vars =& $this->$varType;
+                                $vars[$name]["value"] = $arguments[0];
 
-	                            return TRUE;
+                                return TRUE;
 
-	                        }
-	                    }
+                            }
+                        }
                     }
 
                 }
@@ -581,26 +581,26 @@ abstract class ShoreObject
      *
      * @return string
      */
-	public function getOrder() {
-		return $this->_order;
-	}
+    public function getOrder() {
+        return $this->_order;
+    }
 
-	/**
-	 * Get any messages when updating or inserting
-	 *
-	 * @return array
-	 */
-	public function getMessages() {
-		return $this->_messages;
-	}
+    /**
+     * Get any messages when updating or inserting
+     *
+     * @return array
+     */
+    public function getMessages() {
+        return $this->_messages;
+    }
 
-	/**
-	 * Set any messages when updating or inserting
-	 *
-	 * @param array $messages
-	 */
-	public function setMessages(array $messages = array()) {
-		$this->_messages = $messages;
-	}
+    /**
+     * Set any messages when updating or inserting
+     *
+     * @param array $messages
+     */
+    public function setMessages(array $messages = array()) {
+        $this->_messages = $messages;
+    }
 
 }

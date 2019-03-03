@@ -168,10 +168,10 @@ class Session
         $sessions = $sessionObj->getCollection();
 
         if($sessions instanceof Collection) {
-        	$sessions->setLimit("last_modified", "<", date("Y-m-d H:i:s", time() - $maxlifetime));
-        	foreach ($sessions->fetchAll() as $session) {
-        		$session->delete();
-        	}
+            $sessions->setLimit("last_modified", "<", date("Y-m-d H:i:s", time() - $maxlifetime));
+            foreach ($sessions->fetchAll() as $session) {
+                $session->delete();
+            }
         }
 
         return TRUE;

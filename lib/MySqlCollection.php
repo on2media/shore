@@ -11,12 +11,12 @@
 class MySqlCollection extends Collection
 {
 
-	/**
-	 * Class name to use for collection objects
-	 *
-	 * @var string
-	 */
-	protected $_alternateClassName;
+    /**
+     * Class name to use for collection objects
+     *
+     * @var string
+     */
+    protected $_alternateClassName;
 
     /**
      * Stores the limits put in place using the setLimit() method.
@@ -33,7 +33,7 @@ class MySqlCollection extends Collection
      */
     public function __construct(MySqlObject $obj)
     {
-		parent::__construct($obj);
+        parent::__construct($obj);
     }
 
     /**
@@ -43,7 +43,7 @@ class MySqlCollection extends Collection
      */
     public function setAlternateClassName($className)
     {
-		$this->_alternateClassName = $className;
+        $this->_alternateClassName = $className;
     }
 
     /**
@@ -53,7 +53,7 @@ class MySqlCollection extends Collection
      */
     public function getAlternateClassName()
     {
-    	return $this->_alternateClassName;
+        return $this->_alternateClassName;
     }
 
     /**
@@ -124,22 +124,22 @@ class MySqlCollection extends Collection
      */
     public function getSql()
     {
-		// below used in new model layer mapper classes
+        // below used in new model layer mapper classes
 
-    	$fields = $this->_fields;
-    	$uidField = $this->_uidField;
-    	$modelTable = $this->_modelTable;
-    	if(empty($fields)) {
-        	$fields = $this->_obj->getObjFields();
-    	}
+        $fields = $this->_fields;
+        $uidField = $this->_uidField;
+        $modelTable = $this->_modelTable;
+        if(empty($fields)) {
+            $fields = $this->_obj->getObjFields();
+        }
 
-    	if(empty($uidField)) {
-    		$uidField = (is_object($this->_obj) ? $this->_obj->uidField() : NULL); // uidfield can by NULL
-    	}
+        if(empty($uidField)) {
+            $uidField = (is_object($this->_obj) ? $this->_obj->uidField() : NULL); // uidfield can by NULL
+        }
 
-    	if(empty($modelTable)) {
-    		$modelTable = $this->_obj->getTable();
-    	}
+        if(empty($modelTable)) {
+            $modelTable = $this->_obj->getTable();
+        }
 
         // remove LOBs from fields
         foreach ($fields as $fieldName => $fieldSpec) {
@@ -218,8 +218,8 @@ class MySqlCollection extends Collection
             } catch (PDOException $e) {
                 exit('Database error: ' . $e->getMessage() . " [$sql]");
             } catch (Exception $e) {
-            	exit('Generic error: ' . $e->getMessage() . " [$sql]");
-			}
+                exit('Generic error: ' . $e->getMessage() . " [$sql]");
+            }
 
             $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
 

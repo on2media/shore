@@ -50,8 +50,8 @@ function rrmdir($dir)
 }
 
 function getUKPostcodeRegex($caseSensitive = false) {
-	return '/[A-Z]{1,2}[0-9R][0-9A-Z]? ?[0-9][ABD-HJLNP-UW-Z]{2}/'.
-			($caseSensitive?'':'i');
+    return '/[A-Z]{1,2}[0-9R][0-9A-Z]? ?[0-9][ABD-HJLNP-UW-Z]{2}/'.
+            ($caseSensitive?'':'i');
 }
 
 /**
@@ -61,5 +61,5 @@ function getUKPostcodeRegex($caseSensitive = false) {
  * @param string $antiPattern
  */
 function stripInvalidStringChars($string, $antiPattern) {
-	return preg_replace('/ {2,}/',' ',preg_replace($antiPattern, '', $string));
+    return preg_replace('/ {2,}/',' ',preg_replace($antiPattern, '', $string));
 }

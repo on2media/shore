@@ -99,7 +99,7 @@ abstract class Collection implements Iterator
      */
     public function setObjFields(array $fields = array())
     {
-    	$this->_fields = $fields;
+        $this->_fields = $fields;
     }
 
     /**
@@ -109,13 +109,13 @@ abstract class Collection implements Iterator
      */
     public function setUidField($uidFieldName)
     {
-    	$this->_uidField = $uidFieldName;
+        $this->_uidField = $uidFieldName;
     }
 
-	public function getUidField()
-	{
-		return $this->_uidField;
-	}
+    public function getUidField()
+    {
+        return $this->_uidField;
+    }
 
     /**
      * Set the model table name for collection object
@@ -123,7 +123,7 @@ abstract class Collection implements Iterator
      * @param string $tableName
      */
     public function setModelTable($tableName) {
-    	$this->_modelTable = $tableName;
+        $this->_modelTable = $tableName;
     }
 
     /**
@@ -235,7 +235,7 @@ abstract class Collection implements Iterator
     {
         $rtn = "";
         for ($i=$start; $i<=$end;$i++) {
-        	$urlcpy = str_replace("%d", $i, $url);
+            $urlcpy = str_replace("%d", $i, $url);
             $rtn .= sprintf("<li%s><a href=\"%s\">%d</a></li>\n", ($currentPage == $i ? " class=\"active\"":""), $urlcpy, $i);
         }
 
@@ -355,6 +355,6 @@ abstract class Collection implements Iterator
     }
 
     public function setTotal($total) {
-    	$this->_total = $total;
+        $this->_total = $total;
     }
 }

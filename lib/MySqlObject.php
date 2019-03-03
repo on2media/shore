@@ -81,7 +81,7 @@ abstract class MySqlObject extends ShoreObject
      */
     public function getLastInsertId()
     {
-    	return $this->_lastInsertId;
+        return $this->_lastInsertId;
     }
 
     /**
@@ -210,7 +210,7 @@ abstract class MySqlObject extends ShoreObject
         }
 
         if ($this->uid() == NULL) {
-        	$this->{$this->uidField()} = $this->_lastInsertId = $dbh->lastInsertId();
+            $this->{$this->uidField()} = $this->_lastInsertId = $dbh->lastInsertId();
         }
 
         $this->isNew(FALSE);
@@ -304,7 +304,7 @@ abstract class MySqlObject extends ShoreObject
             }
 
         }
-		return TRUE;
+        return TRUE;
     }
 
     /**
@@ -515,6 +515,6 @@ abstract class MySqlObject extends ShoreObject
      * @return array
      */
     public function getAllFieldSpecs() {
-    	return $this->_fields;
+        return $this->_fields;
     }
 }

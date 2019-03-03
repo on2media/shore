@@ -12,12 +12,12 @@ window.addEvent('domready', function(){
     });
 
     try {
-	    new DatePicker('.datetime', {
-	        timePicker: true,
-	        format: 'd F Y H:i',
-	        inputOutputFormat: 'd F Y H:i',
-	        positionOffset: {x:0, y:-1}
-	    });
+        new DatePicker('.datetime', {
+            timePicker: true,
+            format: 'd F Y H:i',
+            inputOutputFormat: 'd F Y H:i',
+            positionOffset: {x:0, y:-1}
+        });
     }catch(e) {}
 
     try {
