@@ -20,7 +20,7 @@ class GridComponent extends Component {
                 $filters[$key] = $value;
         }
 
-        $namespace = get_class($this->_controller);
+        $gridNamespace = $this->_controller->getGridNamespace();
 
         if (count($filters) == 0) {
             // check for any saved filters
@@ -31,8 +31,8 @@ class GridComponent extends Component {
             }
 
             $savedFilters = array();
-            if(isset($allSessionFilters[$namespace])) {
-                $savedFilters = $allSessionFilters[$namespace];
+            if(isset($allSessionFilters[$gridNamespace])) {
+                $savedFilters = $allSessionFilters[$gridNamespace];
             }
             if (is_array($savedFilters) && count($savedFilters ) > 0) {
                 foreach($savedFilters as $key => $value ) {
@@ -180,18 +180,18 @@ class GridComponent extends Component {
         if(!$allSessionFilters || !is_array($allSessionFilters)) {
             $allSessionFilters = array();
         }
-        $namespace = get_class($this->_controller);
+
         $savedFilters = array();
-        if(!isset($allSessionFilters[$namespace])) {
-            $allSessionFilters[$namespace] = array();
+        if(!isset($allSessionFilters[$gridNamespace])) {
+            $allSessionFilters[$gridNamespace] = array();
         }
         $page = 1;
         if (isset($_GET["p"])) {
             $page = (int) $_GET["p"];
-            $allSessionFilters[$namespace]['page'] = $page;
+            $allSessionFilters[$gridNamespace]['page'] = $page;
         } else {
-            if(isset($allSessionFilters[$namespace]['page'])) {
-                $page = (int)$allSessionFilters[$namespace]['page'];
+            if(isset($allSessionFilters[$gridNamespace]['page'])) {
+                $page = (int)$allSessionFilters[$gridNamespace]['page'];
             }
         }
         $session->setAllSessionFilters($allSessionFilters);
@@ -208,7 +208,7 @@ class GridComponent extends Component {
 
         $this->_controller->getView()->assign("filter_str", $filterStr);
         $this->_controller->getView()->assign("per_page", $perPage);
-        $this->_controller->getView()->assign("namespace", get_class($this->_controller));
+        $this->_controller->getView()->assign("namespace", $gridNamespace);
 
         if ($addSimilar)
             $this->_controller->getView()->assign( "add_similar", TRUE );
@@ -289,11 +289,8 @@ class GridComponent extends Component {
                     $allSessionFilters = array();
                 }
 
-                $namespace = get_class($this->_controller);
-                $allSessionFilters[$namespace] = $filters;
-
+                $allSessionFilters[$gridNamespace] = $filters;
                 $sess->setAllSessionFilters($allSessionFilters);
-
 
                 $filterStr = http_build_query($filters);
                 $this->_controller->redirect( _BASE . _PAGE . ($filterStr != "" ? "?" . $filterStr : ""));
@@ -304,7 +301,7 @@ class GridComponent extends Component {
 
                 $sess = Session::getInstance();
                 $sess->unsetFilters();
-                $sess->removeNamespaceFilters(get_class($this->_controller));
+                $sess->removeNamespaceFilters($gridNamespace);
                 $this->_controller->redirect( _BASE . _PAGE );
             }
 

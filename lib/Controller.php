@@ -250,4 +250,9 @@ abstract class Controller
     public function __toString() {
         return get_class($this);
     }
+
+    public function getGridNamespace()
+    {
+        return get_class($this);
+    }
 }

@@ -1,3 +1,8 @@
+{* Fetch session filters *}
+{assign var=hasSavedFilters value=false}
+{assign var=sessionFilters value=$session->getNamespaceFilters($namespace)}
+{if $sessionFilters}{assign var=hasSavedFilters value=true}{/if}
+
 {$welcome}
 
 {if !$edit_only}
@@ -74,6 +79,11 @@
 
                                 {capture assign=fPos}f{$pos}{/capture}
                                 {capture assign=fVal}{if $smarty.get.$fPos}{$smarty.get.$fPos}{/if}{/capture}
+
+                                {* Check for session filters *}
+                                {if !$fVal && $sessionFilters.$fPos}
+                                    {assign var=fVal value=$sessionFilters.$fPos}
+                                {/if}
 
                                 {if $th.filter.type == 'freetext'}
 
