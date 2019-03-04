@@ -137,18 +137,16 @@ class SmartyView extends View
             return;
         }
 
-        if ($layout != NULL && $path != NULL) {
-
-            $layout = $path . $layout;
-
-        } else if ($layout != NULL &&
-            !file_exists($this->_smarty->getTemplateDir("app") . $layout)) {
-            $layout = '[shore]' . $layout;
-        } else {
-            $layout = '[app]' . $layout;
+        if ($layout != NULL) {
+            if ($path != NULL) {
+                $layout = $path . $layout;
+            } elseif (!file_exists($this->_smarty->getTemplateDir("app") . $layout)) {
+                $layout = '[shore]' . $layout;
+            } else {
+                $layout = '[app]' . $layout;
+            }
+            $this->_layout = 'file:' . $layout;
         }
-
-        $this->_layout = 'file:' . $layout;
     }
 
     /**
