@@ -23,10 +23,15 @@ class EditComponent extends Component
 
         }
 
-        $this->_controller->setView(new SmartyView("admin.edit.tpl"));
+        if ($this->_controller->getView() === null) {
+            $this->_controller->setView(new SmartyView("admin.edit.tpl"));
+        }
+
         $tpl = $this->_controller->getView();
 
-        $tpl->setLayout("layout.admin.tpl");
+        if ($tpl->getLayout() === null) {
+            $tpl->setLayout("layout.admin.tpl");
+        }
 
         if ($_POST) {
 

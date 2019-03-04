@@ -25,7 +25,9 @@ ini_set("session.gc_probability", 1);
 ini_set("session.gc_divisor", 10);
 
 // automatically define some system variables - paths and urls
-if (!defined("_PATH")) define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . "..") . DS);
+if (!defined("_PATH")) {
+    define("_PATH", realpath(dirname(__FILE__) . DS . ".." . DS . ".." . DS . ".." . DS . "..") . DS);
+}
 
 define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "http" : "https"));
 
