@@ -35,7 +35,8 @@ $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
 define('URL_DIR', str_replace("%2F", "/", rawurlencode($urlDir)));
 
-$base = "://" . $_SERVER["HTTP_HOST"] . URL_DIR;
+$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
+$base = "://" . $host . URL_DIR;
 
 define("_BASE", _PROTOCOL . $base);
 define("_BASE_HTTP", "http" . $base);
