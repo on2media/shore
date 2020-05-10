@@ -33,7 +33,11 @@ define("_PROTOCOL", (!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" ? "
 
 $urlDir = dirname($_SERVER["SCRIPT_NAME"]);
 $urlDir = (in_array($urlDir, array("\\", "/", ".")) ? "/" : "$urlDir/");
-define('URL_DIR', str_replace("%2F", "/", rawurlencode($urlDir)));
+$urlDir = str_replace("%2F", "/", rawurlencode($urlDir));
+if (defined('PATH_CUT')) {
+    $urlDir = str_replace(PATH_CUT, '', $urlDir);
+}
+define('URL_DIR', $urlDir);
 
 $host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
 $base = "://" . $host . URL_DIR;
@@ -44,6 +48,9 @@ define("_BASE_HTTPS", "https" . $base);
 
 if (!$urlParts = @parse_url($_SERVER["REQUEST_URI"])) exit(); $urlPath = $urlParts["path"];
 if (!$page = substr(rawurldecode($urlParts["path"]), strlen($urlDir))) $page = "";
+if (defined('PATH_CUT')) {
+    $page = str_replace(PATH_CUT, '', $page);
+}
 define("_PAGE", $page);
 
 define("_QS", (isset($urlParts["query"]) ? "?" . $urlParts["query"] : ""));
