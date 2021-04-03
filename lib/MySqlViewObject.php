@@ -62,7 +62,7 @@ abstract class MySqlViewObject extends MySqlObject
      * @param bool $inTransaction
      * @return bool|int Boolean or last insert id
      */
-    public function save()
+    public function save($inTransaction=FALSE)
     {
         throw new Exception("MySQL View Objects can't be created or updated.");
     }
