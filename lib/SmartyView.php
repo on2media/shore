@@ -41,10 +41,11 @@ class SmartyView extends View
         @header("Content-Type: text/html;charset=utf-8");
 
         $this->_smarty = new Smarty();
-        $this->_smarty->error_reporting = E_ALL ^ E_NOTICE;
+        $this->_smarty->muteUndefinedOrNullWarnings();
         $this->_smarty->disableSecurity();
 
         $this->_smarty->registerPlugin("modifier", "date", array($this, "modifierDate"));
+        $this->_smarty->registerPlugin("modifier", "preg_replace", array($this, "modifierPregReplace"));
 
         // if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
         // compile check is TRUE by default
@@ -132,12 +133,11 @@ class SmartyView extends View
      */
     public function setLayout($layout=NULL, $path=NULL)
     {
-        if (substr($layout, 0, strlen('string:')) == 'string:') {
-            $this->_layout = $layout;
-            return;
-        }
-
         if ($layout != NULL) {
+            if (substr($layout, 0, strlen('string:')) == 'string:') {
+                $this->_layout = $layout;
+                return;
+            }
             if ($path != NULL) {
                 $layout = $path . $layout;
             } elseif (!file_exists($this->_smarty->getTemplateDir("app") . $layout)) {
@@ -220,6 +220,11 @@ class SmartyView extends View
     public function modifierDate($timestamp, $format="d F Y H:i")
     {
         return ($timestamp ? date($format, $timestamp) : "");
+    }
+
+    public function modifierPregReplace($pattern, $replacement, $subject, $limit=-1, &$count=null)
+    {
+        return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 
     public function getSmarty()
