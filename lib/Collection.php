@@ -296,9 +296,9 @@ abstract class Collection implements Iterator
     /**
      * Returns the current record.
      *
-     * @return  object
+     * @return  mixed
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->_dataSet);
     }
@@ -306,9 +306,9 @@ abstract class Collection implements Iterator
     /**
      * Returns the key of the current record.
      *
-     * @return  scalar|null
+     * @return  mixed
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->_dataSet);
     }
@@ -318,7 +318,7 @@ abstract class Collection implements Iterator
      *
      * @return  void
      */
-    public function next()
+    public function next(): void
     {
         next($this->_dataSet);
     }
@@ -328,7 +328,7 @@ abstract class Collection implements Iterator
      *
      * @return  void
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->_dataSet);
     }
@@ -336,9 +336,9 @@ abstract class Collection implements Iterator
     /**
      * Checks if the current position is valid.
      *
-     * @return  boolean
+     * @return  bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return ($this->current() !== FALSE);
     }

@@ -3,7 +3,7 @@
     "description": "Shore framework",
     "type": "library",
     "require": {
-        "php": ">=5.4",
+        "php": ">=8.0.0",
         "smarty/smarty": "^3.1.28"
     },
     "autoload": {
