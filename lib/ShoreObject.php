@@ -85,7 +85,7 @@ abstract class ShoreObject
     /**
      *
      */
-    abstract public function save();
+    abstract public function save($inTransaction=FALSE);
 
     /**
      *

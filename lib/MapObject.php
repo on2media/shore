@@ -35,7 +35,7 @@ abstract class MapObject extends ShoreObject
     /**
      *
      */
-    public function save()
+    public function save($inTransaction=FALSE)
     {
         throw new Exception("Map Objects can't be created or updated.");
     }
