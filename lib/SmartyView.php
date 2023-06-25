@@ -59,10 +59,17 @@ class SmartyView extends View
             'is_array',
             'is_bool',
             'method_exists',
+            'preg_match',
+            'preg_match_all',
             'preg_replace',
+            'str_replace',
+            'strpos',
             'substr',
             'trim',
             'ucwords',
+            'rawurlencode',
+            'strtolower',
+            'md5',
         ];
         foreach ($phpModifiers as $phpFunction) {
             $this->_smarty->registerPlugin("modifier", $phpFunction, $phpFunction);
