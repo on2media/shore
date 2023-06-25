@@ -8,8 +8,7 @@
     },
     "autoload": {
         "files": [
-            "lib/utilities.php",
-            "lib/Bootstrap.php"
+            "lib/utilities.php"
         ],
         "classmap": [
             "lib/Collection.php",
