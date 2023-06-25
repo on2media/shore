@@ -53,7 +53,20 @@ class SmartyView extends View
         $this->_smarty->disableSecurity();
 
         $this->_smarty->registerPlugin("modifier", "date", array($this, "modifierDate"));
-        $this->_smarty->registerPlugin("modifier", "preg_replace", array($this, "modifierPregReplace"));
+
+        $phpModifiers = [
+            'defined',
+            'is_array',
+            'is_bool',
+            'method_exists',
+            'preg_replace',
+            'substr',
+            'trim',
+            'ucwords',
+        ];
+        foreach ($phpModifiers as $phpFunction) {
+            $this->_smarty->registerPlugin("modifier", $phpFunction, $phpFunction);
+        }
 
         // if (!IS_LIVE) $this->_smarty->force_compile = TRUE;
         // compile check is TRUE by default
@@ -237,11 +250,6 @@ class SmartyView extends View
     public function modifierDate($timestamp, $format="d F Y H:i")
     {
         return ($timestamp ? date($format, $timestamp) : "");
-    }
-
-    public function modifierPregReplace($pattern, $replacement, $subject, $limit=-1, &$count=null)
-    {
-        return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 
     public function getSmarty()
