@@ -19,9 +19,17 @@ class SmartyView extends View
 
     /**
      * Stores the template filename.
+     *
      * @var  string
      */
     protected $_template = "";
+
+    /**
+     * Indicates if the session variables should be unset when the view is output
+     *
+     * @var boolean
+     */
+    protected $_clearSession = TRUE;
 
     /**
      * Stores the layout template filename.
@@ -36,7 +44,7 @@ class SmartyView extends View
      *
      * @param  string  $template  Filename of the template to use.
      */
-    public function __construct($template, $dir="")
+    public function __construct($template, $dir="", $clearSession=TRUE)
     {
         @header("Content-Type: text/html;charset=utf-8");
 
@@ -95,6 +103,8 @@ class SmartyView extends View
         if ($session->getSmarty() && is_array($session->getSmarty())) {
             $this->assign_array($session->getSmarty());
         }
+
+        $this->_clearSession = $clearSession;
     }
 
     /**
@@ -175,7 +185,9 @@ class SmartyView extends View
      */
     public function assign_array($array)
     {
-        foreach ($array as $key => $value) $this->_smarty->assign($key, $value);
+        foreach ($array as $key => $value) {
+            $this->assign($key, $value);
+        }
     }
 
     /**
@@ -189,6 +201,9 @@ class SmartyView extends View
     {
         $session = Session::getInstance();
         $vars = $session->getSmarty();
+        if ($vars === FALSE) {
+            $vars = [];
+        }
         $vars[$key] = $value;
         $session->setSmarty($vars);
     }
@@ -200,8 +215,10 @@ class SmartyView extends View
      */
     public function output()
     {
-        $session = Session::getInstance();
-        $session->unsetSmarty();
+        if ($this->_clearSession) {
+            $session = Session::getInstance();
+            $session->unsetSmarty();
+        }
 
         if ($this->_layout != NULL) {
 
