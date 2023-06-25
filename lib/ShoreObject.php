@@ -422,10 +422,10 @@ abstract class ShoreObject
                 switch ($this->typeOf($name)) {
 
                     case "string":
-                        return htmlspecialchars($value);
+                        return htmlspecialchars($value ?? "");
 
                     case "text":
-                        return nl2br($value);
+                        return nl2br($value ?? "");
 
                     case "timestamp":
                         if ($value == NULL) return "";

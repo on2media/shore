@@ -17,7 +17,7 @@ class InputControl extends Control
 
         $field = sprintf("<input type=\"text\" name=\"%s\" value=\"%s\"%s />",
             $this->_prefix . $this->_var,
-            htmlspecialchars(($this->_obj->$func() instanceof ShoreObject ? $this->_obj->$func()->uid() : $this->_obj->$func())),
+            htmlspecialchars(($this->_obj->$func() instanceof ShoreObject ? $this->_obj->$func()->uid() : ($this->_obj->$func() ?? ""))),
             ($this->usingBootstrap()
                 ? sprintf(" class=\"%s\"", $this->getBootstrapSize())
                 : sprintf(" size=\"%d\"", $this->getSize())
