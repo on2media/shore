@@ -376,7 +376,9 @@ abstract class MySqlObject extends ShoreObject
                 switch ($this->typeOf($fieldName)) {
 
                     case "timestamp":
-                        if (!is_int($value)) return $this->$fieldName = strtotime($value);
+                        if ($value !== null && !is_int($value)) {
+                            return $this->$fieldName = strtotime($value);
+                        }
                         break;
 
                     case "boolean":
