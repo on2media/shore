@@ -159,7 +159,7 @@ class MySqlCollection extends Collection
                     : "`" . $uidField . "`"
                 )
             ),
-            "tbl." . implode(", tbl.", $fieldNames),
+            "tbl.`" . implode("`, tbl.`", $fieldNames) . '`',
             $modelTable,
             $this->limitSql() . $this->getOrder() . $this->getPagination()
         );
@@ -196,7 +196,7 @@ class MySqlCollection extends Collection
      */
     public function getOrder()
     {
-        return " ORDER BY " . $this->_order;
+        return " ORDER BY `" . $this->_order . "`";
     }
 
     /**
