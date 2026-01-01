@@ -70,6 +70,8 @@ class SmartyView extends View
             'rawurlencode',
             'strtolower',
             'md5',
+            'array_key_exists',
+            'urlencode',
         ];
         foreach ($phpModifiers as $phpFunction) {
             $this->_smarty->registerPlugin("modifier", $phpFunction, $phpFunction);
