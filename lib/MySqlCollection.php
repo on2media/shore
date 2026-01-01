@@ -221,7 +221,7 @@ class MySqlCollection extends Collection
                 exit('Generic error: ' . $e->getMessage() . " [$sql]");
             }
 
-            $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_UNIQUE);
+            $this->_dataSet = $sth->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE|PDO::FETCH_UNIQUE);
 
             if ($sth = $dbh->query("SELECT FOUND_ROWS()")) $this->_total = $sth->fetchColumn(0);
 
