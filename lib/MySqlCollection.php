@@ -196,7 +196,7 @@ class MySqlCollection extends Collection
      */
     public function getOrder()
     {
-        return " ORDER BY `" . $this->_order . "`";
+        return " ORDER BY " . $this->_order;
     }
 
     /**
