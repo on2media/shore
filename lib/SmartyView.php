@@ -91,7 +91,7 @@ class SmartyView extends View
         if ($dir != "" && substr($dir, -1) != DS) $dir .= DS;
 
         if ($dir != "" && defined("DIR_USERVIEWS")) {
-            $this->_smarty->setTemplateDir(array("app" => DIR_USERVIEWS . DS . $dir));
+            $this->_smarty->setTemplateDir(array("app" => _PATH . DIR_USERVIEWS . DS . $dir));
         } else {
             $this->_smarty->setTemplateDir(array("app" => DIR_VIEWS . DS . $dir));
         }
