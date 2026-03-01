@@ -490,7 +490,7 @@ abstract class ShoreObject
         $rtn = $this->{$this->_cite};
         if ($rtn instanceof ShoreObject) $rtn = $rtn->cite(FALSE);
 
-        return ($escape == TRUE ? htmlspecialchars($rtn) : $rtn);
+        return ($escape == TRUE ? htmlspecialchars($rtn ?? "") : $rtn);
     }
 
     /**
