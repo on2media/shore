@@ -131,7 +131,7 @@ abstract class ShoreObject
      */
     public function getFieldSpec($var)
     {
-        return (isset($this->_fields[$var]) ? $this->_fields[$var] : FALSE);
+        return ($this->_fields[$var] ?? FALSE);
     }
 
     /**
@@ -216,8 +216,8 @@ abstract class ShoreObject
         foreach ($this->_customColumns as $name => $spec) {
 
             $rtn[(int)$spec["position"]] = array(
-                "field"     =>  (isset($spec["method"]) ? $spec["method"] : "cite" . var2func($name)),
-                "heading"   =>  (isset($spec["heading"]) ? $spec["heading"] : var2label($name)),
+                "field"     =>  ($spec["method"] ?? "cite" . var2func($name)),
+                "heading"   =>  ($spec["heading"] ?? var2label($name)),
                 "filter"    =>  FALSE,
                 "sortable"  =>  FALSE
             );

@@ -74,11 +74,11 @@ class ObjectField
 
         $this->name = $name;
         $this->value =& $spec["value"];
-        $this->heading = (isset($spec["heading"]) ? $spec["heading"] : var2label($name));
-        $this->tip = (isset($spec["on_edit"]["tip"]) ? $spec["on_edit"]["tip"] : NULL);
+        $this->heading = ($spec["heading"] ?? var2label($name));
+        $this->tip = ($spec["on_edit"]["tip"] ?? NULL);
         $this->required = (isset($spec["required"]) && $spec["required"] == TRUE);
-        $this->prefix = (isset($spec["prefix"]) ? $spec["prefix"] : "");
-        $this->suffix = (isset($spec["suffix"]) ? $spec["suffix"] : "");
+        $this->prefix = ($spec["prefix"] ?? "");
+        $this->suffix = ($spec["suffix"] ?? "");
 
         if (!isset($spec["type"])) {
             $this->type = "string";

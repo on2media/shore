@@ -48,7 +48,7 @@ define("_PAGE", $page);
 
 define("_QS", (isset($urlParts["query"]) ? "?" . $urlParts["query"] : ""));
 
-if (strpos(_PAGE, ".") === FALSE && _PAGE != "" && substr(_PAGE, -1) != "/") {
+if (!str_contains(_PAGE, ".") && _PAGE != "" && substr(_PAGE, -1) != "/") {
     @header($_SERVER["SERVER_PROTOCOL"] . " 301 Permanent Redirect");
     @header("Location: " . _BASE . _PAGE . "/");
     exit();

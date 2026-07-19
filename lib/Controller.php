@@ -221,7 +221,7 @@ abstract class Controller
 
             $size = memory_get_usage();
             $unit = array("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB");
-            $mem = " " . number_format(@round($size / pow(1024, ($i=floor(log($size,1024))) ),2),2) . " " . $unit[$i];
+            $mem = " " . number_format(@round($size / 1024 ** ($i=floor(log($size,1024))), 2), 2) . " " . $unit[$i];
 
             $space = mb_strlen($log, "UTF-8") + mb_strlen($mem, "UTF-8");
 

@@ -50,7 +50,7 @@ class SOAPComponent extends Component
 
             foreach ($obj->getControls() as $control) {
 
-                if ($control->getError()) $errors[] = get_class($obj) . "::" . $control->getVar() . ": " . $control->getError();
+                if ($control->getError()) $errors[] = $obj::class . "::" . $control->getVar() . ": " . $control->getError();
 
             }
 
@@ -93,7 +93,7 @@ class SOAPComponent extends Component
 
             }
 
-            $this->raiseException('Unable to find '.get_class($obj).' from passed identifier -> '.$data);
+            $this->raiseException('Unable to find '.$obj::class.' from passed identifier -> '.$data);
         }
 
         return $matchedObj->uid();

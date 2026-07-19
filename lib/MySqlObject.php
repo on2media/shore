@@ -92,7 +92,7 @@ abstract class MySqlObject extends ShoreObject
     public function getFieldSpec($var)
     {
         if (isset($this->_fields[$var])) return $this->_fields[$var];
-        return (isset($this->_relationships[$var]) ? $this->_relationships[$var] : FALSE);
+        return ($this->_relationships[$var] ?? FALSE);
     }
 
     /**

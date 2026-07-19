@@ -346,8 +346,8 @@ abstract class Control
             }
 
             if ($fail) {
-                $this->setError((isset($opts["message"]) ? $opts["message"] : $message));
-                $this->setErrorCode((isset($opts["error_code"]) ? $opts["error_code"] : $code));
+                $this->setError(($opts["message"] ?? $message));
+                $this->setErrorCode(($opts["error_code"] ?? $code));
                 return FALSE;
             }
 
