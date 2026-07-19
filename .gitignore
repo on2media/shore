@@ -1,2 +1,4 @@
+/vendor/
+/composer.lock
 /lib/cache/*/*.php
 /lib/cache/sessions/sess_*

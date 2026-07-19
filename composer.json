@@ -3,8 +3,11 @@
     "description": "Shore framework",
     "type": "library",
     "require": {
-        "php": ">=8.0.0",
+        "php": "^8.1",
         "smarty/smarty": "^4.3.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95"
     },
     "autoload": {
         "files": [
@@ -36,5 +39,9 @@
             "lib/controls/",
             "lib/components/"
         ]
+    },
+    "scripts": {
+        "phpcs-dry": "php-cs-fixer fix --verbose --allow-risky=yes --dry-run --diff",
+        "phpcs-fix": "php-cs-fixer fix --verbose --allow-risky=yes"
     }
 }
