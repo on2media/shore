@@ -104,9 +104,9 @@ class SmartyView extends View
 
         $base = realpath(dirname(__FILE__)) . DS;
 
-        $this->_smarty->compile_dir   =  $base . "cache" . DS . "smarty_compiled" . DS;
-        $this->_smarty->config_dir    =  $base . "cache" . DS . "smarty_configs" . DS;
-        $this->_smarty->cache_dir     =  $base . "cache" . DS . "smarty_cache" . DS;
+        $this->_smarty->setCompileDir($base . "cache" . DS . "smarty_compiled" . DS);
+        $this->_smarty->setConfigDir($base . "cache" . DS . "smarty_configs" . DS);
+        $this->_smarty->setCacheDir($base . "cache" . DS . "smarty_cache" . DS);
 
         $this->setTemplate($template);
 
