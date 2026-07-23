@@ -72,6 +72,7 @@ class SmartyView extends View
             'md5',
             'array_key_exists',
             'urlencode',
+            'chr',
         ];
         foreach ($phpModifiers as $phpFunction) {
             $this->_smarty->registerPlugin("modifier", $phpFunction, $phpFunction);
