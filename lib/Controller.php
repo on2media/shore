@@ -10,6 +10,14 @@
  */
 abstract class Controller
 {
+    public AuthComponent $Auth;
+
+    public EditComponent $Edit;
+
+    public GridComponent $Grid;
+
+    public SOAPComponent $SOAP;
+
     /**
      * Stores the defined View object.
      *
