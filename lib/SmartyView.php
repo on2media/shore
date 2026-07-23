@@ -48,7 +48,7 @@ class SmartyView extends View
     {
         @header("Content-Type: text/html;charset=utf-8");
 
-        $this->_smarty = new Smarty();
+        $this->_smarty = new Smarty\Smarty();
         $this->_smarty->muteUndefinedOrNullWarnings();
         $this->_smarty->disableSecurity();
 

@@ -50,7 +50,7 @@ class MySqlDatabase
 
             $diverOptions = array();
             if (defined("RUN_SET_NAMES_UTF8_QUERY") && RUN_SET_NAMES_UTF8_QUERY) {
-                $diverOptions = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
+                $diverOptions = array(Pdo\Mysql::ATTR_INIT_COMMAND => "SET NAMES utf8");
             }
 
             try {
