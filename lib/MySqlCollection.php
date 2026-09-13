@@ -249,19 +249,8 @@ class MySqlCollection extends Collection
         $dbh = MySqlDatabase::getInstance();
 
         if ($sth = $dbh->prepare($sql)) {
-
-            try {
-
-                $sth->execute($this->_limits["values"]);
-                return $sth->fetchColumn(0);
-
-            } catch (PDOException $e) {
-
-                trigger_error("Database counting error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
-                exit();
-
-            }
-
+            $sth->execute($this->_limits["values"]);
+            return $sth->fetchColumn(0);
         }
 
         return FALSE;

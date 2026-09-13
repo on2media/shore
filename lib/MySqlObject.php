@@ -200,14 +200,7 @@ abstract class MySqlObject extends ShoreObject
             }
         }
 
-        try {
-
-            if (!$sth->execute()) return FALSE;
-
-        } catch (PDOException $e) {
-            trigger_error("Database error: " . $e->getMessage() . ". SQL: [" . $sql . "]", E_USER_ERROR);
-            exit();
-        }
+        if (!$sth->execute()) return FALSE;
 
         if ($this->uid() == NULL) {
             $this->{$this->uidField()} = $this->_lastInsertId = $dbh->lastInsertId();
@@ -219,28 +212,19 @@ abstract class MySqlObject extends ShoreObject
 
             if ($fieldSpec["type"] == "m-m" || ($fieldSpec["type"] == "1-m" && isset($fieldSpec["on_edit"]))) {
 
-                try {
+                if ($inTransaction || $dbh->beginTransaction()) {
 
-                    if ($inTransaction || $dbh->beginTransaction()) {
+                    $sth = $dbh->prepare(sprintf("DELETE FROM %s WHERE %s=?",
+                        $this->quoteField($fieldSpec["table"]),
+                        $this->quoteField($fieldSpec["foreign"])
+                    ));
 
-                        $sth = $dbh->prepare(sprintf("DELETE FROM %s WHERE %s=?",
-                            $this->quoteField($fieldSpec["table"]),
-                            $this->quoteField($fieldSpec["foreign"])
-                        ));
+                    if (!$sth->execute(array($this->uid()))) {
 
-                        if (!$sth->execute(array($this->uid()))) {
-
-                            if (!$inTransaction) $dbh->rollBack();
-                            return FALSE;
-
-                        }
+                        if (!$inTransaction) $dbh->rollBack();
+                        return FALSE;
 
                     }
-
-                } catch (PDOException $e) {
-
-                    trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
-                    exit();
 
                 }
 
@@ -250,33 +234,24 @@ abstract class MySqlObject extends ShoreObject
 
                     if (is_object($fieldValue) && $fieldValue instanceof Collection) {
 
-                        try {
+                        foreach ($fieldValue as $obj) {
 
-                            foreach ($fieldValue as $obj) {
+                            $sth = $dbh->prepare(sprintf("INSERT INTO %s (%s, %s) VALUES (?, ?)",
+                                $this->quoteField($fieldSpec["table"]),
+                                $this->quoteField($fieldSpec["foreign"]),
+                                $this->quoteField($fieldSpec["column"])
+                            ));
 
-                                $sth = $dbh->prepare(sprintf("INSERT INTO %s (%s, %s) VALUES (?, ?)",
-                                    $this->quoteField($fieldSpec["table"]),
-                                    $this->quoteField($fieldSpec["foreign"]),
-                                    $this->quoteField($fieldSpec["column"])
-                                ));
+                            if (!$sth->execute(array($this->uid(), $obj->uid()))) {
 
-                                if (!$sth->execute(array($this->uid(), $obj->uid()))) {
-
-                                    if (!$inTransaction) $dbh->rollBack();
-                                    return FALSE;
-
-                                }
+                                if (!$inTransaction) $dbh->rollBack();
+                                return FALSE;
 
                             }
 
-                            if (!$inTransaction) $dbh->commit();
-
-                        } catch (PDOException $e) {
-
-                            trigger_error("Database error: " . $e->getMessage(), E_USER_ERROR);
-                            exit();
-
                         }
+
+                        if (!$inTransaction) $dbh->commit();
 
                     }
 
@@ -432,16 +407,7 @@ abstract class MySqlObject extends ShoreObject
                     $value = $this->$func();
                     if ($this->$func() instanceof MySqlObject) $value = $value->uid();
 
-                    try {
-
-                        $sth->execute(array($value));
-
-                    } catch (PDOException $e) {
-
-                        trigger_error("Database error: " . $e->getMessage() . " [$sql]", E_USER_ERROR);
-                        exit();
-
-                    }
+                    $sth->execute(array($value));
 
                     $objIds = $sth->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_UNIQUE, 0);
 
