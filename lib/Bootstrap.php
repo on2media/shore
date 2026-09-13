@@ -64,5 +64,7 @@ if (!str_contains(_PAGE, ".") && _PAGE != "" && substr(_PAGE, -1) != "/") {
 $maxLifetime = (defined("SESSION_TIMEOUT") ? SESSION_TIMEOUT : 3600 ); // an hour by default
 @ini_set("session.gc_maxlifetime", $maxLifetime); // bin session after the maximum lifetime.
 $session = Session::getInstance();
-if ($session->getLastActivity() && (time() - $session->getLastActivity()) > $maxLifetime) $session->respawn();
-$session->setLastActivity(time());
+if (isset($_SESSION['shore_last_activity']) && (time() - $_SESSION['shore_last_activity']) > $maxLifetime) {
+    $session->respawn();
+}
+$_SESSION['shore_last_activity'] = time();

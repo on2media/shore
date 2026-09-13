@@ -30,7 +30,6 @@
             "lib/ObjectField.php",
             "lib/Router.php",
             "lib/Session.php",
-            "lib/SessionObject.php",
             "lib/ShoreObject.php",
             "lib/SmartyView.php",
             "lib/TextView.php",

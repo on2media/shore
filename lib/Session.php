@@ -8,6 +8,8 @@
  */
 class Session
 {
+    private string $namespace = 'shore';
+
     /**
      * Constructor
      *
@@ -18,15 +20,6 @@ class Session
      */
     private function __construct()
     {
-        // session_set_save_handler(
-        //     array(&$this, "sessionOpen"),
-        //     array(&$this, "sessionClose"),
-        //     array(&$this, "sessionRead"),
-        //     array(&$this, "sessionWrite"),
-        //     array(&$this, "sessionDestroy"),
-        //     array(&$this, "sessionGarbageCollector")
-        // );
-
         session_name(SESSION_NAME);
         session_start();
     }
@@ -44,6 +37,11 @@ class Session
         static $instance;
         if (!is_object($instance)) $instance = new Session();
         return $instance;
+    }
+
+    public function setNamespace(string $namespace): void
+    {
+        $this->namespace = $namespace;
     }
 
     /**
@@ -69,15 +67,19 @@ class Session
      */
     public function __call($name, $arguments)
     {
+        if (!array_key_exists($this->namespace, $_SESSION)) {
+            $_SESSION[$this->namespace] = [];
+        }
+
         if (substr($name, 0, 3) == "get") {
 
             $name = substr($name, 3);
-            if (array_key_exists($name, $_SESSION)) return $_SESSION[$name];
+            if (array_key_exists($name, $_SESSION[$this->namespace])) return $_SESSION[$this->namespace][$name];
 
         } else if (substr($name, 0, 5) == "unset") {
 
             $name = substr($name, 5);
-            unset($_SESSION[$name]);
+            unset($_SESSION[$this->namespace][$name]);
             return TRUE;
 
         } else {
@@ -87,7 +89,7 @@ class Session
                 if (substr($name, 0, 3) == "set" && (isset($arguments[0]) || is_null($arguments[0]))) {
 
                     $name = substr($name, 3);
-                    $_SESSION[$name] = $arguments[0];
+                    $_SESSION[$this->namespace][$name] = $arguments[0];
                     return TRUE;
 
                 }
@@ -96,93 +98,6 @@ class Session
         }
 
         return FALSE;
-    }
-
-    /**
-     *
-     */
-    public function sessionOpen($save_path, $session_name)
-    {
-        return TRUE;
-    }
-
-    /**
-     *
-     */
-    public function sessionClose()
-    {
-        return TRUE;
-    }
-
-    /**
-     *
-     */
-    public function sessionRead($id)
-    {
-        $sessionObj = new SessionObject();
-        if ($session = $sessionObj->fetchById($id)) {
-            return (string)$session->getData();
-        }
-
-        return "";
-    }
-
-    /**
-     *
-     */
-    public function sessionWrite($id, $data)
-    {
-        $sessionObj = new SessionObject();
-        if (!$session = $sessionObj->fetchById($id)) {
-            $session = new SessionObject();
-            $session->setId($id);
-        }
-
-        $session->setData($data);
-        $session->setLastModified(time());
-
-        return $session->save();
-    }
-
-    /**
-     *
-     */
-    public function sessionDestroy($id)
-    {
-        $sessionObj = new SessionObject();
-        if ($session = $sessionObj->fetchById($id)) {
-            return $session->delete();
-        }
-
-        return FALSE;
-    }
-
-    /**
-     *
-     */
-    public function sessionGarbageCollector($maxlifetime=NULL)
-    {
-        if ($maxlifetime === NULL) $maxlifetime = ini_get("session.gc_maxlifetime");
-
-        $sessionObj = new SessionObject();
-        $sessions = $sessionObj->getCollection();
-
-        if($sessions instanceof Collection) {
-            $sessions->setLimit("last_modified", "<", date("Y-m-d H:i:s", time() - $maxlifetime));
-            foreach ($sessions->fetchAll() as $session) {
-                $session->delete();
-            }
-        }
-
-        return TRUE;
-    }
-
-    /**
-     *
-     */
-    public function __destruct()
-    {
-        @session_write_close();
     }
 
     /**
